@@ -19,6 +19,7 @@ Alternatively, run `dotnet run` from the command line. ( Make sure you are in th
 The default credentials to login are:
 
 Username: `admin`
+
 Password: `adminadmin`
 
 ### Configuration
