@@ -45,9 +45,7 @@ public static class FormManager
     {
         _master = new FormMaster();
 
-        // Starting Form
-
-        Trigger<Startup>();
+        Trigger<T>();
 
         if (callback is Action<IFormMaster> action)
         {

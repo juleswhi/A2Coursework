@@ -10,7 +10,7 @@ public partial class FormLogin : Form, IResizeable
         InitializeComponent();
         button_login.UseMnemonic = true;
         button_login.Text = "&Login";
-        button_login.Click += (_, _) => Trigger<FormMain>();
+        button_login.Click += (_, _) => Trigger<FormViewModel>();
 
         button_login.UseAccentColor = true;
 

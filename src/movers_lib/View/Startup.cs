@@ -75,6 +75,6 @@ public partial class Startup : Form
 
         CenterMaster();
 
-        Invoke(() => Trigger<FormLogin>());
+        Invoke(() => Trigger<FormMain>());
     }
 }
