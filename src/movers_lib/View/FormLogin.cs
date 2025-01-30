@@ -2,6 +2,7 @@
 
 using MaterialSkin.Controls;
 using movers_lib.forms;
+using movers_lib.model;
 
 public partial class FormLogin : Form, IResizeable
 {
@@ -10,7 +11,10 @@ public partial class FormLogin : Form, IResizeable
         InitializeComponent();
         button_login.UseMnemonic = true;
         button_login.Text = "&Login";
-        button_login.Click += (_, _) => Trigger<FormViewModel>();
+
+        button_login.Click += (_, _) => {
+            Trigger<FormViewModel, Customer>();
+        };
 
         button_login.UseAccentColor = true;
 

@@ -1,6 +1,6 @@
 ﻿namespace movers_lib.model;
 
-public class Product
+public class Product : DatabaseModel
 {
     public int Id { get; set; }
     public string Name { get; set; } = "";

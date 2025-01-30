@@ -8,8 +8,6 @@ public partial class FormMaster : Form, IFormMaster
     {
         InitializeComponent();
         SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
-        Colourscheme.LoadColourscheme();
-        Colourscheme.Toggle((ColorScheme)GetGlobalState().GetFirst(COLOURSCHEME_CURRENT)!);
     }
 
     public Panel GetHolder() => panelHolder;

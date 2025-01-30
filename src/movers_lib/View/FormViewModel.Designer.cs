@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             dataGridView = new DataGridView();
+            btnBack = new MaterialSkin.Controls.MaterialButton();
+            btnCreate = new MaterialSkin.Controls.MaterialButton();
             ((System.ComponentModel.ISupportInitialize)dataGridView).BeginInit();
             SuspendLayout();
             // 
@@ -47,24 +49,71 @@
             dataGridView.MultiSelect = false;
             dataGridView.Name = "dataGridView";
             dataGridView.ReadOnly = true;
-            dataGridView.Size = new Size(700, 400);
+            dataGridView.Size = new Size(700, 340);
             dataGridView.TabIndex = 0;
+            // 
+            // btnBack
+            // 
+            btnBack.Anchor = AnchorStyles.Bottom;
+            btnBack.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            btnBack.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            btnBack.Depth = 0;
+            btnBack.HighEmphasis = true;
+            btnBack.Icon = null;
+            btnBack.Location = new Point(305, 391);
+            btnBack.Margin = new Padding(4, 6, 4, 6);
+            btnBack.MouseState = MaterialSkin.MouseState.HOVER;
+            btnBack.Name = "btnBack";
+            btnBack.NoAccentTextColor = Color.Empty;
+            btnBack.Size = new Size(75, 36);
+            btnBack.TabIndex = 3;
+            btnBack.Text = "<- Back";
+            btnBack.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            btnBack.UseAccentColor = false;
+            btnBack.UseVisualStyleBackColor = true;
+            btnBack.Click += btnBack_Click;
+            // 
+            // Create
+            // 
+            btnCreate.Anchor = AnchorStyles.Bottom;
+            btnCreate.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            btnCreate.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            btnCreate.Depth = 0;
+            btnCreate.HighEmphasis = true;
+            btnCreate.Icon = null;
+            btnCreate.Location = new Point(413, 391);
+            btnCreate.Margin = new Padding(4, 6, 4, 6);
+            btnCreate.MouseState = MaterialSkin.MouseState.HOVER;
+            btnCreate.Name = "Create";
+            btnCreate.NoAccentTextColor = Color.Empty;
+            btnCreate.Size = new Size(76, 36);
+            btnCreate.TabIndex = 4;
+            btnCreate.Text = "Create";
+            btnCreate.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            btnCreate.UseAccentColor = false;
+            btnCreate.UseVisualStyleBackColor = true;
+            btnCreate.Click += btnCreate_Click;
             // 
             // FormViewModel
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(btnCreate);
+            Controls.Add(btnBack);
             Controls.Add(dataGridView);
             Name = "FormViewModel";
-            Padding = new Padding(50, 25, 50, 25);
+            Padding = new Padding(50, 25, 50, 85);
             Text = "FormCustomerCreate";
             ((System.ComponentModel.ISupportInitialize)dataGridView).EndInit();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
 
         private DataGridView dataGridView;
+        private MaterialSkin.Controls.MaterialButton btnBack;
+        private MaterialSkin.Controls.MaterialButton btnCreate;
     }
 }

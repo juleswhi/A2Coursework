@@ -1,6 +1,6 @@
 ﻿namespace movers_lib.model;
 
-public class StockReorder
+public class StockReorder : DatabaseModel
 {
     public int Id { get; set; }
     public int EmployeeId { get; set; }

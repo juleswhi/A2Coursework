@@ -1,6 +1,6 @@
 ﻿namespace movers_lib.model;
 
-public class Employee
+public class Employee : DatabaseModel
 {
     public int Id { get; set; }
     public string Forename { get; set; } = "";

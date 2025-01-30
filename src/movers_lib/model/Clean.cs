@@ -1,6 +1,6 @@
 ﻿namespace movers_lib.model;
 
-public class Clean
+public class Clean : DatabaseModel
 {
     public int Id { get; set; }
     public int CustomerId { get; set; }

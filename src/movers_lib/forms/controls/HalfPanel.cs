@@ -15,7 +15,6 @@ public class HalfPanel : Panel, IResizeableControl
     {
         Size = new Size(new_size.Width / 2, new_size.Height);
         this.CenterX(new_size.Width / 4);
-        this.CenterY();
     }
 
     private void InitializeComponent()

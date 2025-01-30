@@ -1,16 +1,23 @@
 ﻿using Microsoft.Data.SqlClient;
 using movers_lib.model;
-using System.Reflection.Metadata.Ecma335;
-using System.Runtime.CompilerServices;
 namespace database;
 
 public static class DAL
 {
-    private static readonly string _connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename='C:\Users\callum white\projects\movers_admin\movers_lib\database\database.mdf';Integrated Security=True";
+    // private static readonly string _connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename='C:\Users\callum white\projects\movers_admin\movers_lib\database\database.mdf';Integrated Security=True";
+    private static readonly string _connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename='C:\Users\callum\Documents\GitHub\A2Coursework\src\movers_lib\database\database.mdf';Integrated Security=True";
 
-    public static List<T> Query<T>(params string[] names)
+    /// <summary>
+    /// Query a database via class (and with selected column names)
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="names"></param>
+    /// <returns></returns>
+    public static List<T> Query<T>(params string[] names) where T : DatabaseModel
     {
         var type = typeof(T);
+
+        // If no column names are passed then grab all of them
         if (names is null || names.Length == 0) {
             names = type.GetProperties().Select(x => x.Name).ToArray();
         }
@@ -20,16 +27,22 @@ public static class DAL
         using var conn = new SqlConnection($"{_connectionString}");
         conn.Open();
         using var command = new SqlCommand($"select {name} from {type.Name} ;", conn);
+
+        // Grab results from query
         using var reader = command.ExecuteReader();
 
         List<T> results = [];
 
         while(reader.Read())
         {
+            // Create instance of the DatabaseModel
             T obj = Activator.CreateInstance<T>();
             foreach (var property in type.GetProperties().Where(x => names.Contains(x.Name)))
             {
+                // Grab the column cooresponding to the name
                 var ord = reader.GetOrdinal(property.Name);
+
+                // No nulls are ever allowed in database
                 ASSERT(!reader.IsDBNull(ord));
 
                 var t = property.PropertyType;
@@ -66,9 +79,9 @@ public static class DAL
         return results;
     }
 
-    public static List<T> Query<T>(Func<T, bool> func, params string[] names) => Query<T>(names).Where(func).ToList();
+    public static List<T> Query<T>(Func<T, bool> func, params string[] names) where T : DatabaseModel => Query<T>(names).Where(func).ToList();
 
-    public static bool Update<T>(this T obj, string rec) {
+    public static bool Update<T>(this T obj, string rec) where T : DatabaseModel {
         var type = typeof(T);
 
         using var conn = new SqlConnection($"{_connectionString}");
@@ -89,7 +102,7 @@ public static class DAL
         return res == 0;
     }
 
-    public static bool Delete<T>(this T obj, string condition)
+    public static bool Delete<T>(this T obj, string condition) where T : DatabaseModel
     {
         var type = typeof(T);
 
@@ -100,7 +113,7 @@ public static class DAL
         return command.ExecuteNonQuery() == 0;
     }
 
-    public static bool Create<T>(this T obj)
+    public static bool Create<T>(this T obj) where T : DatabaseModel
     {
         var type = typeof(T);
         using var conn = new SqlConnection($"{_connectionString}");
