@@ -9,4 +9,6 @@ public class Clean : DatabaseModel
     public int HoursWorked { get; set; }
     public double Price { get; set; }
     public bool Paid { get; set; }
+
+    public int[] GetPrimaryKey() => [Id];
 }

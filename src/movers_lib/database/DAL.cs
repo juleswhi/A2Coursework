@@ -79,7 +79,7 @@ public static class DAL
         return results;
     }
 
-    public static List<T> Query<T>(Func<T, bool> func, params string[] names) where T : DatabaseModel => Query<T>(names).Where(func).ToList();
+    // public static List<T> Query<T>(Func<T, bool> func, params string[] names) where T : DatabaseModel => Query<T>(names).Where(func).ToList();
 
     public static bool Update<T>(this T obj, string rec) where T : DatabaseModel {
         var type = typeof(T);

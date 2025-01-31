@@ -8,4 +8,5 @@ public class Customer : DatabaseModel
     public string Address { get; set; } = "";
     public string BillingAddress { get; set; } = "";
     public string ContactNumber { get; set; } = "";
+    public int[] GetPrimaryKey() => [Id];
 }

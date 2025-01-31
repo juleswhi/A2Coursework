@@ -8,4 +8,5 @@ public class StockReorder : DatabaseModel
     public int Quantity { get; set; }
     public DateTime OrderDate { get; set; }
     public DateTime ReceivedDate { get; set; }
+    public int[] GetPrimaryKey() => [Id];
 }

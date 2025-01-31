@@ -7,4 +7,5 @@ public class Employee : DatabaseModel
     public string Surname { get; set; } = "";
     public int JobId { get; set; } 
     public int TeamId { get; set; }
+    public int[] GetPrimaryKey() => [Id];
 }
