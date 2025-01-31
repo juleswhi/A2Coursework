@@ -33,7 +33,7 @@ public static class FormManager
     {
         _master = new FormMaster();
 
-        Trigger<T>();
+        ShowForm<T>();
 
         if (callback is Action<IFormMaster> action)
         {
@@ -48,7 +48,7 @@ public static class FormManager
     /// </summary>
     /// <typeparam name="T">The type of form to load</typeparam>
     /// <returns>A state representing either a Success or Failure</returns>
-    public static void Trigger<T>() where T : Form, new()
+    public static void ShowForm<T>() where T : Form, new()
     {
         if (_master is null) return;
 
@@ -62,7 +62,7 @@ public static class FormManager
     /// </summary>
     /// <typeparam name="T">The type of form to load</typeparam>
     /// <returns>A state representing either a Success or Failure</returns>
-    public static void Trigger<T, V>() where T : Form, new() where V : DatabaseModel
+    public static void ShowGCF<T, V>() where T : Form, GenericCreateableForm, new() where V : DatabaseModel
     {
         if (_master is null) return;
 
@@ -70,7 +70,7 @@ public static class FormManager
 
         _master.LoadForm(form);
 
-        (form as GenericCreateableForm)!.Create<V>();
+        form.Create<V>();
     }
 
     /// <summary>

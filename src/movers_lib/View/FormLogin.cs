@@ -13,7 +13,7 @@ public partial class FormLogin : Form, IResizeable
         button_login.Text = "&Login";
 
         button_login.Click += (_, _) => {
-            Trigger<FormViewModel, Customer>();
+            ShowGCF<FormViewModel, Customer>();
         };
 
         button_login.UseAccentColor = true;

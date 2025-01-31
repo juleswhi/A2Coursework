@@ -4,8 +4,8 @@ namespace database;
 
 public static class DAL
 {
-    // private static readonly string _connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename='C:\Users\callum white\projects\movers_admin\movers_lib\database\database.mdf';Integrated Security=True";
-    private static readonly string _connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename='C:\Users\callum\Documents\GitHub\A2Coursework\src\movers_lib\database\database.mdf';Integrated Security=True";
+    private static readonly string _connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename='C:\Users\callum white\projects\movers_admin\movers_lib\database\database.mdf';Integrated Security=True";
+    // private static readonly string _connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename='C:\Users\callum\Documents\GitHub\A2Coursework\src\movers_lib\database\database.mdf';Integrated Security=True";
 
     /// <summary>
     /// Query a database via class (and with selected column names)
