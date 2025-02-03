@@ -36,14 +36,14 @@ partial class FormMaster
         panelHolder.Dock = DockStyle.Fill;
         panelHolder.Location = new Point(0, 0);
         panelHolder.Name = "panelHolder";
-        panelHolder.Size = new Size(784, 361);
+        panelHolder.Size = new Size(834, 502);
         panelHolder.TabIndex = 0;
         // 
         // FormMaster
         // 
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
-        ClientSize = new Size(784, 361);
+        ClientSize = new Size(834, 502);
         Controls.Add(panelHolder);
         MinimumSize = new Size(20, 20);
         Name = "FormMaster";
