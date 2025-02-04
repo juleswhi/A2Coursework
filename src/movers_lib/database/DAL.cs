@@ -4,8 +4,8 @@ namespace database;
 
 public static class DAL
 {
-    // private static readonly string _connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename='C:\Users\callum white\projects\movers_admin\movers_lib\database\database.mdf';Integrated Security=True";
-    private static readonly string _connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename='C:\Users\callum\Documents\GitHub\A2Coursework\src\movers_lib\database\database.mdf';Integrated Security=True";
+    private static readonly string _connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename='C:\Users\callum white\projects\movers_admin\movers_lib\database\database.mdf';Integrated Security=True";
+    // private static readonly string _connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename='C:\Users\callum\Documents\GitHub\A2Coursework\src\movers_lib\database\database.mdf';Integrated Security=True";
 
     /// <summary>
     /// Query a database via class (and with selected column names)
@@ -23,6 +23,7 @@ public static class DAL
         }
 
         string name = names.Aggregate((x, y) => $"{x}, {y}");
+        // Id and Forename
 
         using var conn = new SqlConnection($"{_connectionString}");
         conn.Open();
@@ -119,8 +120,13 @@ public static class DAL
         using var conn = new SqlConnection($"{_connectionString}");
         conn.Open();
 
-        string props = type.GetProperties().Select(x => x.Name).Aggregate((x, y) => $"{x}, {y}");
-        string vals = type.GetProperties().Select(x => x.GetValue(obj)).Select(x => x!.ToString()).Aggregate((x, y) => $"{x}, '{y}'")!;
+        string props = type.GetProperties().
+            Select(x => x.Name).
+            Aggregate((x, y) => $"{x}, {y}");
+        string vals = type.GetProperties().
+            Select(x => x.GetValue(obj)).
+            Select(x => x!.ToString()).
+            Aggregate((x, y) => $"{x}, '{y}'")!;
 
         using var command = new SqlCommand($"insert into {type.Name} ({props}) values ({vals})", conn);
 

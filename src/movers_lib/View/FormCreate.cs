@@ -1,6 +1,8 @@
-﻿using MaterialSkin.Controls;
+﻿using database;
+using MaterialSkin.Controls;
 using movers_lib.forms;
 using movers_lib.model;
+using System.Reflection;
 
 namespace movers_lib.View;
 
@@ -61,6 +63,40 @@ public partial class FormCreate : Form, GenericCreateableForm
 
     private void btnCreate_Click(object sender, EventArgs e)
     {
+        //var obj = Activator.CreateInstance(_currentType);
+        //var meth = _currentType.GetMethod(nameof(DAL.Create)).MakeGenericMethod(_currentType);
+        //meth.Invoke(null, obj);
+    }
 
+    public static void do_something()
+    {
+        return;
+        var types = Assembly.GetCallingAssembly().GetTypes();
+
+        var unwanted_props = typeof(Button).GetProperties().Select(x => x.Name).ToList();
+        unwanted_props.AddRange(
+            typeof(TextBox).GetProperties().Select(x => x.Name).ToList()
+            );
+        unwanted_props.AddRange(
+            typeof(Panel).GetProperties().Select(x => x.Name).ToList()
+            );
+
+
+        foreach (var type in types)
+        {
+            var props = type.GetProperties();
+            string names = "";
+
+
+            if(props is null || props.Length == 0)
+            {
+                continue;
+            }
+
+            names = props.Select(x => x.Name).Where(x => !unwanted_props.Contains(x)).Aggregate((x, y) => $"{x}, {y}");
+
+            LOG($"---- NAME = {type.Name} --- ");
+            LOG($"\t\t{names}");
+        }
     }
 }
