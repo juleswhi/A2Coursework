@@ -19,7 +19,6 @@ public static class FormManager
         var m = _master as FormMaster;
         m!.Width = width;
         m!.Height = height;
-        LOG($"NEW WIDTH: {m.Width}, NEW HEIGHT: {m.Height}");
     }
 
     public static void CenterMaster()
@@ -71,6 +70,18 @@ public static class FormManager
         _master.LoadForm(form);
 
         form.Create<V>();
+    }
+
+    /// <summary>
+    /// Show GCF but reflective
+    /// </summary>
+    /// <param name="T"></param>
+    /// <param name="V"></param>
+    public static void ShowGCFR(Type T, Type V)
+    {
+        if (_master is null) return;
+
+        var method = typeof(FormManager)!.GetMethod(nameof(ShowGCF))!.MakeGenericMethod(T, V).Invoke(null, null);
     }
 
     /// <summary>

@@ -12,6 +12,8 @@ public partial class FormViewModel : Form, GenericCreateableForm
     private bool isRowSelected => dataGridView.SelectedRows.Count == 1;
     private Point btnCreateCenter = new();
     private Action<int>? deleteAction;
+    private Func<object?>? selectedAction;
+    private bool editMode = false;
     public FormViewModel()
     {
         InitializeComponent();
@@ -21,6 +23,7 @@ public partial class FormViewModel : Form, GenericCreateableForm
         dataGridView.RowStateChanged += (s, e) =>
         {
             btnDelete.Enabled = dataGridView.SelectedRows.Count == 1;
+            editMode = btnDelete.Enabled;
             if(_currentType is not null)
             {
                 btnCreate.Text = $"{(isRowSelected ? "Edit" : "Create")} {_currentType.Name}";
@@ -42,11 +45,10 @@ public partial class FormViewModel : Form, GenericCreateableForm
         _currentType = typeof(T);
 
         deleteAction = (i) =>
-        {
-            var val = values[i];
-            LOG($"{val.FormatPrimaryKey()}");
-            val.Delete($"Id = {val.FormatPrimaryKey()}");
-        };
+            DAL.Delete<T>($"Id = {values[i].FormatPrimaryKey()}");
+
+        selectedAction = () =>
+            Query<T>()[dataGridView.SelectedRows[0].Index];
     }
 
     private void btnBack_Click(object sender, EventArgs e)
@@ -56,10 +58,29 @@ public partial class FormViewModel : Form, GenericCreateableForm
 
     private void btnCreate_Click(object sender, EventArgs e)
     {
+        var rows = dataGridView.SelectedRows;
+        var edit = false;
+        object? val = null;
+        if (rows.Count == 1)
+        {
+            edit = true;
+            val = selectedAction!();
+        }
+
+
         // Can't invoke generic with Type so use reflection
         var method = typeof(FormManager)!.GetMethod(nameof(ShowGCF));
         var generic = method!.MakeGenericMethod(typeof(FormCreate), _currentType!);
         generic.Invoke(null, null);
+
+        if (!edit) return;
+
+        LOG($"IN edit mode");
+
+        var form = ((FormManager.GetMaster() as FormMaster)!.CurrentlyDisplayedForm as FormCreate)!;
+        var form_meth = form.GetType().GetMethod(nameof(form.Populate))!.MakeGenericMethod(_currentType!);
+
+        form_meth.Invoke(form, [val]);
     }
 
     private void btnDelete_Click(object sender, EventArgs e)

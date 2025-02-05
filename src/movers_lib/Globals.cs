@@ -6,3 +6,5 @@ global using Password = (string Hashed, byte[] Salt);
 global using static MaterialSkin.Primary;
 global using static MaterialSkin.Accent;
 global using static movers_lib.Widgets.WidgetHelper;
+global using static database.DAL;
+global using static database.DalHelper;

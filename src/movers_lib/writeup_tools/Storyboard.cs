@@ -15,7 +15,7 @@ public static class StoryboardConverter
 
         var forms = types.Where(x => x.IsSubclassOf(form) || x == form);
 
-        using var sw = new StreamWriter(@"C:\Users\callum white\output500", true);
+        using var sw = new StreamWriter(@"examplepath.txt", true);
 
         foreach(Type type in forms)
         {

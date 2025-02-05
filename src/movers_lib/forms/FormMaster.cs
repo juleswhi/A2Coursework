@@ -4,6 +4,7 @@ using MaterialSkin;
 namespace movers_lib.forms;
 public partial class FormMaster : Form, IFormMaster
 {
+    public Form? CurrentlyDisplayedForm => panelHolder.Controls.OfType<Form>().ToList().FirstOrDefault();
     public FormMaster()
     {
         InitializeComponent();

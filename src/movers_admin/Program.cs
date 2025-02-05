@@ -24,10 +24,6 @@ internal static class Program
 
         SetupAppData();
 
-        List<string> list = ["Rory", "James", "Michael", "Amy"];
-
-        List<string> cool_names = list.Where(name => name[0] == 'R' || name[0] == 'J').ToList();
-
         // Start form using my own Form Management System rather than the default way
         Start<FormLogin>();
     }

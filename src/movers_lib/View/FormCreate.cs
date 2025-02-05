@@ -2,24 +2,21 @@
 using MaterialSkin.Controls;
 using movers_lib.forms;
 using movers_lib.model;
-using System.Reflection;
 
 namespace movers_lib.View;
 
 public partial class FormCreate : Form, GenericCreateableForm
 {
     private Type? _currentType;
-    private List<(MaterialTextBox, bool)> _textBoxes => panel1.Controls.OfType<MaterialTextBox>().Select(x => (x, false)).ToList();
+    private List<MaterialTextBox> _textBoxes => panel1.Controls.OfType<MaterialTextBox>().ToList();
+    private bool _editMode = false;
     public FormCreate()
     {
         InitializeComponent();
         btnBack.UseAccentColor = true;
         btnCreate.UseAccentColor = true;
 
-        _textBoxes.ForEach(x => x.Item1.TextChanged += (s, e) =>
-        {
-            btnCreate.Enabled = _textBoxes.All(y => y.Item2);
-        });
+        btnCreate.Enabled = false;
     }
 
     public void Create<T>() where T : DatabaseModel
@@ -27,7 +24,7 @@ public partial class FormCreate : Form, GenericCreateableForm
         // Get fields in type
         var props = typeof(T).GetProperties();
 
-        var location = (panel1.Width / 3, 10);
+        var location = (panel1.Width / 2, 10);
 
         var max_len = props.Select(x => TextRenderer.MeasureText(x.Name, MaterialButton.DefaultFont).Width).Order().Reverse().First();
 
@@ -37,7 +34,7 @@ public partial class FormCreate : Form, GenericCreateableForm
             var label = new MaterialLabel();
             label.Text = prop.Name;
             btn.Location = new(location.Item1, location.Item2);
-            label.Location = new(location.Item1 - max_len - 25, location.Item2 + 15);
+            label.Location = new(location.Item1 - max_len - 40, location.Item2 + 15);
 
             location.Item2 = location.Item2 + btn.Height + 10;
 
@@ -52,6 +49,21 @@ public partial class FormCreate : Form, GenericCreateableForm
         }
 
         _currentType = typeof(T);
+
+        _textBoxes.ForEach(x => x.TextChanged += (s, e) =>
+        {
+            btnCreate.Enabled = _textBoxes.All(y => y.Text != String.Empty);
+        });
+    }
+
+    public void Populate<T>(T obj)
+    {
+        obj!.GetType().GetProperties().Zip(_textBoxes).ToList().ForEach(x =>
+        {
+            x.Second.Text = Convert.ChangeType(x.First.GetValue(obj), x.First.PropertyType)!.ToString();
+        });
+        _editMode = true;
+        btnCreate.Text = "Update";
     }
 
     private void btnBack_Click(object sender, EventArgs e)
@@ -63,40 +75,29 @@ public partial class FormCreate : Form, GenericCreateableForm
 
     private void btnCreate_Click(object sender, EventArgs e)
     {
-        //var obj = Activator.CreateInstance(_currentType);
-        //var meth = _currentType.GetMethod(nameof(DAL.Create)).MakeGenericMethod(_currentType);
-        //meth.Invoke(null, obj);
-    }
-
-    public static void do_something()
-    {
-        return;
-        var types = Assembly.GetCallingAssembly().GetTypes();
-
-        var unwanted_props = typeof(Button).GetProperties().Select(x => x.Name).ToList();
-        unwanted_props.AddRange(
-            typeof(TextBox).GetProperties().Select(x => x.Name).ToList()
-            );
-        unwanted_props.AddRange(
-            typeof(Panel).GetProperties().Select(x => x.Name).ToList()
-            );
-
-
-        foreach (var type in types)
+        if(_editMode)
         {
-            var props = type.GetProperties();
-            string names = "";
-
-
-            if(props is null || props.Length == 0)
-            {
-                continue;
-            }
-
-            names = props.Select(x => x.Name).Where(x => !unwanted_props.Contains(x)).Aggregate((x, y) => $"{x}, {y}");
-
-            LOG($"---- NAME = {type.Name} --- ");
-            LOG($"\t\t{names}");
+            var delete_meth = typeof(DAL).GetMethod(nameof(DAL.Delete))!.MakeGenericMethod(_currentType!);
+            delete_meth.Invoke(null, [$"Id = {_textBoxes[0].Text}"]);
         }
+        if (_currentType is null) return;
+
+        var obj = Activator.CreateInstance(_currentType);
+        Convert.ChangeType(obj, _currentType);
+
+        var props = _currentType.GetProperties();
+        var textvalues = _textBoxes.Select(x => x.Text);
+
+        props.Zip(textvalues).
+            ToList().
+            ForEach(x => x.First.
+                SetValue(obj, Convert.
+                    ChangeType(x.Second, x.First.PropertyType)));
+
+        var meth = typeof(DAL).GetMethod(nameof(DAL.Create))!;
+        var new_meth = meth.MakeGenericMethod(_currentType);
+        new_meth.Invoke(null, [obj!]);
+
+        ShowGCFR(typeof(FormViewModel), _currentType);
     }
 }

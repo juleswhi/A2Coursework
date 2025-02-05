@@ -48,18 +48,13 @@ public static class DAL
 
                 var t = property.PropertyType;
 
-                LOG($"Property Name: {property.Name}, Property Type: {property.PropertyType.Name}");
-
                 switch (property.PropertyType.Name)
                 {
                     case "Int32":
                         var num = reader.GetInt32(ord);
                         var prop = type.GetProperty(property.Name);
                         if(prop is null)
-                        {
-                            LOG($"Property: {t.Name} is null");
                             break;
-                        }
                         prop.SetValue(obj, num);
                         break;
                     case "DateTime":
@@ -103,7 +98,7 @@ public static class DAL
         return res == 0;
     }
 
-    public static bool Delete<T>(this T obj, string condition) where T : DatabaseModel
+    public static bool Delete<T>(string condition) where T : DatabaseModel
     {
         var type = typeof(T);
 
