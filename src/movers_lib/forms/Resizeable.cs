@@ -1,4 +1,4 @@
-﻿namespace movers_lib.forms;
+﻿namespace Forms;
 
 public interface IResizeable
 {

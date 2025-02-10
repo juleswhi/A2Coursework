@@ -1,10 +1,10 @@
-﻿using database;
+﻿using Database;
 using MaterialSkin.Controls;
-using movers_lib.forms;
-using movers_lib.model;
+using Forms;
+using Model;
 using System.Reflection;
 
-namespace movers_lib.View;
+namespace View;
 
 public partial class FormViewModel : Form, GenericCreateableForm
 {
@@ -17,7 +17,6 @@ public partial class FormViewModel : Form, GenericCreateableForm
     public FormViewModel()
     {
         InitializeComponent();
-        btnBack.UseAccentColor = true;
         btnCreate.UseAccentColor = true;
         btnDelete.UseAccentColor = true;
         dataGridView.RowStateChanged += (s, e) =>
@@ -75,8 +74,8 @@ public partial class FormViewModel : Form, GenericCreateableForm
 
         if (!edit) return;
 
-        var form = ((FormManager.GetMaster() as FormMaster)!.CurrentlyDisplayedForm as FormCreate)!;
-        var form_meth = form.GetType().GetMethod(nameof(form.Populate))!.MakeGenericMethod(_currentType!);
+        var form = Master!.CurrentlyDisplayedForm as FormCreate;
+        var form_meth = form!.GetType().GetMethod(nameof(form.Populate))!.MakeGenericMethod(_currentType!);
 
         form_meth.Invoke(form, [val]);
     }

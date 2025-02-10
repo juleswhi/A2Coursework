@@ -1,10 +1,6 @@
-﻿global using controls;
-global using static movers_lib.forms.FormHelper;
-global using static movers_lib.forms.FormManager;
-global using static movers_lib.logging.Logger;
-global using Password = (string Hashed, byte[] Salt);
+﻿global using static Forms.FormHelper;
+global using static Forms.FormManager;
+global using static Logging.Logger;
 global using static MaterialSkin.Primary;
 global using static MaterialSkin.Accent;
-global using static movers_lib.Widgets.WidgetHelper;
-global using static database.DAL;
-global using static database.DalHelper;
+global using static Database.DAL;

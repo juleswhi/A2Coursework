@@ -1,9 +1,9 @@
-﻿using database;
+﻿using Database;
 using MaterialSkin.Controls;
-using movers_lib.forms;
-using movers_lib.model;
+using Forms;
+using Model;
 
-namespace movers_lib.View;
+namespace View;
 
 public partial class FormCreate : Form, GenericCreateableForm
 {

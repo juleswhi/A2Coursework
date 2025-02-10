@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace movers_lib.logging;
+namespace Logging;
 
 public static class Logger
 {

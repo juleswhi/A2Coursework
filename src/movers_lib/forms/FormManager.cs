@@ -1,45 +1,34 @@
-﻿namespace movers_lib.forms;
+﻿namespace Forms;
 
-using movers_lib.model;
-using movers_lib.View;
+using Model;
+using View;
 
 public static class FormManager
 {
-    private static IFormMaster? _master;
-
-    public static IFormMaster? GetMaster()
-    {
-        return _master;
-    }
-
-    public static Size MasterSize => (_master as FormMaster)!.Size;
+    public static IFormMaster? Master;
+    public static Size MasterSize => (Master as Form)!.Size;
 
     public static void ChangeMasterSize(int width, int height)
     {
-        var m = _master as FormMaster;
+        var m = Master as Form;
         m!.Width = width;
         m!.Height = height;
     }
 
     public static void CenterMaster()
     {
-        var m = _master as FormMaster;
+        var m = Master as Form;
         m!.Location = new Point((Screen.PrimaryScreen!.WorkingArea.Width - m!.Width) / 2,
                                       (Screen.PrimaryScreen.WorkingArea.Height - m!.Height) / 2);
     }
 
-    public static void Start<T>(Action<FormMaster>? callback = null) where T : Form, new()
+    public static void Start<T>() where T : Form, new()
     {
-        _master = new FormMaster();
+        Master = new FormSkeleton();
 
         ShowForm<T>();
 
-        if (callback is Action<IFormMaster> action)
-        {
-            action(_master);
-        }
-
-        Application.Run((FormMaster)_master);
+        Application.Run((FormSkeleton)Master);
     }
 
     /// <summary>
@@ -49,11 +38,13 @@ public static class FormManager
     /// <returns>A state representing either a Success or Failure</returns>
     public static void ShowForm<T>() where T : Form, new()
     {
-        if (_master is null) return;
+        if (Master is null) return;
+
+        LOG($"Creating form now");
 
         T form = CreateForm<T>();
 
-        _master.LoadForm(form);
+        Master.LoadForm(form);
     }
 
     /// <summary>
@@ -63,11 +54,11 @@ public static class FormManager
     /// <returns>A state representing either a Success or Failure</returns>
     public static void ShowGCF<T, V>() where T : Form, GenericCreateableForm, new() where V : DatabaseModel
     {
-        if (_master is null) return;
+        if (Master is null) return;
 
         T form = CreateForm<T>();
 
-        _master.LoadForm(form);
+        Master.LoadForm(form);
 
         form.Create<V>();
     }
@@ -79,7 +70,7 @@ public static class FormManager
     /// <param name="V">Type of Database Model</param>
     public static void ShowGCFR(Type T, Type V)
     {
-        if (_master is null) return;
+        if (Master is null) return;
 
         var method = typeof(FormManager)!.
             GetMethod(nameof(ShowGCF))!.

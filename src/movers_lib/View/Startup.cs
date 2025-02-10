@@ -1,5 +1,4 @@
-﻿using movers_lib.forms;
-using System.Diagnostics;
+﻿using View;
 
 namespace movers_lib.View;
 
@@ -17,15 +16,12 @@ public partial class Startup : Form
 
         SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
 
-        BackColor = GetBlue();
-        // Set master form size
-
         ChangeMasterSize(390, 300);
         CenterMaster();
 
         LOG($"MASTER WIDTH: {MasterSize.Width}, MASTER HEIGHT: {MasterSize.Height}, HALF WIDTH: {MasterSize.Width / 2}, HALF HEIGHT: {MasterSize.Height / 2}");
 
-        (GetMaster() as FormMaster)!.FormBorderStyle = FormBorderStyle.None;
+        (Master as Form)!.FormBorderStyle = FormBorderStyle.None;
 
         Task.Run(() => ShowLoading());
     }
@@ -42,12 +38,12 @@ public partial class Startup : Form
 
         var g = e.Graphics;
 
-        var img = images.MoversCompanyLogo;
+        // var img = images.MoversCompanyLogo;
 
         var half_x = MasterSize.Width - (int)(MasterSize.Width / 2);
         var half_y = MasterSize.Height - (int)(MasterSize.Height / 2);
 
-        g.DrawImage(img, new Rectangle(half_x - 200, half_y - 188, 400, 375), new(0, 0, img.Width, img.Height), GraphicsUnit.Pixel);
+        // g.DrawImage(img, new Rectangle(half_x - 200, half_y - 188, 400, 375), new(0, 0, img.Width, img.Height), GraphicsUnit.Pixel);
 
         // var text_size = TextRenderer.MeasureText("Loading..", font);
         // TextFormatFlags flags = TextFormatFlags.Bottom;
@@ -71,10 +67,10 @@ public partial class Startup : Form
         await Task.Delay(PROGRESS_PAUSE);
 
         ChangeMasterSize(800, 500);
-        (GetMaster() as FormMaster)!.FormBorderStyle = FormBorderStyle.FixedSingle;
+        (Master as Form)!.FormBorderStyle = FormBorderStyle.FixedSingle;
 
         CenterMaster();
 
-        Invoke(() => ShowForm<FormMain>());
+        Invoke(() => ShowForm<FormSkeleton>());
     }
 }

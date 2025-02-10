@@ -1,6 +1,6 @@
-﻿using movers_lib.model;
+﻿using Model;
 
-namespace movers_lib.View;
+namespace View;
 
 public interface GenericCreateableForm
 {

@@ -1,4 +1,4 @@
-﻿namespace movers_lib.model;
+﻿namespace Model;
 
 public class Customer : DatabaseModel
 {

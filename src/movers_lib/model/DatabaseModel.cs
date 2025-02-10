@@ -1,4 +1,4 @@
-﻿namespace movers_lib.model;
+﻿namespace Model;
 
 public interface DatabaseModel {
     int[] GetPrimaryKey();
