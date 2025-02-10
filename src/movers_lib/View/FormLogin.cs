@@ -18,7 +18,8 @@ public partial class FormLogin : Form, IResizeable
         // FormCreate.do_something();
 
         button_login.Click += (_, _) => {
-            ShowGCF<FormViewModel, Customer>();
+            // ShowGCF<FormViewModel, Customer>();
+            ShowForm<FormMain>();
         };
 
         button_login.UseAccentColor = true;

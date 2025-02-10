@@ -75,8 +75,6 @@ public partial class FormViewModel : Form, GenericCreateableForm
 
         if (!edit) return;
 
-        LOG($"IN edit mode");
-
         var form = ((FormManager.GetMaster() as FormMaster)!.CurrentlyDisplayedForm as FormCreate)!;
         var form_meth = form.GetType().GetMethod(nameof(form.Populate))!.MakeGenericMethod(_currentType!);
 

@@ -75,13 +75,16 @@ public static class FormManager
     /// <summary>
     /// Show GCF but reflective
     /// </summary>
-    /// <param name="T"></param>
-    /// <param name="V"></param>
+    /// <param name="T">Form Type To Show</param>
+    /// <param name="V">Type of Database Model</param>
     public static void ShowGCFR(Type T, Type V)
     {
         if (_master is null) return;
 
-        var method = typeof(FormManager)!.GetMethod(nameof(ShowGCF))!.MakeGenericMethod(T, V).Invoke(null, null);
+        var method = typeof(FormManager)!.
+            GetMethod(nameof(ShowGCF))!.
+            MakeGenericMethod(T, V).
+            Invoke(null, null);
     }
 
     /// <summary>
