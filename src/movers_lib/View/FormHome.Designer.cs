@@ -42,6 +42,7 @@ partial class FormHome
         materialProgressBar2 = new MaterialSkin.Controls.MaterialProgressBar();
         materialLabel1 = new MaterialSkin.Controls.MaterialLabel();
         labelEmployees = new MaterialSkin.Controls.MaterialLabel();
+        cartesianChart1 = new LiveCharts.WinForms.CartesianChart();
         materialCard1.SuspendLayout();
         materialCard2.SuspendLayout();
         SuspendLayout();
@@ -147,7 +148,7 @@ partial class FormHome
         materialFloatingActionButton2.Icon = movers_lib.Properties.Resources.users;
         materialFloatingActionButton2.ImageKey = "users.png";
         materialFloatingActionButton2.ImageList = imageList1;
-        materialFloatingActionButton2.Location = new Point(465, 51);
+        materialFloatingActionButton2.Location = new Point(468, 52);
         materialFloatingActionButton2.MouseState = MaterialSkin.MouseState.HOVER;
         materialFloatingActionButton2.Name = "materialFloatingActionButton2";
         materialFloatingActionButton2.Size = new Size(56, 56);
@@ -163,7 +164,7 @@ partial class FormHome
         materialCard2.Controls.Add(labelEmployees);
         materialCard2.Depth = 0;
         materialCard2.ForeColor = Color.FromArgb(222, 0, 0, 0);
-        materialCard2.Location = new Point(271, 23);
+        materialCard2.Location = new Point(274, 24);
         materialCard2.Margin = new Padding(14);
         materialCard2.MouseState = MaterialSkin.MouseState.HOVER;
         materialCard2.Name = "materialCard2";
@@ -205,11 +206,20 @@ partial class FormHome
         labelEmployees.TabIndex = 3;
         labelEmployees.Text = "Working Employees";
         // 
+        // cartesianChart1
+        // 
+        cartesianChart1.Location = new Point(14, 153);
+        cartesianChart1.Name = "cartesianChart1";
+        cartesianChart1.Size = new Size(242, 142);
+        cartesianChart1.TabIndex = 15;
+        cartesianChart1.Text = "cartesianChart1";
+        // 
         // FormHome
         // 
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
         ClientSize = new Size(529, 381);
+        Controls.Add(cartesianChart1);
         Controls.Add(materialFloatingActionButton2);
         Controls.Add(materialFloatingActionButton1);
         Controls.Add(materialCard2);
@@ -237,4 +247,5 @@ partial class FormHome
     private MaterialSkin.Controls.MaterialProgressBar materialProgressBar2;
     private MaterialSkin.Controls.MaterialLabel materialLabel1;
     private MaterialSkin.Controls.MaterialLabel labelEmployees;
+    private LiveCharts.WinForms.CartesianChart cartesianChart1;
 }

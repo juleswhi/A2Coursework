@@ -1,6 +1,8 @@
-﻿namespace Model;
+﻿using MaterialSkin;
+
+namespace Model;
 
 public interface DatabaseModel {
-    int[] GetPrimaryKey();
-    string FormatPrimaryKey() => GetPrimaryKey().Select(x => x.ToString()).Aggregate((x, y) => $"{x}, {y}");
+    public (string, int)[] GetPrimaryKey();
+    public string FormatWhere() => GetPrimaryKey().Select((x, y) => $"{x} = '{y}'").Aggregate((x, y) => $"{x} AND {y}"); 
 }

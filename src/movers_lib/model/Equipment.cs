@@ -1,9 +1,10 @@
 ﻿namespace Model;
 
-public class Equipment : DatabaseModel
+public record Equipment : DatabaseModel
 {
     public int Id { get; set; }
-    public string Description { get; set; } = "";
+    public string Description { get; set; } = String.Empty;
     public int Amount { get; set; }
-    public int[] GetPrimaryKey() => [Id];
+    public (string, int)[] GetPrimaryKey() => [(nameof(Id), Id)];
+    public string FormatWhere() => GetPrimaryKey().Select((x, y) => $"{x} = '{y}'").Aggregate((x, y) => $"{x} AND {y}"); 
 }

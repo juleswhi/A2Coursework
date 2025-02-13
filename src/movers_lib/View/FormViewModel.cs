@@ -43,8 +43,8 @@ public partial class FormViewModel : Form, GenericCreateableForm
         btnCreateCenter = new(btnCreate.Location.X - (int)(0.5 * btnCreate.Width), btnCreate.Location.Y);
         _currentType = typeof(T);
 
-        deleteAction = (i) =>
-            DAL.Delete<T>($"Id = {values[i].FormatPrimaryKey()}");
+        deleteAction = (i) => { };
+            // DAL.Delete<T>($"Id = {values[i].FormatPrimaryKey()}");
 
         selectedAction = () =>
             Query<T>()[dataGridView.SelectedRows[0].Index];

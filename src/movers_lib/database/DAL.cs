@@ -2,8 +2,15 @@
 using Model;
 namespace Database;
 
+/// <summary>
+/// Database Access Layer
+/// Manages all Database Operations, including Queries, Creating, Deleting, Updating
+/// </summary>
 public static class DAL
 {
+    /// <summary>
+    /// Connection string : Refactor
+    /// </summary>
     // private static readonly string _connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename='C:\Users\callum white\projects\movers_admin\movers_lib\database\database.mdf';Integrated Security=True";
     private static readonly string _connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename='C:\Users\callum\Documents\GitHub\A2Coursework\src\movers_lib\database\database.mdf';Integrated Security=True";
 
@@ -48,18 +55,31 @@ public static class DAL
 
                 var t = property.PropertyType;
 
+                // Properly cast to type based on SQL type
                 switch (property.PropertyType.Name)
                 {
                     case "Int32":
+                    case "System.Int32":
                         var num = reader.GetInt32(ord);
                         var prop = type.GetProperty(property.Name);
                         if(prop is null)
                             break;
                         prop.SetValue(obj, num);
                         break;
+                    case "Double":
+                        var doub = reader.GetInt32(ord);
+                        var p = type.GetProperty(property.Name);
+                        if(p is null)
+                            break;
+                        p.SetValue(obj, doub);
+                        break;
                     case "DateTime":
                         var dt = reader.GetDateTime(ord);
                         type.GetProperty(property.Name)!.SetValue(obj, dt);
+                        break;
+                    case "Boolean":
+                        var b = reader.GetBoolean(ord);
+                        type.GetProperty(property.Name)!.SetValue(obj, b);
                         break;
                     default:
                         var str = reader.GetString(ord);
@@ -77,6 +97,13 @@ public static class DAL
 
     // public static List<T> Query<T>(Func<T, bool> func, params string[] names) where T : DatabaseModel => Query<T>(names).Where(func).ToList();
 
+    /// <summary>
+    /// Update SQL statement
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="obj"></param>
+    /// <param name="rec"></param>
+    /// <returns></returns>
     public static bool Update<T>(this T obj, string rec) where T : DatabaseModel {
         var type = typeof(T);
 
@@ -121,6 +148,7 @@ public static class DAL
         string vals = type.GetProperties().
             Select(x => x.GetValue(obj)).
             Select(x => x!.ToString()).
+            Select(x => x!.Replace("'", "''")).
             Aggregate((x, y) => $"{x}, '{y}'")!;
 
         using var command = new SqlCommand($"insert into {type.Name} ({props}) values ({vals})", conn);

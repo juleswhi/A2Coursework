@@ -34,6 +34,7 @@ partial class FormSkeleton
         panelHolder = new Panel();
         imageList1 = new ImageList(components);
         cardSide = new MaterialSkin.Controls.MaterialCard();
+        btnReports = new MaterialSkin.Controls.MaterialButton();
         btnHome = new MaterialSkin.Controls.MaterialButton();
         btnJobs = new MaterialSkin.Controls.MaterialButton();
         btnStock = new MaterialSkin.Controls.MaterialButton();
@@ -82,6 +83,7 @@ partial class FormSkeleton
         // 
         cardSide.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
         cardSide.BackColor = Color.FromArgb(255, 255, 255);
+        cardSide.Controls.Add(btnReports);
         cardSide.Controls.Add(btnHome);
         cardSide.Controls.Add(btnJobs);
         cardSide.Controls.Add(btnStock);
@@ -97,6 +99,27 @@ partial class FormSkeleton
         cardSide.Size = new Size(200, 450);
         cardSide.TabIndex = 3;
         // 
+        // btnReports
+        // 
+        btnReports.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
+        btnReports.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+        btnReports.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+        btnReports.Depth = 0;
+        btnReports.HighEmphasis = true;
+        btnReports.Icon = (Image)resources.GetObject("btnReports.Icon");
+        btnReports.Location = new Point(13, 309);
+        btnReports.Margin = new Padding(0);
+        btnReports.MinimumSize = new Size(172, 50);
+        btnReports.MouseState = MaterialSkin.MouseState.HOVER;
+        btnReports.Name = "btnReports";
+        btnReports.NoAccentTextColor = Color.Empty;
+        btnReports.Size = new Size(172, 50);
+        btnReports.TabIndex = 6;
+        btnReports.Text = "Reports";
+        btnReports.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+        btnReports.UseAccentColor = true;
+        btnReports.UseVisualStyleBackColor = true;
+        // 
         // btnHome
         // 
         btnHome.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
@@ -105,7 +128,7 @@ partial class FormSkeleton
         btnHome.Depth = 0;
         btnHome.HighEmphasis = true;
         btnHome.Icon = (Image)resources.GetObject("btnHome.Icon");
-        btnHome.Location = new Point(14, 37);
+        btnHome.Location = new Point(13, 21);
         btnHome.Margin = new Padding(0);
         btnHome.MinimumSize = new Size(172, 50);
         btnHome.MouseState = MaterialSkin.MouseState.HOVER;
@@ -126,7 +149,7 @@ partial class FormSkeleton
         btnJobs.Depth = 0;
         btnJobs.HighEmphasis = true;
         btnJobs.Icon = (Image)resources.GetObject("btnJobs.Icon");
-        btnJobs.Location = new Point(14, 113);
+        btnJobs.Location = new Point(13, 93);
         btnJobs.Margin = new Padding(0);
         btnJobs.MinimumSize = new Size(172, 50);
         btnJobs.MouseState = MaterialSkin.MouseState.HOVER;
@@ -147,7 +170,7 @@ partial class FormSkeleton
         btnStock.Depth = 0;
         btnStock.HighEmphasis = true;
         btnStock.Icon = (Image)resources.GetObject("btnStock.Icon");
-        btnStock.Location = new Point(14, 189);
+        btnStock.Location = new Point(13, 165);
         btnStock.Margin = new Padding(0);
         btnStock.MinimumSize = new Size(172, 50);
         btnStock.MouseState = MaterialSkin.MouseState.HOVER;
@@ -168,7 +191,7 @@ partial class FormSkeleton
         btnStaff.Depth = 0;
         btnStaff.HighEmphasis = true;
         btnStaff.Icon = (Image)resources.GetObject("btnStaff.Icon");
-        btnStaff.Location = new Point(14, 265);
+        btnStaff.Location = new Point(13, 237);
         btnStaff.Margin = new Padding(0);
         btnStaff.MinimumSize = new Size(172, 50);
         btnStaff.MouseState = MaterialSkin.MouseState.HOVER;
@@ -189,7 +212,7 @@ partial class FormSkeleton
         btnSettings.Depth = 0;
         btnSettings.HighEmphasis = true;
         btnSettings.Icon = (Image)resources.GetObject("btnSettings.Icon");
-        btnSettings.Location = new Point(14, 341);
+        btnSettings.Location = new Point(13, 381);
         btnSettings.Margin = new Padding(0);
         btnSettings.MinimumSize = new Size(172, 50);
         btnSettings.MouseState = MaterialSkin.MouseState.HOVER;
@@ -231,4 +254,5 @@ partial class FormSkeleton
     private MaterialSkin.Controls.MaterialButton btnStock;
     private MaterialSkin.Controls.MaterialButton btnJobs;
     private MaterialSkin.Controls.MaterialButton btnHome;
+    private MaterialSkin.Controls.MaterialButton btnReports;
 }

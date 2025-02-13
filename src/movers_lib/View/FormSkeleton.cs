@@ -16,12 +16,15 @@ public partial class FormSkeleton : Form, IFormMaster
 
         BackColor = Almond();
 
+        // Initialise Buttons 
         btnHome.Click += (s, e) => ShowForm<FormHome>();
         btnJobs.Click += (s, e) => ShowGCF<FormViewModel, Clean>();
         btnStock.Click += (s, e) => ShowGCF<FormViewModel, Product>();
         btnStaff.Click += (s, e) => ShowGCF<FormViewModel, Employee>();
+        btnSettings.Click += (s, e) => ShowForm<FormReports>();
         btnSettings.Click += (s, e) => ShowForm<FormSettings>();
     }
+
     public Panel GetHolder() => panelHolder;
 
     public void LoadForm(Form form)
