@@ -40,8 +40,6 @@ public static class FormManager
     {
         if (Master is null) return;
 
-        LOG($"Creating form now");
-
         T form = CreateForm<T>();
 
         Master.LoadForm(form);

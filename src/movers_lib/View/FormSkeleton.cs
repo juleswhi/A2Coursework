@@ -4,6 +4,9 @@ using Model;
 
 namespace View;
 
+/// <summary>
+/// FormSkeleton is the master form, 
+/// </summary>
 public partial class FormSkeleton : Form, IFormMaster
 {
     public Form current_form => panelHolder.Controls.OfType<Form>().ToList().FirstOrDefault()!;
@@ -21,12 +24,20 @@ public partial class FormSkeleton : Form, IFormMaster
         btnJobs.Click += (s, e) => ShowGCF<FormViewModel, Clean>();
         btnStock.Click += (s, e) => ShowGCF<FormViewModel, Product>();
         btnStaff.Click += (s, e) => ShowGCF<FormViewModel, Employee>();
-        btnSettings.Click += (s, e) => ShowForm<FormReports>();
+        btnReports.Click += (s, e) => ShowForm<FormReports>();
         btnSettings.Click += (s, e) => ShowForm<FormSettings>();
     }
 
+    /// <summary>
+    /// Accesses the Panel that holds the form
+    /// </summary>
+    /// <returns></returns>
     public Panel GetHolder() => panelHolder;
 
+    /// <summary>
+    /// Displays a chosen <c>Form</c> in <c>panelHolder</c>
+    /// </summary>
+    /// <param name="form">The form to display</param>
     public void LoadForm(Form form)
     {
         form.TopLevel = false;

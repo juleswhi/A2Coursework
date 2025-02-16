@@ -19,7 +19,7 @@ internal static class Program
         MaterialSkinManager.Instance.ColorScheme = new ColorScheme(Primary.Green800, Primary.Green800, Primary.Green800, Accent.Teal700, TextShade.BLACK);
 
         for (int i = 0; i < 50; i++) {
-            Employee.GenerateFakeData().Create();
+            // Employee.GenerateFakeData().Create();
         }
 
         // Start form using my own Form Management System rather than the default way
