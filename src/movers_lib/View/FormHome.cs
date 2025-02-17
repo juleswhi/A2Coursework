@@ -1,6 +1,4 @@
-﻿using Forms;
-
-namespace View;
+﻿namespace View;
 
 public partial class FormHome : Form
 {

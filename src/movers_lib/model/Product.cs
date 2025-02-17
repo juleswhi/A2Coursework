@@ -12,7 +12,7 @@ public record Product : DatabaseModel
         ];
 
     public (string, int)[] GetPrimaryKey() => [(nameof(Id), Id)];
-    public string FormatWhere() => GetPrimaryKey().Select((x, y) => $"{x} = '{y}'").Aggregate((x, y) => $"{x} AND {y}"); 
+    public string FormatWhere() => GetPrimaryKey().Select((x, y) => $"{x} = '{y}'").Aggregate((x, y) => $"{x} AND {y}");
     public static Product GenerateFakeData()
         => new Faker<Product>()
             .RuleFor(o => o.Id, f => DAL.Query<Product>().Select(x => x.Id).Max() + 1)
@@ -20,4 +20,12 @@ public record Product : DatabaseModel
             .RuleFor(o => o.Description, f => f.PickRandom(productTypes.Select(x => x.Item2)))
             .RuleFor(o => o.Amount, f => f.Random.Number(500))
             .Generate();
+    public Dictionary<string, Action<DatabaseModel>> Buttons()
+    {
+        return new() {
+            { "Create", _ => { } },
+            { "Edit", _ => { } },
+            { "Delete", _ => { } }
+        };
+    }
 }

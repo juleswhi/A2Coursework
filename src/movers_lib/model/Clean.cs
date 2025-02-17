@@ -1,5 +1,5 @@
-﻿using Bogus;
-using Database;
+﻿using View;
+
 namespace Model;
 
 public class Clean : DatabaseModel
@@ -14,7 +14,7 @@ public class Clean : DatabaseModel
     public bool Paid { get; set; }
 
     public (string, int)[] GetPrimaryKey() => new[] { ("Id", Id) };
-    public string FormatWhere() => GetPrimaryKey().Select(x => $"{x.Item1} = '{x.Item2}'").Aggregate((x, y) => $"{x} AND {y}"); 
+    public string FormatWhere() => GetPrimaryKey().Select(x => $"{x.Item1} = '{x.Item2}'").Aggregate((x, y) => $"{x} AND {y}");
     public static Clean GenerateFakeData()
         => new Faker<Clean>()
             .RuleFor(o => o.Id, f => DAL.Query<Clean>().Select(o => o.Id).Max() + 1)
@@ -26,4 +26,18 @@ public class Clean : DatabaseModel
             .RuleFor(o => o.Price, f => f.Random.Number(0, 10_000))
             .RuleFor(o => o.Paid, f => f.Random.Bool())
             .Generate();
+
+    public Dictionary<string, Action<DatabaseModel>> Buttons()
+    {
+        return new() {
+            { 
+                "Create", m => { ShowGCFR(typeof(FormCreate), typeof(Clean));
+                var form = Master!.CurrentlyDisplayedForm as FormCreate;
+                var form_meth = form!.GetType().GetMethod(nameof(form.Populate))!.MakeGenericMethod(typeof(Clean)!);
+                form_meth.Invoke(form, [m]); } 
+            },
+            { "Bombard", _ => { } },
+            { "Delete", _ => { } }
+        };
+    }
 }

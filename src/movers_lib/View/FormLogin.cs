@@ -11,9 +11,10 @@ public partial class FormLogin : Form
         btnLogin.UseMnemonic = true;
         btnLogin.Text = "&Login";
 
-        btnLogin.Click += (_, _) => {
-            ShowForm<FormHome>(); 
-        }; 
+        btnLogin.Click += (_, _) =>
+        {
+            ShowForm<FormHome>();
+        };
 
         btnLogin.UseAccentColor = true;
     }

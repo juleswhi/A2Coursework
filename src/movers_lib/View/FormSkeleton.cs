@@ -1,15 +1,19 @@
-﻿using MaterialSkin.Controls;
-using Forms;
+﻿using Forms;
 using Model;
 
 namespace View;
 
 /// <summary>
-/// FormSkeleton is the master form, 
+/// FormSkeleton is the master form
 /// </summary>
 public partial class FormSkeleton : Form, IFormMaster
 {
-    public Form current_form => panelHolder.Controls.OfType<Form>().ToList().FirstOrDefault()!;
+    public Form current_form => panelHolder.
+        Controls.
+        OfType<Form>().
+        ToList().
+        FirstOrDefault()!;
+
     public Form CurrentlyDisplayedForm { get => current_form; }
 
     public FormSkeleton()

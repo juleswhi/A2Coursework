@@ -1,6 +1,5 @@
-﻿using Database;
+﻿using Forms;
 using MaterialSkin.Controls;
-using Forms;
 using Model;
 
 namespace View;
@@ -30,6 +29,7 @@ public partial class FormCreate : Form, GenericCreateableForm
 
         foreach (var prop in props)
         {
+            if (prop.Name == "Id") continue;
             var btn = new MaterialTextBox();
             var label = new MaterialLabel();
             label.Text = prop.Name;
@@ -75,7 +75,7 @@ public partial class FormCreate : Form, GenericCreateableForm
 
     private void btnCreate_Click(object sender, EventArgs e)
     {
-        if(_editMode)
+        if (_editMode)
         {
             var delete_meth = typeof(DAL).GetMethod(nameof(DAL.Delete))!.MakeGenericMethod(_currentType!);
             delete_meth.Invoke(null, [$"Id = {_textBoxes[0].Text}"]);
@@ -85,7 +85,8 @@ public partial class FormCreate : Form, GenericCreateableForm
         var obj = Activator.CreateInstance(_currentType);
         Convert.ChangeType(obj, _currentType);
 
-        var props = _currentType.GetProperties();
+        var props = _currentType.GetProperties().ToList();
+        props.RemoveAt(0);
         var textvalues = _textBoxes.Select(x => x.Text);
 
         props.Zip(textvalues).

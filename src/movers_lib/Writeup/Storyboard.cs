@@ -1,5 +1,4 @@
-﻿using System.Collections.Immutable;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace movers_lib.writeup_tools;
 
@@ -17,7 +16,7 @@ public static class StoryboardConverter
 
         using var sw = new StreamWriter(@"examplepath.txt", true);
 
-        foreach(Type type in forms)
+        foreach (Type type in forms)
         {
             // Create the instance of the form
             var instance = Activator.CreateInstance(type);
@@ -36,7 +35,7 @@ public static class StoryboardConverter
     {
         var controls = GetControls(obj);
 
-        if(controls is null)
+        if (controls is null)
         {
             return;
         }
@@ -49,7 +48,7 @@ public static class StoryboardConverter
                 PrintContainer(control, sw);
             }
 
-            foreach(var str in GetInformation(control))
+            foreach (var str in GetInformation(control))
             {
                 sw.WriteLine(str);
             }

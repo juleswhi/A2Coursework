@@ -16,11 +16,6 @@ public partial class Startup : Form
 
         SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
 
-        ChangeMasterSize(390, 300);
-        CenterMaster();
-
-        LOG($"MASTER WIDTH: {MasterSize.Width}, MASTER HEIGHT: {MasterSize.Height}, HALF WIDTH: {MasterSize.Width / 2}, HALF HEIGHT: {MasterSize.Height / 2}");
-
         (Master as Form)!.FormBorderStyle = FormBorderStyle.None;
 
         Task.Run(() => ShowLoading());
@@ -39,9 +34,6 @@ public partial class Startup : Form
         var g = e.Graphics;
 
         // var img = images.MoversCompanyLogo;
-
-        var half_x = MasterSize.Width - (int)(MasterSize.Width / 2);
-        var half_y = MasterSize.Height - (int)(MasterSize.Height / 2);
 
         // g.DrawImage(img, new Rectangle(half_x - 200, half_y - 188, 400, 375), new(0, 0, img.Width, img.Height), GraphicsUnit.Pixel);
 
@@ -66,10 +58,7 @@ public partial class Startup : Form
         // Pause with the loading bar full
         await Task.Delay(PROGRESS_PAUSE);
 
-        ChangeMasterSize(800, 500);
         (Master as Form)!.FormBorderStyle = FormBorderStyle.FixedSingle;
-
-        CenterMaster();
 
         Invoke(() => ShowForm<FormSkeleton>());
     }

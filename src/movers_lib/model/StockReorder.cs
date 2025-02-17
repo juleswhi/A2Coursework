@@ -9,7 +9,7 @@ public record StockReorder : DatabaseModel
     public string OrderDate { get; set; } = String.Empty;
     public string ReceivedDate { get; set; } = String.Empty;
     public (string, int)[] GetPrimaryKey() => [(nameof(Id), Id)];
-    public string FormatWhere() => GetPrimaryKey().Select((x, y) => $"{x} = '{y}'").Aggregate((x, y) => $"{x} AND {y}"); 
+    public string FormatWhere() => GetPrimaryKey().Select((x, y) => $"{x} = '{y}'").Aggregate((x, y) => $"{x} AND {y}");
     public static StockReorder GenerateFakeData()
         => new Faker<StockReorder>()
             .RuleFor(o => o.Id, f => DAL.Query<StockReorder>().Select(x => x.Id).Max() + 1)
@@ -19,4 +19,12 @@ public record StockReorder : DatabaseModel
             .RuleFor(o => o.OrderDate, f => f.Date.Past().ToString())
             .RuleFor(o => o.ReceivedDate, f => f.Date.Future().ToString())
             .Generate();
+    public Dictionary<string, Action<DatabaseModel>> Buttons()
+    {
+        return new() {
+            { "Create", _ => { } },
+            { "Edit", _ => { } },
+            { "Delete", _ => { } }
+        };
+    }
 }

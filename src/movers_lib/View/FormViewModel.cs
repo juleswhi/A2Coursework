@@ -1,8 +1,6 @@
-﻿using Database;
+﻿using Forms;
 using MaterialSkin.Controls;
-using Forms;
 using Model;
-using System.Reflection;
 
 namespace View;
 
@@ -19,11 +17,15 @@ public partial class FormViewModel : Form, GenericCreateableForm
         InitializeComponent();
         btnCreate.UseAccentColor = true;
         btnDelete.UseAccentColor = true;
+        btnCreate.Enabled = false;
+        btnDelete.Enabled = false;
+        btnCreate.Visible = false;
+        btnDelete.Visible = false;
         dataGridView.RowStateChanged += (s, e) =>
         {
             btnDelete.Enabled = dataGridView.SelectedRows.Count == 1;
             editMode = btnDelete.Enabled;
-            if(_currentType is not null)
+            if (_currentType is not null)
             {
                 btnCreate.Text = $"{(isRowSelected ? "Edit" : "Create")} {_currentType.Name}";
                 btnCreate.Location = btnCreateCenter;
@@ -39,15 +41,41 @@ public partial class FormViewModel : Form, GenericCreateableForm
         string name = $"Create {typeof(T).Name}";
         var size = TextRenderer.MeasureText(name, MaterialButton.DefaultFont);
         btnCreate.Width = size.Width;
-        btnCreate.Text = $"{(isRowSelected ? "Edit" : "Create")} {typeof(T).Name}";
-        btnCreateCenter = new(btnCreate.Location.X - (int)(0.5 * btnCreate.Width), btnCreate.Location.Y);
         _currentType = typeof(T);
 
         deleteAction = (i) => { };
-            // DAL.Delete<T>($"Id = {values[i].FormatPrimaryKey()}");
+        // DAL.Delete<T>($"Id = {values[i].FormatPrimaryKey()}");
 
         selectedAction = () =>
             Query<T>()[dataGridView.SelectedRows[0].Index];
+
+        var obj = (DatabaseModel)Activator.CreateInstance(typeof(T))!;
+        var buttons = obj.Buttons();
+
+        int x = 0;
+
+        foreach (var btn in buttons)
+        {
+            var b = new MaterialButton()
+            {
+                Text = btn.Key,
+            };
+
+            b.Click += (s, e) =>
+            {
+                if (dataGridView.SelectedRows.Count != 1) return;
+                var data = Query<T>()[dataGridView.SelectedRows[0].Index];
+                btn.Value.Invoke((DatabaseModel)data);
+            };
+
+            b.UseAccentColor = true;
+
+            b.Location = btnCreate.Location;
+            b.Location = new Point(b.Location.X + x, b.Location.Y);
+            x += (int)(b.Size.Width * 1.5);
+
+            Controls.Add(b);
+        }
     }
 
     private void btnBack_Click(object sender, EventArgs e)
@@ -76,7 +104,6 @@ public partial class FormViewModel : Form, GenericCreateableForm
 
         var form = Master!.CurrentlyDisplayedForm as FormCreate;
         var form_meth = form!.GetType().GetMethod(nameof(form.Populate))!.MakeGenericMethod(_currentType!);
-
         form_meth.Invoke(form, [val]);
     }
 

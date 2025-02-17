@@ -11,8 +11,8 @@ public static class DAL
     /// <summary>
     /// Connection string : Refactor
     /// </summary>
-    // private static readonly string _connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename='C:\Users\callum white\projects\movers_admin\movers_lib\database\database.mdf';Integrated Security=True";
-    private static readonly string _connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename='C:\Users\callum\Documents\GitHub\A2Coursework\src\movers_lib\database\database.mdf';Integrated Security=True";
+    private static readonly string _connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename='C:\Users\callum white\projects\movers_admin\movers_lib\database\database.mdf';Integrated Security=True";
+    // private static readonly string _connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename='C:\Users\callum\Documents\GitHub\A2Coursework\src\movers_lib\database\database.mdf';Integrated Security=True";
 
     /// <summary>
     /// Query a database via class (and with selected column names)
@@ -25,7 +25,8 @@ public static class DAL
         var type = typeof(T);
 
         // If no column names are passed then grab all of them
-        if (names is null || names.Length == 0) {
+        if (names is null || names.Length == 0)
+        {
             names = type.GetProperties().Select(x => x.Name).ToArray();
         }
 
@@ -40,7 +41,7 @@ public static class DAL
 
         List<T> results = [];
 
-        while(reader.Read())
+        while (reader.Read())
         {
             // Create instance of the DatabaseModel
             T obj = Activator.CreateInstance<T>();
@@ -61,14 +62,14 @@ public static class DAL
                     case "System.Int32":
                         var num = reader.GetInt32(ord);
                         var prop = type.GetProperty(property.Name);
-                        if(prop is null)
+                        if (prop is null)
                             break;
                         prop.SetValue(obj, num);
                         break;
                     case "Double":
                         var doub = reader.GetInt32(ord);
                         var p = type.GetProperty(property.Name);
-                        if(p is null)
+                        if (p is null)
                             break;
                         p.SetValue(obj, doub);
                         break;
@@ -102,7 +103,8 @@ public static class DAL
     /// <typeparam name="T">The type of DatabaseModel to update</typeparam>
     /// <param name="obj">The instance of DatabaseModel to update</param>
     /// <returns></returns>
-    public static bool Update<T>(this T obj) where T : DatabaseModel {
+    public static bool Update<T>(this T obj) where T : DatabaseModel
+    {
         var type = typeof(T);
 
         using var conn = new SqlConnection($"{_connectionString}");
@@ -123,7 +125,7 @@ public static class DAL
         return res == 0;
     }
 
-    public static bool Delete<T>() where T : DatabaseModel
+    public static bool Delete<T>(this T obj) where T : DatabaseModel
     {
         var type = typeof(T);
 

@@ -248,7 +248,7 @@ partial class FormSkeleton
     private Panel panelHolder;
     private ImageList imageList1;
     private MaterialSkin.Controls.MaterialCard cardSide;
-    private MaterialSkin.Controls.MaterialCard materialCard1;
+    // private MaterialSkin.Controls.MaterialCard materialCard1;
     private MaterialSkin.Controls.MaterialButton btnStaff;
     private MaterialSkin.Controls.MaterialButton btnSettings;
     private MaterialSkin.Controls.MaterialButton btnStock;
