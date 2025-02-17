@@ -1,27 +1,19 @@
-﻿namespace Forms;
+namespace Forms;
 
 using Model;
 using View;
 
 public static class FormManager
 {
+    ///<summary>
+    /// This holds a public reference to the current main form
+    ///</summary>
     public static IFormMaster? Master;
-    public static Size MasterSize => (Master as Form)!.Size;
 
-    public static void ChangeMasterSize(int width, int height)
-    {
-        var m = Master as Form;
-        m!.Width = width;
-        m!.Height = height;
-    }
-
-    public static void CenterMaster()
-    {
-        var m = Master as Form;
-        m!.Location = new Point((Screen.PrimaryScreen!.WorkingArea.Width - m!.Width) / 2,
-                                      (Screen.PrimaryScreen.WorkingArea.Height - m!.Height) / 2);
-    }
-
+    /// <summary>
+    /// This creates an instance of the master form, and displays the form T inside of it
+    /// </summary>
+    /// <typeparam name="T">The type of form to display</typeparam>
     public static void Start<T>() where T : Form, new()
     {
         Master = new FormSkeleton();
