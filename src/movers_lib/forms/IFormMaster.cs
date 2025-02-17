@@ -1,4 +1,4 @@
-﻿namespace Forms;
+namespace Forms;
 
 public interface IFormMaster
 {
@@ -6,7 +6,6 @@ public interface IFormMaster
     Panel GetHolder();
     void LoadForm(Form form)
     {
-
         form.TopLevel = false;
         form.Dock = DockStyle.Fill;
         form.FormBorderStyle = FormBorderStyle.None;
@@ -14,7 +13,6 @@ public interface IFormMaster
         form.Visible = true;
 
         var panel = GetHolder();
-
         panel.Controls.Clear();
         panel.Controls.Add(form);
         panel.Show();
