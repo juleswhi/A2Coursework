@@ -1,4 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using Model;
 namespace Database;
 
@@ -30,7 +30,6 @@ public static class DAL
         }
 
         string name = names.Aggregate((x, y) => $"{x}, {y}");
-        // Id and Forename
 
         using var conn = new SqlConnection($"{_connectionString}");
         conn.Open();
@@ -50,7 +49,7 @@ public static class DAL
                 // Grab the column cooresponding to the name
                 var ord = reader.GetOrdinal(property.Name);
 
-                // No nulls are ever allowed in database
+                // Database must not contain any nulls
                 ASSERT(!reader.IsDBNull(ord));
 
                 var t = property.PropertyType;
@@ -100,11 +99,10 @@ public static class DAL
     /// <summary>
     /// Update SQL statement
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="obj"></param>
-    /// <param name="rec"></param>
+    /// <typeparam name="T">The type of DatabaseModel to update</typeparam>
+    /// <param name="obj">The instance of DatabaseModel to update</param>
     /// <returns></returns>
-    public static bool Update<T>(this T obj, string rec) where T : DatabaseModel {
+    public static bool Update<T>(this T obj) where T : DatabaseModel {
         var type = typeof(T);
 
         using var conn = new SqlConnection($"{_connectionString}");
@@ -117,7 +115,7 @@ public static class DAL
             .Select((c, _) => $"{c.First} = '{c.Second}'")
             .Aggregate((x, y) => $"{x}, {y}");
 
-        using var command = new SqlCommand($"update {type.Name} set {updates} where {rec};", conn);
+        using var command = new SqlCommand($"update {type.Name} set {updates} where {obj.FormatWhere()};", conn);
         int res = command.ExecuteNonQuery();
 
         conn.Close();
@@ -125,14 +123,14 @@ public static class DAL
         return res == 0;
     }
 
-    public static bool Delete<T>(string condition) where T : DatabaseModel
+    public static bool Delete<T>() where T : DatabaseModel
     {
         var type = typeof(T);
 
         using var conn = new SqlConnection($"{_connectionString}");
         conn.Open();
 
-        using var command = new SqlCommand($"delete from {type.Name} where {condition};", conn);
+        using var command = new SqlCommand($"delete from {type.Name} where {obj.FormatWhere()};", conn);
         return command.ExecuteNonQuery() == 0;
     }
 
