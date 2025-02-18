@@ -9,12 +9,12 @@ public record Job : DatabaseModel
         => new Faker<Job>()
             .RuleFor(o => o.Id, f => DAL.Query<Job>().Select(x => x.Id).Max() + 1)
             .Generate();
-    public Dictionary<string, Action<DatabaseModel>> Buttons()
+    public Dictionary<string, (Action<DatabaseModel?>, bool)> Buttons()
     {
         return new() {
-            { "Create", _ => { } },
-            { "Edit", _ => { } },
-            { "Delete", _ => { } }
+            { "Create", (_ => { }, false) },
+            { "Edit", (_ => { }, true) },
+            { "Delete", (_ => { }, true) }
         };
     }
 }

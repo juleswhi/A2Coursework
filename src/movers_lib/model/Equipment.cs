@@ -7,12 +7,12 @@ public record Equipment : DatabaseModel
     public int Amount { get; set; }
     public (string, int)[] GetPrimaryKey() => [(nameof(Id), Id)];
     public string FormatWhere() => GetPrimaryKey().Select((x, y) => $"{x} = '{y}'").Aggregate((x, y) => $"{x} AND {y}");
-    public Dictionary<string, Action<DatabaseModel>> Buttons()
+    public Dictionary<string, (Action<DatabaseModel?>, bool)> Buttons()
     {
         return new() {
-            { "Create", _ => { } },
-            { "Edit", _ => { } },
-            { "Delete", _ => { } }
+            { "Create", (_ => { }, false) },
+            { "Edit", (_ => { }, true) },
+            { "Delete", (_ => { }, true) }
         };
     }
 }

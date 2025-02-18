@@ -11,12 +11,12 @@ public record CleaningEquipment : DatabaseModel
             .RuleFor(o => o.Id, f => DAL.Query<CleaningEquipment>().Select(o => o.Id).Max() + 1)
             .RuleFor(o => o.EquipmentId, f => f.PickRandom(DAL.Query<Equipment>().Select(x => x.Id)))
             .Generate();
-    public Dictionary<string, Action<DatabaseModel>> Buttons()
+    public Dictionary<string, (Action<DatabaseModel?>, bool)> Buttons()
     {
         return new() {
-            { "Create", _ => { } },
-            { "Edit", _ => { } },
-            { "Delete", _ => { } }
+            { "Create", (_ => { }, false) },
+            { "Edit", (_ => { }, true ) },
+            { "Delete", (_ => { }, true) }
         };
     }
 }

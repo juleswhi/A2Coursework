@@ -11,12 +11,12 @@ public record Team : DatabaseModel
             .RuleFor(o => o.Id, f => DAL.Query<Team>().Select(x => x.Id).Max() + 1)
             .RuleFor(o => o.HourlyRate, f => f.Random.Number(50))
             .Generate();
-    public Dictionary<string, Action<DatabaseModel>> Buttons()
+    public Dictionary<string, (Action<DatabaseModel?>, bool)> Buttons()
     {
         return new() {
-            { "Create", _ => { } },
-            { "Edit", _ => { } },
-            { "Delete", _ => { } }
+            { "Create", (_ => { }, false) },
+            { "Edit", (_ => { }, true) },
+            { "Delete", (_ => { }, true) }
         };
     }
 }

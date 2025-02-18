@@ -19,12 +19,12 @@ public record StockReorder : DatabaseModel
             .RuleFor(o => o.OrderDate, f => f.Date.Past().ToString())
             .RuleFor(o => o.ReceivedDate, f => f.Date.Future().ToString())
             .Generate();
-    public Dictionary<string, Action<DatabaseModel>> Buttons()
+    public Dictionary<string, (Action<DatabaseModel?>, bool)> Buttons()
     {
         return new() {
-            { "Create", _ => { } },
-            { "Edit", _ => { } },
-            { "Delete", _ => { } }
+            { "Create", (_ => { }, false) },
+            { "Edit", (_ => { }, true) },
+            { "Delete", (_ => { }, true) }
         };
     }
 }

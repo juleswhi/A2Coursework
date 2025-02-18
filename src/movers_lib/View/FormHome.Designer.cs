@@ -32,12 +32,12 @@ partial class FormHome
         System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormHome));
         materialDrawer1 = new MaterialSkin.Controls.MaterialDrawer();
         materialCard1 = new MaterialSkin.Controls.MaterialCard();
-        materialProgressBar1 = new MaterialSkin.Controls.MaterialProgressBar();
+        progressJobs = new MaterialSkin.Controls.MaterialProgressBar();
         labelJobsCount = new MaterialSkin.Controls.MaterialLabel();
         labelJobs = new MaterialSkin.Controls.MaterialLabel();
-        materialFloatingActionButton1 = new MaterialSkin.Controls.MaterialFloatingActionButton();
+        btnActiveJobs = new MaterialSkin.Controls.MaterialFloatingActionButton();
         imageList1 = new ImageList(components);
-        materialFloatingActionButton2 = new MaterialSkin.Controls.MaterialFloatingActionButton();
+        btnWorkingEmployees = new MaterialSkin.Controls.MaterialFloatingActionButton();
         materialCard2 = new MaterialSkin.Controls.MaterialCard();
         materialProgressBar2 = new MaterialSkin.Controls.MaterialProgressBar();
         materialLabel1 = new MaterialSkin.Controls.MaterialLabel();
@@ -69,7 +69,7 @@ partial class FormHome
         // materialCard1
         // 
         materialCard1.BackColor = Color.FromArgb(255, 255, 255);
-        materialCard1.Controls.Add(materialProgressBar1);
+        materialCard1.Controls.Add(progressJobs);
         materialCard1.Controls.Add(labelJobsCount);
         materialCard1.Controls.Add(labelJobs);
         materialCard1.Depth = 0;
@@ -82,14 +82,14 @@ partial class FormHome
         materialCard1.Size = new Size(224, 113);
         materialCard1.TabIndex = 11;
         // 
-        // materialProgressBar1
+        // progressJobs
         // 
-        materialProgressBar1.Depth = 0;
-        materialProgressBar1.Location = new Point(17, 91);
-        materialProgressBar1.MouseState = MaterialSkin.MouseState.HOVER;
-        materialProgressBar1.Name = "materialProgressBar1";
-        materialProgressBar1.Size = new Size(190, 5);
-        materialProgressBar1.TabIndex = 2;
+        progressJobs.Depth = 0;
+        progressJobs.Location = new Point(17, 91);
+        progressJobs.MouseState = MaterialSkin.MouseState.HOVER;
+        progressJobs.Name = "progressJobs";
+        progressJobs.Size = new Size(190, 5);
+        progressJobs.TabIndex = 2;
         // 
         // labelJobsCount
         // 
@@ -116,19 +116,19 @@ partial class FormHome
         labelJobs.TabIndex = 0;
         labelJobs.Text = "Active Jobs";
         // 
-        // materialFloatingActionButton1
+        // btnActiveJobs
         // 
-        materialFloatingActionButton1.Depth = 0;
-        materialFloatingActionButton1.Icon = (Image)resources.GetObject("materialFloatingActionButton1.Icon");
-        materialFloatingActionButton1.ImageKey = "calender.png";
-        materialFloatingActionButton1.ImageList = imageList1;
-        materialFloatingActionButton1.Location = new Point(208, 50);
-        materialFloatingActionButton1.MouseState = MaterialSkin.MouseState.HOVER;
-        materialFloatingActionButton1.Name = "materialFloatingActionButton1";
-        materialFloatingActionButton1.Size = new Size(56, 56);
-        materialFloatingActionButton1.TabIndex = 12;
-        materialFloatingActionButton1.Text = "materialFloatingActionButton1";
-        materialFloatingActionButton1.UseVisualStyleBackColor = false;
+        btnActiveJobs.Depth = 0;
+        btnActiveJobs.Icon = (Image)resources.GetObject("btnActiveJobs.Icon");
+        btnActiveJobs.ImageKey = "calender.png";
+        btnActiveJobs.ImageList = imageList1;
+        btnActiveJobs.Location = new Point(208, 50);
+        btnActiveJobs.MouseState = MaterialSkin.MouseState.HOVER;
+        btnActiveJobs.Name = "btnActiveJobs";
+        btnActiveJobs.Size = new Size(56, 56);
+        btnActiveJobs.TabIndex = 12;
+        btnActiveJobs.Text = "materialFloatingActionButton1";
+        btnActiveJobs.UseVisualStyleBackColor = false;
         // 
         // imageList1
         // 
@@ -142,19 +142,19 @@ partial class FormHome
         imageList1.Images.SetKeyName(4, "burger.png");
         imageList1.Images.SetKeyName(5, "calender.png");
         // 
-        // materialFloatingActionButton2
+        // btnWorkingEmployees
         // 
-        materialFloatingActionButton2.Depth = 0;
-        materialFloatingActionButton2.Icon = movers_lib.Properties.Resources.users;
-        materialFloatingActionButton2.ImageKey = "users.png";
-        materialFloatingActionButton2.ImageList = imageList1;
-        materialFloatingActionButton2.Location = new Point(468, 52);
-        materialFloatingActionButton2.MouseState = MaterialSkin.MouseState.HOVER;
-        materialFloatingActionButton2.Name = "materialFloatingActionButton2";
-        materialFloatingActionButton2.Size = new Size(56, 56);
-        materialFloatingActionButton2.TabIndex = 14;
-        materialFloatingActionButton2.Text = "materialFloatingActionButton2";
-        materialFloatingActionButton2.UseVisualStyleBackColor = false;
+        btnWorkingEmployees.Depth = 0;
+        btnWorkingEmployees.Icon = movers_lib.Properties.Resources.users;
+        btnWorkingEmployees.ImageKey = "users.png";
+        btnWorkingEmployees.ImageList = imageList1;
+        btnWorkingEmployees.Location = new Point(468, 52);
+        btnWorkingEmployees.MouseState = MaterialSkin.MouseState.HOVER;
+        btnWorkingEmployees.Name = "btnWorkingEmployees";
+        btnWorkingEmployees.Size = new Size(56, 56);
+        btnWorkingEmployees.TabIndex = 14;
+        btnWorkingEmployees.Text = "materialFloatingActionButton2";
+        btnWorkingEmployees.UseVisualStyleBackColor = false;
         // 
         // materialCard2
         // 
@@ -220,8 +220,8 @@ partial class FormHome
         AutoScaleMode = AutoScaleMode.Font;
         ClientSize = new Size(529, 381);
         Controls.Add(cartesianChart1);
-        Controls.Add(materialFloatingActionButton2);
-        Controls.Add(materialFloatingActionButton1);
+        Controls.Add(btnWorkingEmployees);
+        Controls.Add(btnActiveJobs);
         Controls.Add(materialCard2);
         Controls.Add(materialCard1);
         Controls.Add(materialDrawer1);
@@ -237,11 +237,11 @@ partial class FormHome
     #endregion
     private MaterialSkin.Controls.MaterialDrawer materialDrawer1;
     private MaterialSkin.Controls.MaterialCard materialCard1;
-    private MaterialSkin.Controls.MaterialFloatingActionButton materialFloatingActionButton1;
+    private MaterialSkin.Controls.MaterialFloatingActionButton btnActiveJobs;
     private ImageList imageList1;
-    private MaterialSkin.Controls.MaterialFloatingActionButton materialFloatingActionButton2;
+    private MaterialSkin.Controls.MaterialFloatingActionButton btnWorkingEmployees;
     private MaterialSkin.Controls.MaterialCard materialCard2;
-    private MaterialSkin.Controls.MaterialProgressBar materialProgressBar1;
+    private MaterialSkin.Controls.MaterialProgressBar progressJobs;
     private MaterialSkin.Controls.MaterialLabel labelJobsCount;
     private MaterialSkin.Controls.MaterialLabel labelJobs;
     private MaterialSkin.Controls.MaterialProgressBar materialProgressBar2;

@@ -116,8 +116,8 @@ partial class FormSkeleton
         btnReports.Size = new Size(172, 50);
         btnReports.TabIndex = 6;
         btnReports.Text = "Reports";
-        btnReports.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-        btnReports.UseAccentColor = true;
+        btnReports.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Text;
+        btnReports.UseAccentColor = false;
         btnReports.UseVisualStyleBackColor = true;
         // 
         // btnHome
@@ -137,8 +137,8 @@ partial class FormSkeleton
         btnHome.Size = new Size(172, 50);
         btnHome.TabIndex = 5;
         btnHome.Text = "Home";
-        btnHome.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-        btnHome.UseAccentColor = true;
+        btnHome.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Text;
+        btnHome.UseAccentColor = false;
         btnHome.UseVisualStyleBackColor = true;
         // 
         // btnJobs
@@ -158,8 +158,8 @@ partial class FormSkeleton
         btnJobs.Size = new Size(172, 50);
         btnJobs.TabIndex = 4;
         btnJobs.Text = "Jobs";
-        btnJobs.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-        btnJobs.UseAccentColor = true;
+        btnJobs.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Text;
+        btnJobs.UseAccentColor = false;
         btnJobs.UseVisualStyleBackColor = true;
         // 
         // btnStock
@@ -179,8 +179,8 @@ partial class FormSkeleton
         btnStock.Size = new Size(172, 50);
         btnStock.TabIndex = 3;
         btnStock.Text = "Stock";
-        btnStock.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-        btnStock.UseAccentColor = true;
+        btnStock.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Text;
+        btnStock.UseAccentColor = false;
         btnStock.UseVisualStyleBackColor = true;
         // 
         // btnStaff
@@ -200,8 +200,8 @@ partial class FormSkeleton
         btnStaff.Size = new Size(172, 50);
         btnStaff.TabIndex = 2;
         btnStaff.Text = "Staff";
-        btnStaff.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-        btnStaff.UseAccentColor = true;
+        btnStaff.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Text;
+        btnStaff.UseAccentColor = false;
         btnStaff.UseVisualStyleBackColor = true;
         // 
         // btnSettings
@@ -221,8 +221,8 @@ partial class FormSkeleton
         btnSettings.Size = new Size(172, 50);
         btnSettings.TabIndex = 1;
         btnSettings.Text = "Settings";
-        btnSettings.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-        btnSettings.UseAccentColor = true;
+        btnSettings.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Text;
+        btnSettings.UseAccentColor = false;
         btnSettings.UseVisualStyleBackColor = true;
         // 
         // FormSkeleton

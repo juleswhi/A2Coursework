@@ -9,29 +9,49 @@ public partial class FormViewModel : Form, GenericCreateableForm
     private Type? _currentType;
     private bool isRowSelected => dataGridView.SelectedRows.Count == 1;
     private Point btnCreateCenter = new();
-    private Action<int>? deleteAction;
-    private Func<object?>? selectedAction;
-    private bool editMode = false;
+
     public FormViewModel()
     {
         InitializeComponent();
-        btnCreate.UseAccentColor = true;
-        btnDelete.UseAccentColor = true;
-        btnCreate.Enabled = false;
-        btnDelete.Enabled = false;
-        btnCreate.Visible = false;
-        btnDelete.Visible = false;
-        dataGridView.RowStateChanged += (s, e) =>
-        {
-            btnDelete.Enabled = dataGridView.SelectedRows.Count == 1;
-            editMode = btnDelete.Enabled;
-            if (_currentType is not null)
-            {
-                btnCreate.Text = $"{(isRowSelected ? "Edit" : "Create")} {_currentType.Name}";
-                btnCreate.Location = btnCreateCenter;
-                btnCreate.Location = new(btnCreate.Location.X, btnCreate.Location.Y);
-            }
-        };
+
+        var fore = Earth();
+        var back = Almond();
+
+        dataGridView.ColumnHeadersDefaultCellStyle.BackColor = back;
+        dataGridView.ColumnHeadersDefaultCellStyle.ForeColor = fore;
+        dataGridView.ColumnHeadersDefaultCellStyle.SelectionBackColor = back;
+
+        dataGridView.AdvancedColumnHeadersBorderStyle.Top = DataGridViewAdvancedCellBorderStyle.None;
+        dataGridView.AdvancedColumnHeadersBorderStyle.Left = DataGridViewAdvancedCellBorderStyle.None;
+        dataGridView.AdvancedColumnHeadersBorderStyle.Right = DataGridViewAdvancedCellBorderStyle.None;
+        // dataGridView.AdvancedColumnHeadersBorderStyle.Bottom = DataGridViewAdvancedCellBorderStyle.Single;
+        dataGridView.AdvancedColumnHeadersBorderStyle.Bottom = DataGridViewAdvancedCellBorderStyle.None;
+
+        dataGridView.RowHeadersDefaultCellStyle.BackColor = back;
+        dataGridView.RowHeadersDefaultCellStyle.ForeColor = fore;
+        dataGridView.RowHeadersDefaultCellStyle.SelectionBackColor = Sand();
+        dataGridView.RowHeadersDefaultCellStyle.SelectionForeColor = Earth();
+
+        dataGridView.RowsDefaultCellStyle.BackColor = back;
+        dataGridView.RowsDefaultCellStyle.ForeColor = fore;
+        dataGridView.RowsDefaultCellStyle.SelectionBackColor = Sand();
+        dataGridView.RowsDefaultCellStyle.SelectionForeColor = Earth();
+
+        // dataGridView.AdvancedRowHeadersBorderStyle.Top = DataGridViewAdvancedCellBorderStyle.Single;
+        dataGridView.AdvancedRowHeadersBorderStyle.Top = DataGridViewAdvancedCellBorderStyle.None;
+        dataGridView.AdvancedRowHeadersBorderStyle.Left = DataGridViewAdvancedCellBorderStyle.None;
+        dataGridView.AdvancedRowHeadersBorderStyle.Right = DataGridViewAdvancedCellBorderStyle.None;
+        // dataGridView.AdvancedRowHeadersBorderStyle.Bottom = DataGridViewAdvancedCellBorderStyle.Single;
+        dataGridView.AdvancedRowHeadersBorderStyle.Bottom = DataGridViewAdvancedCellBorderStyle.None;
+
+        dataGridView.GridColor = Color.LightGray;
+        dataGridView.DefaultCellStyle.BackColor = back;
+        dataGridView.DefaultCellStyle.ForeColor = fore;
+        dataGridView.DefaultCellStyle.SelectionBackColor = Sand();
+        dataGridView.DefaultCellStyle.SelectionForeColor = Earth();
+
+        dataGridView.BackgroundColor = back;
+        dataGridView.ForeColor = fore;
     }
 
     public void Create<T>() where T : DatabaseModel
@@ -40,14 +60,7 @@ public partial class FormViewModel : Form, GenericCreateableForm
         dataGridView.DataSource = values;
         string name = $"Create {typeof(T).Name}";
         var size = TextRenderer.MeasureText(name, MaterialButton.DefaultFont);
-        btnCreate.Width = size.Width;
         _currentType = typeof(T);
-
-        deleteAction = (i) => { };
-        // DAL.Delete<T>($"Id = {values[i].FormatPrimaryKey()}");
-
-        selectedAction = () =>
-            Query<T>()[dataGridView.SelectedRows[0].Index];
 
         var obj = (DatabaseModel)Activator.CreateInstance(typeof(T))!;
         var buttons = obj.Buttons();
@@ -56,63 +69,63 @@ public partial class FormViewModel : Form, GenericCreateableForm
 
         foreach (var btn in buttons)
         {
-            var b = new MaterialButton()
-            {
-                Text = btn.Key,
-            };
+            var b = new MaterialButton() { Text = btn.Key };
 
             b.Click += (s, e) =>
             {
-                if (dataGridView.SelectedRows.Count != 1) return;
-                var data = Query<T>()[dataGridView.SelectedRows[0].Index];
-                btn.Value.Invoke((DatabaseModel)data);
+                btn.Value.Item1.Invoke(
+                    dataGridView.SelectedRows.Count == 1 ? 
+                        (DatabaseModel)Query<T>()[dataGridView.SelectedRows[0].Index]
+                        : null
+                    );
             };
 
             b.UseAccentColor = true;
 
-            b.Location = btnCreate.Location;
+            b.Location = new Point(20, dataGridView.Bottom + 30);
             b.Location = new Point(b.Location.X + x, b.Location.Y);
             x += (int)(b.Size.Width * 1.5);
 
             Controls.Add(b);
+
         }
-    }
 
-    private void btnBack_Click(object sender, EventArgs e)
-    {
-        ShowForm<FormLogin>();
-    }
+        var horizontalSpace = dataGridView.Width;
 
-    private void btnCreate_Click(object sender, EventArgs e)
-    {
-        var rows = dataGridView.SelectedRows;
-        var edit = false;
-        object? val = null;
-        if (rows.Count == 1)
+        int totalButtonsWidth = 0;
+        foreach (var button in Controls.OfType<MaterialButton>())
         {
-            edit = true;
-            val = selectedAction!();
+            totalButtonsWidth += button.Width;
         }
 
+        // Calculate the available space between buttons
+        int availableSpace = horizontalSpace - totalButtonsWidth;
+        int spacing = availableSpace / (buttons.Count + 1);
 
-        // Can't invoke generic with Type so use reflection
-        var method = typeof(FormManager)!.GetMethod(nameof(ShowGCF));
-        var generic = method!.MakeGenericMethod(typeof(FormCreate), _currentType!);
-        generic.Invoke(null, null);
+        int startX = (this.ClientSize.Width - horizontalSpace) / 2;
+        int currentX = startX + spacing;
 
-        if (!edit) return;
+        foreach (var button in Controls.OfType<MaterialButton>())
+        {
+            button.Location = new Point(currentX, dataGridView.Bottom + 30);
+            currentX += button.Width + spacing;
+        }
 
-        var form = Master!.CurrentlyDisplayedForm as FormCreate;
-        var form_meth = form!.GetType().GetMethod(nameof(form.Populate))!.MakeGenericMethod(_currentType!);
-        form_meth.Invoke(form, [val]);
-    }
+        dataGridView.RowStateChanged += (s, e) =>
+        {
+            foreach(var action in buttons.Zip(Controls.OfType<MaterialButton>()))
+            {
+                if (!action.First.Value.Item2) continue;
 
-    private void btnDelete_Click(object sender, EventArgs e)
-    {
-        var rows = dataGridView.SelectedRows;
-        if (rows.Count != 1) return;
-        var row = rows[0];
+                action.Second.Enabled = dataGridView.SelectedRows.Count == 1;
+            }
+        };
 
-        deleteAction?.Invoke(row.Index);
+        foreach (var action in buttons.Zip(Controls.OfType<MaterialButton>()))
+        {
+            if (!action.First.Value.Item2) continue;
+
+            action.Second.Enabled = dataGridView.SelectedRows.Count == 1;
+        }
     }
 }

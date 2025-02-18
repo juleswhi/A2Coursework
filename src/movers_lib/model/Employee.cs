@@ -17,12 +17,12 @@ public record Employee : DatabaseModel
             .RuleFor(o => o.JobId, f => f.PickRandom(DAL.Query<Job>().Select(x => x.Id)))
             .RuleFor(o => o.TeamId, f => f.PickRandom(DAL.Query<Team>().Select(x => x.Id)))
             .Generate();
-    public Dictionary<string, Action<DatabaseModel>> Buttons()
+    public Dictionary<string, (Action<DatabaseModel?>, bool)> Buttons()
     {
         return new() {
-            { "Create", _ => { } },
-            { "Edit", _ => { } },
-            { "Delete", _ => { } }
+            { "Create", (_ => { }, false) },
+            { "Edit", (_ => { }, true) },
+            { "Delete", (_ => { }, true) }
         };
     }
 }

@@ -23,33 +23,74 @@ public partial class FormCreate : Form, GenericCreateableForm
         // Get fields in type
         var props = typeof(T).GetProperties();
 
-        var location = (panel1.Width / 2, 10);
-
-        var max_len = props.Select(x => TextRenderer.MeasureText(x.Name, MaterialButton.DefaultFont).Width).Order().Reverse().First();
-
         foreach (var prop in props)
         {
             if (prop.Name == "Id") continue;
-            var btn = new MaterialTextBox();
-            var label = new MaterialLabel();
-            label.Text = prop.Name;
-            btn.Location = new(location.Item1, location.Item2);
-            label.Location = new(location.Item1 - max_len - 40, location.Item2 + 15);
 
-            location.Item2 = location.Item2 + btn.Height + 10;
-
-            if (location.Item2 > panel1.Height)
-            {
-                location.Item2 = 10;
-                location.Item1 += 225;
-            }
-
-            panel1.Controls.Add(btn);
-            panel1.Controls.Add(label);
+            panel1.Controls.Add(new MaterialTextBox());
+            panel1.Controls.Add(new MaterialLabel() { Text = prop.Name });
         }
 
-        _currentType = typeof(T);
+        var textBoxes = panel1.Controls.OfType<MaterialTextBox>().ToList();
+        var textBoxCount = textBoxes.Count();
+        var maxLabelSize = props.Select(x => TextRenderer.MeasureText(x.Name, MaterialButton.DefaultFont)).OrderBy(s => s.Width).Reverse().First();
+        var maxTextBoxSize = new Size(150, 50);
+        var horizontalSpace = panel1.Width;
+        var verticalSpace = panel1.Height;
 
+
+        var labels = panel1.Controls.OfType<MaterialLabel>().ToList();
+
+
+        int columns = (int)Math.Ceiling(Math.Sqrt(textBoxCount));
+        int rows = (int)Math.Ceiling((double)textBoxCount / columns);
+
+        // Calculate the total height required for each row (label + textbox + spacing)
+        int totalHeightPerRow = maxLabelSize.Height + maxTextBoxSize.Height + 10; // 10 is spacing between label and textbox
+
+        // Calculate the available width and height per column/row
+        int availableWidthPerColumn = horizontalSpace / columns;
+        int availableHeightPerRow = verticalSpace / rows;
+
+        // Determine the actual size of each textbox and label
+        int textBoxWidth = Math.Min(maxTextBoxSize.Width, availableWidthPerColumn);
+        int textBoxHeight = Math.Min(maxTextBoxSize.Height, availableHeightPerRow - maxLabelSize.Height - 10); // Account for label height and spacing
+        int labelWidth = Math.Min(maxLabelSize.Width, availableWidthPerColumn);
+        int labelHeight = maxLabelSize.Height;
+
+        // Calculate the spacing between controls
+        int horizontalSpacing = (horizontalSpace - (textBoxWidth * columns)) / (columns + 1);
+        int verticalSpacing = (verticalSpace - (totalHeightPerRow * rows)) / (rows + 1);
+
+        // Position the labels and textboxes
+        int startX = 10;
+        int startY = 10;
+
+        for (int i = 0; i < textBoxCount; i++)
+        {
+            int row = i / columns;
+            int col = i % columns;
+
+            // Calculate the position for the label
+            int labelX = startX + horizontalSpacing + col * (textBoxWidth + horizontalSpacing);
+            int labelY = startY + verticalSpacing + row * (totalHeightPerRow + verticalSpacing);
+
+            // Calculate the position for the textbox
+            int textBoxX = labelX;
+            int textBoxY = labelY + labelHeight + 10; // 10 is spacing between label and textbox
+
+            // Set the location and size of the label and textbox
+            labels[i].Location = new Point(labelX, labelY);
+            labels[i].Size = new Size(labelWidth, labelHeight);
+
+            textBoxes[i].Location = new Point(textBoxX, textBoxY);
+            textBoxes[i].Size = new Size(textBoxWidth, textBoxHeight);
+        }
+
+
+
+
+        _currentType = typeof(T);
         _textBoxes.ForEach(x => x.TextChanged += (s, e) =>
         {
             btnCreate.Enabled = _textBoxes.All(y => y.Text != String.Empty);

@@ -11,12 +11,12 @@ public class CleanJob : DatabaseModel
             .RuleFor(o => o.CleanId, f => f.PickRandom(DAL.Query<Clean>().Select(o => o.Id)))
             .RuleFor(o => o.EmployeeId, f => f.PickRandom(DAL.Query<Employee>().Select(x => x.Id)))
             .Generate();
-    public Dictionary<string, Action<DatabaseModel>> Buttons()
+    public Dictionary<string, (Action<DatabaseModel?>, bool)> Buttons()
     {
         return new() {
-            { "Create", _ => { } },
-            { "Edit", _ => { } },
-            { "Delete", _ => { } }
+            { "Create", (_ => { }, false) },
+            { "Edit", (_ => { }, true) },
+            { "Delete", (_ => { }, true) }
         };
     }
 }

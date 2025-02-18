@@ -13,7 +13,7 @@ internal static class Program
         ApplicationConfiguration.Initialize();
 
         // Set colourscheme
-        MaterialSkinManager.Instance.ColorScheme = new ColorScheme(Primary.Green800, Primary.Green800, Primary.Green800, Accent.Teal700, TextShade.BLACK);
+        MaterialSkinManager.Instance.ColorScheme = new ColorScheme(Primary.Brown400, Primary.Brown200, Primary.Brown700, Accent.Teal400, TextShade.BLACK);
 
         for (int i = 0; i < 50; i++)
         {

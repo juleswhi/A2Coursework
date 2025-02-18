@@ -4,5 +4,5 @@ public interface DatabaseModel
 {
     public (string, int)[] GetPrimaryKey();
     public string FormatWhere() => GetPrimaryKey().Select((x, y) => $"{x} = '{y}'").Aggregate((x, y) => $"{x} AND {y}");
-    public Dictionary<string, Action<DatabaseModel>> Buttons();
+    public Dictionary<string, (Action<DatabaseModel?>, bool)> Buttons();
 }

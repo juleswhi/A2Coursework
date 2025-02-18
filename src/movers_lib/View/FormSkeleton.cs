@@ -26,7 +26,7 @@ public partial class FormSkeleton : Form, IFormMaster
         // Initialise Buttons 
         btnHome.Click += (s, e) => ShowForm<FormHome>();
         btnJobs.Click += (s, e) => ShowGCF<FormViewModel, Clean>();
-        btnStock.Click += (s, e) => ShowGCF<FormViewModel, Product>();
+        btnStock.Click += (s, e) => ShowGCF<FormViewModel, Stock>();
         btnStaff.Click += (s, e) => ShowGCF<FormViewModel, Employee>();
         btnReports.Click += (s, e) => ShowForm<FormReports>();
         btnSettings.Click += (s, e) => ShowForm<FormSettings>();

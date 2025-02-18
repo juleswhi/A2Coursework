@@ -20,12 +20,12 @@ public class Customer : DatabaseModel
             .RuleFor(o => o.BillingAddress, f => f.Address.StreetAddress())
             .RuleFor(o => o.ContactNumber, f => f.Phone.PhoneNumber())
             .Generate();
-    public Dictionary<string, Action<DatabaseModel>> Buttons()
+    public Dictionary<string, (Action<DatabaseModel?>, bool)> Buttons()
     {
         return new() {
-            { "Create", _ => { } },
-            { "Edit", _ => { } },
-            { "Delete", _ => { } }
+            { "Create", (_ => { }, false) },
+            { "Edit", (_ => { }, true) },
+            { "Delete", (_ => { }, true) }
         };
     }
 }

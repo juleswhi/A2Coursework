@@ -27,17 +27,17 @@ public class Clean : DatabaseModel
             .RuleFor(o => o.Paid, f => f.Random.Bool())
             .Generate();
 
-    public Dictionary<string, Action<DatabaseModel>> Buttons()
+    public Dictionary<string, (Action<DatabaseModel?>, bool)> Buttons()
     {
         return new() {
-            { 
-                "Create", m => { ShowGCFR(typeof(FormCreate), typeof(Clean));
-                var form = Master!.CurrentlyDisplayedForm as FormCreate;
-                var form_meth = form!.GetType().GetMethod(nameof(form.Populate))!.MakeGenericMethod(typeof(Clean)!);
-                form_meth.Invoke(form, [m]); } 
-            },
-            { "Bombard", _ => { } },
-            { "Delete", _ => { } }
+            { "Create", (_ => {
+                    ShowGCFR(typeof(FormCreate), typeof(Clean));
+                    var form = Master!.CurrentlyDisplayedForm as FormCreate;
+                    var form_meth = form!.GetType().GetMethod(nameof(form.Populate))!.MakeGenericMethod(typeof(Clean)!);
+                    // form_meth.Invoke(form, [m]); 
+            }, false) },
+            { "Edit", (_ => { }, true ) },
+            { "Delete", (_ => { }, true) }
         };
     }
 }
