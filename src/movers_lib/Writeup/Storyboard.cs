@@ -2,10 +2,8 @@
 
 namespace movers_lib.writeup_tools;
 
-public static class StoryboardConverter
-{
-    public static void Convert()
-    {
+public static class StoryboardConverter {
+    public static void Convert() {
         var assembly = Assembly.GetCallingAssembly();
 
         var types = assembly.GetTypes();
@@ -16,8 +14,7 @@ public static class StoryboardConverter
 
         using var sw = new StreamWriter(@"examplepath.txt", true);
 
-        foreach (Type type in forms)
-        {
+        foreach (Type type in forms) {
             // Create the instance of the form
             var instance = Activator.CreateInstance(type);
 
@@ -31,64 +28,51 @@ public static class StoryboardConverter
 
     }
 
-    private static void PrintContainer<T>(T obj, StreamWriter sw)
-    {
+    private static void PrintContainer<T>(T obj, StreamWriter sw) {
         var controls = GetControls(obj);
 
-        if (controls is null)
-        {
+        if (controls is null) {
             return;
         }
 
-        foreach (Control control in controls)
-        {
-            if (control is Panel || control.GetType().IsSubclassOf(typeof(Panel)))
-            {
+        foreach (Control control in controls) {
+            if (control is Panel || control.GetType().IsSubclassOf(typeof(Panel))) {
                 // Get controls of panel
                 PrintContainer(control, sw);
             }
 
-            foreach (var str in GetInformation(control))
-            {
+            foreach (var str in GetInformation(control)) {
                 sw.WriteLine(str);
             }
         }
     }
 
-    private static Control.ControlCollection? GetControls<T>(T obj)
-    {
+    private static Control.ControlCollection? GetControls<T>(T obj) {
         var type = typeof(T);
         var controlProp = type.GetProperty("Controls");
 
-        if (controlProp is null)
-        {
+        if (controlProp is null) {
             return null;
         }
 
         Control.ControlCollection? controls = controlProp.GetValue(obj) as Control.ControlCollection;
 
-        if (controls is null)
-        {
+        if (controls is null) {
             return null;
         }
 
         return controls;
     }
 
-    private static IEnumerable<string> GetInformation<T>(T control) where T : Control
-    {
+    private static IEnumerable<string> GetInformation<T>(T control) where T : Control {
         var props = control.GetType().GetProperties();
 
-        foreach (var prop in props)
-        {
+        foreach (var prop in props) {
             string str;
-            try
-            {
+            try {
                 // Grab the value of the property
                 str = $"\t\t{prop.Name}: {PrettyPrint(prop.GetMethod?.Invoke(control, new object[] { }))}";
-            }
-            catch (Exception)
-            {
+            } catch (Exception) {
                 // Some weird property values may encounter this exception
                 // In that case, just ignore it
                 continue;
@@ -98,20 +82,16 @@ public static class StoryboardConverter
         }
     }
 
-    private static string? PrettyPrint(object? obj)
-    {
-        if (obj is Font font)
-        {
+    private static string? PrettyPrint(object? obj) {
+        if (obj is Font font) {
             return $"{font.Name} - {font.Size}px";
         }
 
-        if (obj is Point point)
-        {
+        if (obj is Point point) {
             return $"[{point.X}, {point.Y}]";
         }
 
-        if (obj is Size size)
-        {
+        if (obj is Size size) {
             return $"[{size.Width}, {size.Height}]";
         }
 

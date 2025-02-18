@@ -1,9 +1,7 @@
 ﻿namespace View;
 
-public partial class FormLogin : Form
-{
-    public FormLogin()
-    {
+public partial class FormLogin : Form {
+    public FormLogin() {
         InitializeComponent();
 
         BackColor = Color.White;
@@ -11,8 +9,7 @@ public partial class FormLogin : Form
         btnLogin.UseMnemonic = true;
         btnLogin.Text = "&Login";
 
-        btnLogin.Click += (_, _) =>
-        {
+        btnLogin.Click += (_, _) => {
             ShowForm<FormHome>();
         };
 

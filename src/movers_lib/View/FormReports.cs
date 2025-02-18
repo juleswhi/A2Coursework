@@ -1,9 +1,7 @@
 ﻿namespace View;
 
-public partial class FormReports : Form
-{
-    public FormReports()
-    {
+public partial class FormReports : Form {
+    public FormReports() {
         InitializeComponent();
     }
 }

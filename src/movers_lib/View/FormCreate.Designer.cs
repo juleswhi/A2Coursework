@@ -26,11 +26,8 @@ partial class FormCreate
     /// Required method for Designer support - do not modify
     /// the contents of this method with the code editor.
     /// </summary>
-    private void InitializeComponent()
-    {
+    private void InitializeComponent() {
         panel1 = new Panel();
-        btnCreate = new MaterialSkin.Controls.MaterialButton();
-        btnBack = new MaterialSkin.Controls.MaterialButton();
         SuspendLayout();
         // 
         // panel1
@@ -43,66 +40,19 @@ partial class FormCreate
         panel1.Size = new Size(800, 365);
         panel1.TabIndex = 0;
         // 
-        // btnCreate
-        // 
-        btnCreate.Anchor = AnchorStyles.Bottom;
-        btnCreate.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-        btnCreate.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-        btnCreate.Depth = 0;
-        btnCreate.HighEmphasis = true;
-        btnCreate.Icon = null;
-        btnCreate.Location = new Point(418, 395);
-        btnCreate.Margin = new Padding(4, 6, 4, 6);
-        btnCreate.MouseState = MaterialSkin.MouseState.HOVER;
-        btnCreate.Name = "btnCreate";
-        btnCreate.NoAccentTextColor = Color.Empty;
-        btnCreate.Size = new Size(76, 36);
-        btnCreate.TabIndex = 5;
-        btnCreate.Text = "Create";
-        btnCreate.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-        btnCreate.UseAccentColor = false;
-        btnCreate.UseVisualStyleBackColor = true;
-        btnCreate.Click += btnCreate_Click;
-        // 
-        // btnBack
-        // 
-        btnBack.Anchor = AnchorStyles.Bottom;
-        btnBack.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-        btnBack.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-        btnBack.Depth = 0;
-        btnBack.HighEmphasis = true;
-        btnBack.Icon = null;
-        btnBack.Location = new Point(306, 395);
-        btnBack.Margin = new Padding(4, 6, 4, 6);
-        btnBack.MouseState = MaterialSkin.MouseState.HOVER;
-        btnBack.Name = "btnBack";
-        btnBack.NoAccentTextColor = Color.Empty;
-        btnBack.Size = new Size(64, 36);
-        btnBack.TabIndex = 6;
-        btnBack.Text = "Back";
-        btnBack.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-        btnBack.UseAccentColor = false;
-        btnBack.UseVisualStyleBackColor = true;
-        btnBack.Click += btnBack_Click;
-        // 
         // FormCreate
         // 
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
         ClientSize = new Size(800, 450);
-        Controls.Add(btnBack);
-        Controls.Add(btnCreate);
         Controls.Add(panel1);
         Name = "FormCreate";
         Padding = new Padding(0, 0, 0, 85);
         Text = "FormCreate";
         ResumeLayout(false);
-        PerformLayout();
     }
 
     #endregion
 
     private Panel panel1;
-    private MaterialSkin.Controls.MaterialButton btnCreate;
-    private MaterialSkin.Controls.MaterialButton btnBack;
 }

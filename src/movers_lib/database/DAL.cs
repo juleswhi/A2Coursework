@@ -1,18 +1,22 @@
 using Microsoft.Data.SqlClient;
 using Model;
+using System.Configuration;
 namespace Database;
 
 /// <summary>
 /// Database Access Layer
 /// Manages all Database Operations, including Queries, Creating, Deleting, Updating
 /// </summary>
-public static class DAL
-{
+public static class DAL {
     /// <summary>
-    /// Connection string : Refactor
+    /// Connection String fomr App.config
     /// </summary>
-    // private static readonly string _connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename='C:\Users\callum white\projects\movers_admin\movers_lib\database\database.mdf';Integrated Security=True";
-    private static readonly string _connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename='C:\Users\callum\Documents\GitHub\A2Coursework\src\movers_lib\database\database.mdf';Integrated Security=True";
+    private static string _connectionString = string.Format(
+        ConfigurationManager.
+        ConnectionStrings["DatabaseConnectionString"].
+        ConnectionString,
+        Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)!.Parent!.Parent!.Parent!.Parent!.FullName
+        );
 
     /// <summary>
     /// Query a database via class (and with selected column names)
@@ -20,13 +24,11 @@ public static class DAL
     /// <typeparam name="T"></typeparam>
     /// <param name="names"></param>
     /// <returns></returns>
-    public static List<T> Query<T>(params string[] names) where T : DatabaseModel
-    {
+    public static List<T> Query<T>(params string[] names) where T : IDatabaseModel {
         var type = typeof(T);
 
         // If no column names are passed then grab all of them
-        if (names is null || names.Length == 0)
-        {
+        if (names is null || names.Length == 0) {
             names = type.GetProperties().Select(x => x.Name).ToArray();
         }
 
@@ -41,12 +43,10 @@ public static class DAL
 
         List<T> results = [];
 
-        while (reader.Read())
-        {
+        while (reader.Read()) {
             // Create instance of the DatabaseModel
             T obj = Activator.CreateInstance<T>();
-            foreach (var property in type.GetProperties().Where(x => names.Contains(x.Name)))
-            {
+            foreach (var property in type.GetProperties().Where(x => names.Contains(x.Name))) {
                 // Grab the column cooresponding to the name
                 var ord = reader.GetOrdinal(property.Name);
 
@@ -56,8 +56,7 @@ public static class DAL
                 var t = property.PropertyType;
 
                 // Properly cast to type based on SQL type
-                switch (property.PropertyType.Name)
-                {
+                switch (property.PropertyType.Name) {
                     case "Int32":
                     case "System.Int32":
                         var num = reader.GetInt32(ord);
@@ -103,8 +102,7 @@ public static class DAL
     /// <typeparam name="T">The type of DatabaseModel to update</typeparam>
     /// <param name="obj">The instance of DatabaseModel to update</param>
     /// <returns></returns>
-    public static bool Update<T>(this T obj) where T : DatabaseModel
-    {
+    public static bool Update<T>(this T obj) where T : IDatabaseModel {
         var type = typeof(T);
 
         using var conn = new SqlConnection($"{_connectionString}");
@@ -117,7 +115,7 @@ public static class DAL
             .Select((c, _) => $"{c.First} = '{c.Second}'")
             .Aggregate((x, y) => $"{x}, {y}");
 
-        using var command = new SqlCommand($"update {type.Name} set {updates} where {obj.FormatWhere()};", conn);
+        using var command = new SqlCommand($"update {type.Name} set {updates} where {obj.FormatKeys()};", conn);
         int res = command.ExecuteNonQuery();
 
         conn.Close();
@@ -125,19 +123,17 @@ public static class DAL
         return res == 0;
     }
 
-    public static bool Delete<T>(this T obj) where T : DatabaseModel
-    {
+    public static bool Delete<T>(this T obj) where T : IDatabaseModel {
         var type = typeof(T);
 
         using var conn = new SqlConnection($"{_connectionString}");
         conn.Open();
 
-        using var command = new SqlCommand($"delete from {type.Name} where {obj.FormatWhere()};", conn);
+        using var command = new SqlCommand($"delete from {type.Name} where {obj.FormatKeys()};", conn);
         return command.ExecuteNonQuery() == 0;
     }
 
-    public static bool Create<T>(this T obj) where T : DatabaseModel
-    {
+    public static bool Create<T>(this T obj) where T : IDatabaseModel {
         var type = typeof(T);
         using var conn = new SqlConnection($"{_connectionString}");
         conn.Open();

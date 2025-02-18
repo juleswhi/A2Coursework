@@ -3,8 +3,7 @@ namespace Forms;
 using Model;
 using View;
 
-public static class FormManager
-{
+public static class FormManager {
     ///<summary>
     /// This holds a public reference to the current main form
     ///</summary>
@@ -14,8 +13,7 @@ public static class FormManager
     /// This creates an instance of the master form, and displays the form T inside of it
     /// </summary>
     /// <typeparam name="T">The type of form to display</typeparam>
-    public static void Start<T>() where T : Form, new()
-    {
+    public static void Start<T>() where T : Form, new() {
         Master = new FormSkeleton();
 
         ShowForm<T>();
@@ -28,8 +26,7 @@ public static class FormManager
     /// </summary>
     /// <typeparam name="T">The type of form to load</typeparam>
     /// <returns>A state representing either a Success or Failure</returns>
-    public static void ShowForm<T>() where T : Form, new()
-    {
+    public static void ShowForm<T>() where T : Form, new() {
         if (Master is null) return;
 
         T form = CreateForm<T>();
@@ -42,8 +39,7 @@ public static class FormManager
     /// </summary>
     /// <typeparam name="T">The type of form to load</typeparam>
     /// <returns>A state representing either a Success or Failure</returns>
-    public static void ShowGCF<T, V>() where T : Form, GenericCreateableForm, new() where V : DatabaseModel
-    {
+    public static void ShowGCF<T, V>() where T : Form, GenericCreateableForm, new() where V : IDatabaseModel {
         if (Master is null) return;
 
         T form = CreateForm<T>();
@@ -58,8 +54,7 @@ public static class FormManager
     /// </summary>
     /// <param name="T">Form Type To Show</param>
     /// <param name="V">Type of Database Model</param>
-    public static void ShowGCFR(Type T, Type V)
-    {
+    public static void ShowGCFR(Type T, Type V) {
         if (Master is null) return;
 
         var method = typeof(FormManager)!.

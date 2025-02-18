@@ -17,4 +17,12 @@
     <ProjectReference Include="..\movers_lib\movers_lib.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EditorConfigFiles Remove="C:\Users\callum white\Documents\GitHub\A2Coursework\src\movers_admin\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="C:\Users\callum white\Documents\GitHub\A2Coursework\src\movers_admin\.editorconfig" />
+  </ItemGroup>
+
 </Project>

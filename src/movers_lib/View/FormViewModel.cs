@@ -1,17 +1,12 @@
-﻿using Forms;
-using MaterialSkin.Controls;
+﻿using MaterialSkin.Controls;
 using Model;
 
 namespace View;
 
-public partial class FormViewModel : Form, GenericCreateableForm
-{
+public partial class FormViewModel : Form, GenericCreateableForm {
     private Type? _currentType;
-    private bool isRowSelected => dataGridView.SelectedRows.Count == 1;
-    private Point btnCreateCenter = new();
 
-    public FormViewModel()
-    {
+    public FormViewModel() {
         InitializeComponent();
 
         var fore = Earth();
@@ -24,7 +19,6 @@ public partial class FormViewModel : Form, GenericCreateableForm
         dataGridView.AdvancedColumnHeadersBorderStyle.Top = DataGridViewAdvancedCellBorderStyle.None;
         dataGridView.AdvancedColumnHeadersBorderStyle.Left = DataGridViewAdvancedCellBorderStyle.None;
         dataGridView.AdvancedColumnHeadersBorderStyle.Right = DataGridViewAdvancedCellBorderStyle.None;
-        // dataGridView.AdvancedColumnHeadersBorderStyle.Bottom = DataGridViewAdvancedCellBorderStyle.Single;
         dataGridView.AdvancedColumnHeadersBorderStyle.Bottom = DataGridViewAdvancedCellBorderStyle.None;
 
         dataGridView.RowHeadersDefaultCellStyle.BackColor = back;
@@ -37,11 +31,9 @@ public partial class FormViewModel : Form, GenericCreateableForm
         dataGridView.RowsDefaultCellStyle.SelectionBackColor = Sand();
         dataGridView.RowsDefaultCellStyle.SelectionForeColor = Earth();
 
-        // dataGridView.AdvancedRowHeadersBorderStyle.Top = DataGridViewAdvancedCellBorderStyle.Single;
         dataGridView.AdvancedRowHeadersBorderStyle.Top = DataGridViewAdvancedCellBorderStyle.None;
         dataGridView.AdvancedRowHeadersBorderStyle.Left = DataGridViewAdvancedCellBorderStyle.None;
         dataGridView.AdvancedRowHeadersBorderStyle.Right = DataGridViewAdvancedCellBorderStyle.None;
-        // dataGridView.AdvancedRowHeadersBorderStyle.Bottom = DataGridViewAdvancedCellBorderStyle.Single;
         dataGridView.AdvancedRowHeadersBorderStyle.Bottom = DataGridViewAdvancedCellBorderStyle.None;
 
         dataGridView.GridColor = Color.LightGray;
@@ -54,47 +46,36 @@ public partial class FormViewModel : Form, GenericCreateableForm
         dataGridView.ForeColor = fore;
     }
 
-    public void Create<T>() where T : DatabaseModel
-    {
+    public void Create<T>() where T : IDatabaseModel {
         var values = DAL.Query<T>([]);
         dataGridView.DataSource = values;
         string name = $"Create {typeof(T).Name}";
         var size = TextRenderer.MeasureText(name, MaterialButton.DefaultFont);
         _currentType = typeof(T);
 
-        var obj = (DatabaseModel)Activator.CreateInstance(typeof(T))!;
-        var buttons = obj.Buttons();
+        var obj = (IDatabaseModel)Activator.CreateInstance(typeof(T))!;
+        var buttons = obj.ViewButtons();
 
-        int x = 0;
-
-        foreach (var btn in buttons)
-        {
+        foreach (var btn in buttons) {
             var b = new MaterialButton() { Text = btn.Key };
 
-            b.Click += (s, e) =>
-            {
+            b.Click += (s, e) => {
                 btn.Value.Item1.Invoke(
-                    dataGridView.SelectedRows.Count == 1 ? 
-                        (DatabaseModel)Query<T>()[dataGridView.SelectedRows[0].Index]
+                    dataGridView.SelectedRows.Count == 1 ?
+                        (IDatabaseModel)Query<T>()[dataGridView.SelectedRows[0].Index]
                         : null
                     );
             };
 
             b.UseAccentColor = true;
 
-            b.Location = new Point(20, dataGridView.Bottom + 30);
-            b.Location = new Point(b.Location.X + x, b.Location.Y);
-            x += (int)(b.Size.Width * 1.5);
-
             Controls.Add(b);
-
         }
 
         var horizontalSpace = dataGridView.Width;
 
         int totalButtonsWidth = 0;
-        foreach (var button in Controls.OfType<MaterialButton>())
-        {
+        foreach (var button in Controls.OfType<MaterialButton>()) {
             totalButtonsWidth += button.Width;
         }
 
@@ -105,24 +86,20 @@ public partial class FormViewModel : Form, GenericCreateableForm
         int startX = (this.ClientSize.Width - horizontalSpace) / 2;
         int currentX = startX + spacing;
 
-        foreach (var button in Controls.OfType<MaterialButton>())
-        {
+        foreach (var button in Controls.OfType<MaterialButton>()) {
             button.Location = new Point(currentX, dataGridView.Bottom + 30);
             currentX += button.Width + spacing;
         }
 
-        dataGridView.RowStateChanged += (s, e) =>
-        {
-            foreach(var action in buttons.Zip(Controls.OfType<MaterialButton>()))
-            {
+        dataGridView.RowStateChanged += (s, e) => {
+            foreach (var action in buttons.Zip(Controls.OfType<MaterialButton>())) {
                 if (!action.First.Value.Item2) continue;
 
                 action.Second.Enabled = dataGridView.SelectedRows.Count == 1;
             }
         };
 
-        foreach (var action in buttons.Zip(Controls.OfType<MaterialButton>()))
-        {
+        foreach (var action in buttons.Zip(Controls.OfType<MaterialButton>())) {
             if (!action.First.Value.Item2) continue;
 
             action.Second.Enabled = dataGridView.SelectedRows.Count == 1;

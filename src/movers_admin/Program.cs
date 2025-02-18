@@ -4,19 +4,16 @@ using MaterialSkin;
 using View;
 using static Forms.FormManager;
 
-internal static class Program
-{
+internal static class Program {
 
     [STAThread]
-    static void Main()
-    {
+    static void Main() {
         ApplicationConfiguration.Initialize();
 
         // Set colourscheme
         MaterialSkinManager.Instance.ColorScheme = new ColorScheme(Primary.Brown400, Primary.Brown200, Primary.Brown700, Accent.Teal400, TextShade.BLACK);
 
-        for (int i = 0; i < 50; i++)
-        {
+        for (int i = 0; i < 50; i++) {
             // Employee.GenerateFakeData().Create();
         }
 

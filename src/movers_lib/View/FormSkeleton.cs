@@ -6,8 +6,7 @@ namespace View;
 /// <summary>
 /// FormSkeleton is the master form
 /// </summary>
-public partial class FormSkeleton : Form, IFormMaster
-{
+public partial class FormSkeleton : Form, IFormMaster {
     public Form current_form => panelHolder.
         Controls.
         OfType<Form>().
@@ -16,8 +15,7 @@ public partial class FormSkeleton : Form, IFormMaster
 
     public Form CurrentlyDisplayedForm { get => current_form; }
 
-    public FormSkeleton()
-    {
+    public FormSkeleton() {
         InitializeComponent();
         SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
 
@@ -42,8 +40,7 @@ public partial class FormSkeleton : Form, IFormMaster
     /// Displays a chosen <c>Form</c> in <c>panelHolder</c>
     /// </summary>
     /// <param name="form">The form to display</param>
-    public void LoadForm(Form form)
-    {
+    public void LoadForm(Form form) {
         form.TopLevel = false;
         form.Dock = DockStyle.Fill;
         form.FormBorderStyle = FormBorderStyle.None;

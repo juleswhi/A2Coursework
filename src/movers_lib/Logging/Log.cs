@@ -2,14 +2,11 @@
 
 namespace Logging;
 
-public static class Logger
-{
-    public static void ASSERT(bool condition)
-    {
+public static class Logger {
+    public static void ASSERT(bool condition) {
         Debug.Assert(condition);
     }
-    public static void LOG(string s)
-    {
+    public static void LOG(string s) {
         Debug.Print(s);
     }
 }

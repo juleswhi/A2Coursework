@@ -1,7 +1,7 @@
 ﻿namespace Model;
 
-public class Customer : DatabaseModel
-{
+public class Customer : IDatabaseModel {
+    [PrimaryKey]
     public int Id { get; set; }
     public string Forename { get; set; } = String.Empty;
     public string Surname { get; set; } = String.Empty;
@@ -9,8 +9,6 @@ public class Customer : DatabaseModel
     public string BillingAddress { get; set; } = String.Empty;
     public string ContactNumber { get; set; } = String.Empty;
 
-    public (string, int)[] GetPrimaryKey() => [(nameof(Id), Id)];
-    public string FormatWhere() => GetPrimaryKey().Select(x => $"{x.Item1} = '{x.Item2}'").Aggregate((x, y) => $"{x} AND {y}");
     public static Customer GenerateFakeData()
         => new Faker<Customer>()
             .RuleFor(o => o.Id, f => DAL.Query<Customer>().Select(x => x.Id).Max() + 1)
@@ -20,12 +18,17 @@ public class Customer : DatabaseModel
             .RuleFor(o => o.BillingAddress, f => f.Address.StreetAddress())
             .RuleFor(o => o.ContactNumber, f => f.Phone.PhoneNumber())
             .Generate();
-    public Dictionary<string, (Action<DatabaseModel?>, bool)> Buttons()
-    {
+    public Dictionary<string, (Action<IDatabaseModel?>, bool)> ViewButtons() {
         return new() {
             { "Create", (_ => { }, false) },
             { "Edit", (_ => { }, true) },
             { "Delete", (_ => { }, true) }
+        };
+    }
+    public Dictionary<string, (Action<List<string>?>, bool)> CreateButtons() {
+        return new() {
+            { "Create", (_ => { }, true) },
+            { "Delete", (_ => { }, false) }
         };
     }
 }

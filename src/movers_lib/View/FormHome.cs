@@ -2,13 +2,11 @@
 
 namespace View;
 
-public partial class FormHome : Form
-{
-    public FormHome()
-    {
+public partial class FormHome : Form {
+    public FormHome() {
         InitializeComponent();
         BackColor = Color.White;
-        
+
         var active_jobs = DAL.Query<Clean>().Where(x => {
             var start = DateTime.Parse(x.StartDate);
             var end = DateTime.Parse(x.EndDate);
