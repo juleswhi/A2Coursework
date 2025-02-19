@@ -38,7 +38,7 @@ partial class FormSkeleton
         btnJobs = new MaterialSkin.Controls.MaterialButton();
         btnStock = new MaterialSkin.Controls.MaterialButton();
         btnStaff = new MaterialSkin.Controls.MaterialButton();
-        btnSettings = new MaterialSkin.Controls.MaterialButton();
+        btnDeliveries = new MaterialSkin.Controls.MaterialButton();
         cardView.SuspendLayout();
         cardSide.SuspendLayout();
         SuspendLayout();
@@ -87,7 +87,7 @@ partial class FormSkeleton
         cardSide.Controls.Add(btnJobs);
         cardSide.Controls.Add(btnStock);
         cardSide.Controls.Add(btnStaff);
-        cardSide.Controls.Add(btnSettings);
+        cardSide.Controls.Add(btnDeliveries);
         cardSide.Depth = 0;
         cardSide.ForeColor = Color.FromArgb(222, 0, 0, 0);
         cardSide.Location = new Point(6, 5);
@@ -203,26 +203,26 @@ partial class FormSkeleton
         btnStaff.UseAccentColor = false;
         btnStaff.UseVisualStyleBackColor = true;
         // 
-        // btnSettings
+        // btnDeliveries
         // 
-        btnSettings.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
-        btnSettings.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-        btnSettings.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-        btnSettings.Depth = 0;
-        btnSettings.HighEmphasis = true;
-        btnSettings.Icon = (Image)resources.GetObject("btnSettings.Icon");
-        btnSettings.Location = new Point(13, 381);
-        btnSettings.Margin = new Padding(0);
-        btnSettings.MinimumSize = new Size(172, 50);
-        btnSettings.MouseState = MaterialSkin.MouseState.HOVER;
-        btnSettings.Name = "btnSettings";
-        btnSettings.NoAccentTextColor = Color.Empty;
-        btnSettings.Size = new Size(172, 50);
-        btnSettings.TabIndex = 1;
-        btnSettings.Text = "Settings";
-        btnSettings.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Text;
-        btnSettings.UseAccentColor = false;
-        btnSettings.UseVisualStyleBackColor = true;
+        btnDeliveries.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
+        btnDeliveries.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+        btnDeliveries.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+        btnDeliveries.Depth = 0;
+        btnDeliveries.HighEmphasis = true;
+        btnDeliveries.Icon = (Image)resources.GetObject("btnDeliveries.Icon");
+        btnDeliveries.Location = new Point(13, 381);
+        btnDeliveries.Margin = new Padding(0);
+        btnDeliveries.MinimumSize = new Size(172, 50);
+        btnDeliveries.MouseState = MaterialSkin.MouseState.HOVER;
+        btnDeliveries.Name = "btnDeliveries";
+        btnDeliveries.NoAccentTextColor = Color.Empty;
+        btnDeliveries.Size = new Size(172, 50);
+        btnDeliveries.TabIndex = 1;
+        btnDeliveries.Text = "Deliveries";
+        btnDeliveries.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Text;
+        btnDeliveries.UseAccentColor = false;
+        btnDeliveries.UseVisualStyleBackColor = true;
         // 
         // FormSkeleton
         // 
@@ -249,7 +249,7 @@ partial class FormSkeleton
     private MaterialSkin.Controls.MaterialCard cardSide;
     // private MaterialSkin.Controls.MaterialCard materialCard1;
     private MaterialSkin.Controls.MaterialButton btnStaff;
-    private MaterialSkin.Controls.MaterialButton btnSettings;
+    private MaterialSkin.Controls.MaterialButton btnDeliveries;
     private MaterialSkin.Controls.MaterialButton btnStock;
     private MaterialSkin.Controls.MaterialButton btnJobs;
     private MaterialSkin.Controls.MaterialButton btnHome;

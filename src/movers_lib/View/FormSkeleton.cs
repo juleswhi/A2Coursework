@@ -27,7 +27,7 @@ public partial class FormSkeleton : Form, IFormMaster {
         btnStock.Click += (s, e) => ShowGCF<FormViewModel, Stock>();
         btnStaff.Click += (s, e) => ShowGCF<FormViewModel, Employee>();
         btnReports.Click += (s, e) => ShowForm<FormReports>();
-        btnSettings.Click += (s, e) => ShowForm<FormSettings>();
+        btnDeliveries.Click += (s, e) => ShowForm<FormSettings>();
     }
 
     /// <summary>

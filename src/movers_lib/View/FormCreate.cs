@@ -1,5 +1,4 @@
-﻿using Forms;
-using MaterialSkin.Controls;
+﻿using MaterialSkin.Controls;
 using Model;
 
 namespace View;
@@ -33,10 +32,15 @@ public partial class FormCreate : Form, GenericCreateableForm {
                     AutoSize = true,
                     Type = MaterialButton.MaterialButtonType.Outlined,
                 };
+
+                foreignKeyButton.Click += (s, e) => {
+                    ShowGCF<FormSelectViewModel, T>();
+                };
+
                 panel1.Controls.Add(foreignKeyButton);
                 txtBox.Tag = "foreign";
-            } 
-            panel1.Controls.Add(txtBox); 
+            }
+            panel1.Controls.Add(txtBox);
         }
 
         var textBoxes = panel1.Controls.OfType<MaterialTextBox>().ToList();
@@ -122,8 +126,8 @@ public partial class FormCreate : Form, GenericCreateableForm {
             if (!action.First.Value.Item2) continue;
         }
 
-        var idx = panel1.Controls.IndexOf(panel1.Controls.OfType<MaterialTextBox>().Where(x => (string)x.Tag == "foreign").FirstOrDefault());
-        if(idx != -1) {
+        var idx = panel1.Controls.IndexOf(panel1.Controls.OfType<MaterialTextBox>().Where(x => (string)x.Tag! == "foreign").FirstOrDefault());
+        if (idx != -1) {
             var s = panel1.Controls[idx].Size;
             var l = panel1.Controls[idx].Location;
 
@@ -145,12 +149,6 @@ public partial class FormCreate : Form, GenericCreateableForm {
         obj!.GetType().GetProperties().Zip(_textBoxes).ToList().ForEach(x => {
             x.Second.Text = Convert.ChangeType(x.First.GetValue(obj), x.First.PropertyType)!.ToString();
         });
-    }
-
-    private void btnBack_Click(object sender, EventArgs e) {
-        var method = typeof(FormManager)!.GetMethod(nameof(ShowGCF));
-        var generic = method!.MakeGenericMethod(typeof(FormViewModel), _currentType!);
-        generic.Invoke(null, null);
     }
 
     private void btnCreate_Click(object sender, EventArgs e) {

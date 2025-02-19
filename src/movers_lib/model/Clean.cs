@@ -43,7 +43,6 @@ public class Clean : IDatabaseModel {
             { "Create", (_ => {
 
             }, true) },
-            { "Back", (_ => ShowGCFR(typeof(FormViewModel), typeof(Clean)), false) }
         };
     }
 }

@@ -4,7 +4,7 @@ using Model;
 namespace View;
 
 public partial class FormViewModel : Form, GenericCreateableForm {
-    private Type? _currentType;
+    protected Type? _currentType;
 
     public FormViewModel() {
         InitializeComponent();

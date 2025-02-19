@@ -65,5 +65,5 @@ partial class FormViewModel
 
     #endregion
 
-    private DataGridView dataGridView;
+    protected DataGridView dataGridView;
 }
