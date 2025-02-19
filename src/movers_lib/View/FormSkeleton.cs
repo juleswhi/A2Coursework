@@ -7,13 +7,13 @@ namespace View;
 /// FormSkeleton is the master form
 /// </summary>
 public partial class FormSkeleton : Form, IFormMaster {
-    public Form current_form => panelHolder.
+    public Form CurrentForm => panelHolder.
         Controls.
         OfType<Form>().
         ToList().
         FirstOrDefault()!;
 
-    public Form CurrentlyDisplayedForm { get => current_form; }
+    public Form CurrentlyDisplayedForm { get => CurrentForm; }
 
     public FormSkeleton() {
         InitializeComponent();

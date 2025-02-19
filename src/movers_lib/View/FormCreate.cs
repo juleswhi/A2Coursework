@@ -1,5 +1,7 @@
 ﻿using MaterialSkin.Controls;
 using Model;
+using Nevron.Nov.WinFormControls;
+using System.Reflection;
 
 namespace View;
 
@@ -8,42 +10,51 @@ public partial class FormCreate : Form, GenericCreateableForm {
     private List<MaterialTextBox> _textBoxes => panel1.Controls.OfType<MaterialTextBox>().ToList();
     private int? foreign_id = null;
 
+    private static Dictionary<Type, PropertyInfo[]> _propCache = new();
+
+    public Action<int>? AssignForeignKey;
+
     public FormCreate() {
         InitializeComponent();
     }
 
+    private List<Type> _skips = [typeof(PrimaryKey), typeof(InitialValueInt), typeof(InitialValueString)];
+
     public void Create<T>() where T : IDatabaseModel {
-        // Get fields in type
-        var props = typeof(T).GetProperties();
+        _currentType = typeof(T);
+
+        // Store properties in cache if needed later
+        PropertyInfo[] props;
+        if (_propCache.ContainsKey(_currentType)) {
+            props = _propCache[_currentType];
+        } else {
+            props = _currentType.GetProperties();
+            _propCache[_currentType] = props;
+        }
+
+        var valid_props = props.Where(x => !x.CustomAttributes.Any(x => _skips.Contains(x.AttributeType)));
 
         foreach (var prop in props) {
-            if (prop.Name == "Id") continue;
+
 
             panel1.Controls.Add(new MaterialLabel() { Text = prop.Name });
             var txtBox = new MaterialTextBox();
 
-            if (Attribute.GetCustomAttribute(prop, typeof(PrimaryKey)) != null) {
-                txtBox.Text += "Primary";
+            if (Attribute.GetCustomAttribute(prop, typeof(PrimaryKey)) != null ||
+                Attribute.GetCustomAttribute(prop, typeof(InitialValueInt)) != null ||
+                Attribute.GetCustomAttribute(prop, typeof(InitialValueString)) != null) {
+                continue;
             }
-            if (Attribute.GetCustomAttribute(prop, typeof(ForeignKey)) != null) {
-                txtBox.Text += "foreign";
-                var foreignKeyButton = new MaterialButton {
-                    Text = "Choose",
-                    AutoSize = true,
-                    Type = MaterialButton.MaterialButtonType.Outlined,
-                };
-
-                foreignKeyButton.Click += (s, e) => {
-                    ShowGCF<FormSelectViewModel, T>();
-                };
-
-                panel1.Controls.Add(foreignKeyButton);
+            if (Attribute.GetCustomAttribute(prop, typeof(ForeignKey)) != null)
                 txtBox.Tag = "foreign";
-            }
+            if (Attribute.GetCustomAttribute(prop, typeof(Date)) != null)
+                txtBox.Tag = "date";
+
             panel1.Controls.Add(txtBox);
         }
 
         var textBoxes = panel1.Controls.OfType<MaterialTextBox>().ToList();
+
         var textBoxCount = textBoxes.Count();
         var maxLabelSize = props.Select(x => TextRenderer.MeasureText(x.Name, MaterialButton.DefaultFont)).OrderBy(s => s.Width).Reverse().First();
         var maxTextBoxSize = new Size(150, 50);
@@ -89,88 +100,84 @@ public partial class FormCreate : Form, GenericCreateableForm {
         }
 
         var obj = (IDatabaseModel)Activator.CreateInstance(typeof(T))!;
-        var buttons = obj.CreateButtons();
+        var btns = obj.CreateButtons();
 
-        foreach (var btn in buttons) {
-            var b = new MaterialButton() { Text = btn.Key };
+        foreach (var btn in btns) {
+            var b = new MaterialButton() { Text = btn.Key, UseAccentColor = true };
 
             b.Click += (s, e) => {
                 btn.Value.Item1.Invoke(
-                    panel1.Controls.OfType<MaterialTextBox>().Select(x => x.Text).Prepend(foreign_id.ToString()).ToList()!
+                    textBoxes.Select(x => x.Text).Prepend(foreign_id.ToString()).ToList()!
                     );
             };
-
-            b.UseAccentColor = true;
-            // b.Type = MaterialButton.MaterialButtonType.Text;
 
             Controls.Add(b);
         }
 
+        var buttons = panel1.Controls.OfType<MaterialButton>().ToList();
+
         int totalButtonsWidth = 0;
-        foreach (var button in Controls.OfType<MaterialButton>()) {
+        foreach (var button in buttons) {
             totalButtonsWidth += button.Width;
         }
 
         int availableSpace = horizontalSpace / totalButtonsWidth;
-        int spacing = availableSpace / (buttons.Count + 1);
+        int spacing = availableSpace / (btns.Count + 1);
 
         startX = (this.ClientSize.Width - horizontalSpace) / 2;
         int currentX = startX + spacing;
 
-        foreach (var button in Controls.OfType<MaterialButton>()) {
+        foreach (var button in buttons) {
             button.Location = new Point(currentX, panel1.Bottom + 30);
             currentX += button.Width + spacing;
         }
 
-        foreach (var action in buttons.Zip(Controls.OfType<MaterialButton>())) {
-            if (!action.First.Value.Item2) continue;
-        }
-
-        var idx = panel1.Controls.IndexOf(panel1.Controls.OfType<MaterialTextBox>().Where(x => (string)x.Tag! == "foreign").FirstOrDefault());
+        List<int> to_remove = [];
+        List<(Control, Size, Point)> updates = [];
+        var idx = panel1.Controls.IndexOf(textBoxes.Where(x => (string)x.Tag! == "foreign").FirstOrDefault());
         if (idx != -1) {
             var s = panel1.Controls[idx].Size;
             var l = panel1.Controls[idx].Location;
 
-            var btn = panel1.Controls.OfType<MaterialButton>().First();
+            var btn = new MaterialButton {
+                Text = "Choose",
+                AutoSize = false,
+                Type = MaterialButton.MaterialButtonType.Outlined,
+                Size = s,
+                Location = l
+            };
 
-            btn.Size = s;
-            btn.AutoSize = false;
-            btn.Location = l;
+            btn.Click += (s, e) => {
+                ShowGCF<FormSelectViewModel, T>();
+            };
+
+            AssignForeignKey += x => {
+                btn.Text = $"{x}";
+            };
 
             panel1.Controls.RemoveAt(idx);
+            panel1.Controls.Add(btn);
         }
 
-        // panel1.Controls.Remove(panel1.Controls.OfType<MaterialTextBox>().Where(x => (string)x.Tag == "foreign").FirstOrDefault());
+        var datetime_idx = 0;
+        foreach (var datetime in textBoxes.Where(x => (string)x.Tag! == "date")) {
+            idx = panel1.Controls.IndexOf(datetime);
+            if (idx != -1) {
+                var s = panel1.Controls[idx].Size;
+                var l = panel1.Controls[idx].Location;
 
-        _currentType = typeof(T);
+                var dt = new NDateTimeBoxControl { AutoSize = false, Size = s, Location = l };
+                datetime_idx++;
+
+                panel1.Controls.RemoveAt(idx);
+                panel1.Controls.Add(dt);
+            }
+        }
     }
 
     public void Populate<T>(T obj) {
         obj!.GetType().GetProperties().Zip(_textBoxes).ToList().ForEach(x => {
             x.Second.Text = Convert.ChangeType(x.First.GetValue(obj), x.First.PropertyType)!.ToString();
         });
-    }
-
-    private void btnCreate_Click(object sender, EventArgs e) {
-        if (_currentType is null) return;
-
-        var obj = Activator.CreateInstance(_currentType);
-        Convert.ChangeType(obj, _currentType);
-
-        var props = _currentType.GetProperties().ToList();
-        props.RemoveAt(0);
-        var textvalues = _textBoxes.Select(x => x.Text);
-
-        props.Zip(textvalues).
-            ToList().
-            ForEach(x => x.First.
-                SetValue(obj, Convert.
-                    ChangeType(x.Second, x.First.PropertyType)));
-
-        var meth = typeof(DAL).GetMethod(nameof(DAL.Create))!;
-        var new_meth = meth.MakeGenericMethod(_currentType);
-        new_meth.Invoke(null, [obj!]);
-
-        ShowGCFR(typeof(FormViewModel), _currentType);
     }
 }

@@ -57,11 +57,13 @@ public partial class FormSelectViewModel : Form, GenericCreateableForm {
 
         b.Click += (s, e) => {
             if (dataGridView.SelectedRows.Count == 1) {
-                var val = (IDatabaseModel)Query<T>()[dataGridView.SelectedRows[0].Index];
+                var val = (T)Query<T>()[dataGridView.SelectedRows[0].Index];
 
-                val.GetPrimaryKey();
+                var primary = val.GetPrimaryKey().First().Item2;
 
                 ShowGCF<FormCreate, T>();
+
+                ((Master as FormSkeleton)!.CurrentForm as FormCreate)!.AssignForeignKey!.Invoke(primary);
             }
         };
 

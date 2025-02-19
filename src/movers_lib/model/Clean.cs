@@ -7,9 +7,13 @@ public class Clean : IDatabaseModel {
     public int Id { get; set; }
     [ForeignKey(typeof(Customer))]
     public int CustomerId { get; set; }
+    [Date]
     public string BookDate { get; set; } = String.Empty;
+    [Date]
     public string StartDate { get; set; } = String.Empty;
+    [Date]
     public string EndDate { get; set; } = String.Empty;
+    [InitialValueInt(0)]
     public int HoursWorked { get; set; }
     public double Price { get; set; }
     public bool Paid { get; set; }

@@ -15,6 +15,7 @@
     <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.1" />
     <PackageReference Include="Microsoft.SqlServer.Server" Version="1.0.0" />
     <PackageReference Include="Microsoft.SqlServer.Types" Version="160.1000.6" />
+    <PackageReference Include="NevronOpenVision" Version="24.6.3.12" />
     <PackageReference Include="SQLite" Version="3.13.0" />
   </ItemGroup>
 
