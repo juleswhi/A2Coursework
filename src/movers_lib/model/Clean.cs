@@ -7,15 +7,22 @@ public class Clean : IDatabaseModel {
     public int Id { get; set; }
     [ForeignKey(typeof(Customer))]
     public int CustomerId { get; set; }
+
     [Date]
+    [InitialValueDate]
     public string BookDate { get; set; } = String.Empty;
+
     [Date]
     public string StartDate { get; set; } = String.Empty;
+
     [Date]
     public string EndDate { get; set; } = String.Empty;
+
     [InitialValueInt(0)]
     public int HoursWorked { get; set; }
+
     public double Price { get; set; }
+
     public bool Paid { get; set; }
 
     public static Clean GenerateFakeData()
@@ -38,15 +45,34 @@ public class Clean : IDatabaseModel {
                     var form_meth = form!.GetType().GetMethod(nameof(form.Populate))!.MakeGenericMethod(typeof(Clean)!);
                     // form_meth.Invoke(form, [m]); 
             }, false) },
-            { "Peter", (_ => { }, true ) },
             { "Delete", (_ => { }, true) }
         };
     }
     public Dictionary<string, (Action<List<string>?>, bool)> CreateButtons() {
         return new() {
-            { "Create", (_ => {
+            { "Create", (s => {
+                    ShowGCFR(typeof(FormCreate), typeof(Clean));
+                    var clean = new Clean();
+                    var cleans = DAL.Query<Clean>();
+                    if(!cleans.Any()) 
+                        return;
 
-            }, true) },
+                    clean.Id = cleans.Select(x => x.Id).Max() + 1;
+                    clean.CustomerId = Convert.ToInt32(s!.First());
+                    clean.BookDate = DateTime.Now.ToString();
+                    clean.StartDate = s![1];
+                    clean.EndDate = s![2];
+                    clean.HoursWorked = 0;
+                    clean.Price = Convert.ToDouble(s![3]);
+                    clean.Paid = Convert.ToBoolean(s![4]);
+
+                    clean.Create();
+
+                    var form = Master!.CurrentlyDisplayedForm as FormCreate;
+                    var form_meth = form!.GetType().GetMethod(nameof(form.Populate))!.MakeGenericMethod(typeof(Clean)!);
+                    // form_meth.Invoke(form, [m]); 
+            }, false) },
+            { "Delete", (_ => { }, true) }
         };
     }
 }

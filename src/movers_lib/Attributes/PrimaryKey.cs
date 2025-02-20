@@ -29,3 +29,6 @@ internal class InitialValueString : Attribute {
         Value = val;
     }
 }
+
+[AttributeUsage(AttributeTargets.Property)]
+internal class InitialValueDate : Attribute { }

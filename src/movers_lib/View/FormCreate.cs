@@ -14,11 +14,13 @@ public partial class FormCreate : Form, GenericCreateableForm {
 
     public Action<int>? AssignForeignKey;
 
+    public Func<IEnumerable<(string, object)>>? func = null;
+
     public FormCreate() {
         InitializeComponent();
     }
 
-    private List<Type> _skips = [typeof(PrimaryKey), typeof(InitialValueInt), typeof(InitialValueString)];
+    private List<Type> _skips = [typeof(PrimaryKey), typeof(InitialValueInt), typeof(InitialValueString), typeof(InitialValueDate)];
 
     public void Create<T>() where T : IDatabaseModel {
         _currentType = typeof(T);
@@ -34,9 +36,7 @@ public partial class FormCreate : Form, GenericCreateableForm {
 
         var valid_props = props.Where(x => !x.CustomAttributes.Any(x => _skips.Contains(x.AttributeType)));
 
-        foreach (var prop in props) {
-
-
+        foreach (var prop in valid_props) {
             panel1.Controls.Add(new MaterialLabel() { Text = prop.Name });
             var txtBox = new MaterialTextBox();
 
@@ -107,14 +107,16 @@ public partial class FormCreate : Form, GenericCreateableForm {
 
             b.Click += (s, e) => {
                 btn.Value.Item1.Invoke(
-                    textBoxes.Select(x => x.Text).Prepend(foreign_id.ToString()).ToList()!
+                    [
+                    ]
+                    // textBoxes.Select(x => x.Text).Prepend(foreign_id.ToString()).ToList()!
                     );
             };
 
             Controls.Add(b);
         }
 
-        var buttons = panel1.Controls.OfType<MaterialButton>().ToList();
+        var buttons = Controls.OfType<MaterialButton>().ToList();
 
         int totalButtonsWidth = 0;
         foreach (var button in buttons) {
@@ -132,8 +134,6 @@ public partial class FormCreate : Form, GenericCreateableForm {
             currentX += button.Width + spacing;
         }
 
-        List<int> to_remove = [];
-        List<(Control, Size, Point)> updates = [];
         var idx = panel1.Controls.IndexOf(textBoxes.Where(x => (string)x.Tag! == "foreign").FirstOrDefault());
         if (idx != -1) {
             var s = panel1.Controls[idx].Size;
