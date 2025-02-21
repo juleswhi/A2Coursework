@@ -7,6 +7,9 @@ global using static Forms.FormManager;
 global using static Logging.Logger;
 
 // Todo:
+// Validation
+// Add create methods to buttons for FormCreate
 // Deliveries
 // Finish Buttons
 // Everything Else
+

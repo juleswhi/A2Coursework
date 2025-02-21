@@ -21,16 +21,39 @@ public record Stock : IDatabaseModel {
                 if(s is null) return;
             },true )},
             { "New Stock", (_ => {
-                    ShowGCFR(typeof(FormCreate), typeof(Clean));
+                    ShowGCFR(typeof(FormCreate), typeof(Stock));
                     //var form = Master!.CurrentlyDisplayedForm as FormCreate;
                     //var form_meth = form!.GetType().GetMethod(nameof(form.Populate))!.MakeGenericMethod(typeof(Clean)!);
             }, false )}
         };
     }
-    public Dictionary<string, (Action<List<string>?>, bool)> CreateButtons() {
+    public Dictionary<string, (Action<List<(string, Func<string>)>>, bool)> CreateButtons() {
         return new() {
-            { "Create", (_ => { }, true) },
-            { "Delete", (_ => { }, false) }
+            { "Create", (list => {
+                ShowGCFR(typeof(FormCreate), typeof(Stock));
+                var stock = new Stock();
+                var stocks = DAL.Query<Stock>();
+
+                if(!stocks.Any())
+                    stock.Id = 0;
+                else stock.Id = stocks.Select(x => x.Id).Max() + 1;
+
+                foreach(var (prop_name, prop_val) in list) {
+                    var prop = typeof(Stock).GetProperty(prop_name);
+                    if(prop is null) continue;
+
+                    if(prop.PropertyType == typeof(string))
+                        prop.SetValue(stock, prop_val(), []);
+                    else if(prop.PropertyType == typeof(bool))
+                        prop.SetValue(stock, Convert.ToBoolean(prop_val()),[]);
+                    else if(prop.PropertyType == typeof(int))
+                        prop.SetValue(stock, Convert.ToInt32(prop_val()),[]);
+                    else if(prop.PropertyType == typeof(double))
+                        prop.SetValue(stock, Convert.ToDouble(prop_val()),[]);
+                }
+
+                stock.Create();
+            }, true) },
         };
     }
 }

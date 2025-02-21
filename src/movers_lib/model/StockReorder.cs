@@ -31,7 +31,7 @@ public record StockReorder : IDatabaseModel {
             { "Delete", (_ => { }, true) }
         };
     }
-    public Dictionary<string, (Action<List<string>?>, bool)> CreateButtons() {
+    public Dictionary<string, (Action<List<(string, Func<string>)>>, bool)> CreateButtons() {
         return new() {
             { "Create", (_ => { }, true) },
             { "Delete", (_ => { }, false) }

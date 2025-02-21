@@ -42,37 +42,48 @@ public class Clean : IDatabaseModel {
             { "Create", (_ => {
                     ShowGCFR(typeof(FormCreate), typeof(Clean));
                     var form = Master!.CurrentlyDisplayedForm as FormCreate;
-                    var form_meth = form!.GetType().GetMethod(nameof(form.Populate))!.MakeGenericMethod(typeof(Clean)!);
-                    // form_meth.Invoke(form, [m]); 
+                    var form_meth = form!.GetType().
+                        GetMethod(nameof(form.Populate))!.
+                        MakeGenericMethod(typeof(Clean)!);
             }, false) },
             { "Delete", (_ => { }, true) }
         };
     }
-    public Dictionary<string, (Action<List<string>?>, bool)> CreateButtons() {
+    public Dictionary<string, (Action<List<(string, Func<string>)>>, bool)> CreateButtons() {
         return new() {
-            { "Create", (s => {
+            { "Create", (list => {
                     ShowGCFR(typeof(FormCreate), typeof(Clean));
                     var clean = new Clean();
                     var cleans = DAL.Query<Clean>();
-                    if(!cleans.Any()) 
-                        return;
 
-                    clean.Id = cleans.Select(x => x.Id).Max() + 1;
-                    clean.CustomerId = Convert.ToInt32(s!.First());
+                    if(!cleans.Any()) {
+                        clean.Id = 0;
+                    }
+                    else clean.Id = cleans.Select(x => x.Id).Max() + 1;
+
+                    foreach(var (prop_name, prop_val) in list) {
+                        LOG($"Property Name: {prop_name}, Value: {prop_val()}");
+                    }
+
+                    foreach(var (prop_name, prop_val) in list) {
+                        var prop = typeof(Clean).GetProperty(prop_name);
+                        if(prop is null) continue;
+
+                        if(prop.PropertyType == typeof(string))
+                            prop.SetValue(clean, prop_val(), []);
+                        else if(prop.PropertyType == typeof(bool))
+                            prop.SetValue(clean, Convert.ToBoolean(prop_val()),[]);
+                        else if(prop.PropertyType == typeof(int))
+                            prop.SetValue(clean, Convert.ToInt32(prop_val()),[]);
+                        else if(prop.PropertyType == typeof(double))
+                            prop.SetValue(clean, Convert.ToDouble(prop_val()),[]);
+                    }
+
                     clean.BookDate = DateTime.Now.ToString();
-                    clean.StartDate = s![1];
-                    clean.EndDate = s![2];
                     clean.HoursWorked = 0;
-                    clean.Price = Convert.ToDouble(s![3]);
-                    clean.Paid = Convert.ToBoolean(s![4]);
 
                     clean.Create();
-
-                    var form = Master!.CurrentlyDisplayedForm as FormCreate;
-                    var form_meth = form!.GetType().GetMethod(nameof(form.Populate))!.MakeGenericMethod(typeof(Clean)!);
-                    // form_meth.Invoke(form, [m]); 
-            }, false) },
-            { "Delete", (_ => { }, true) }
+            }, true) },
         };
     }
 }

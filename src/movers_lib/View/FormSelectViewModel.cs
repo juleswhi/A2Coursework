@@ -61,7 +61,9 @@ public partial class FormSelectViewModel : Form, GenericCreateableForm {
 
                 var primary = val.GetPrimaryKey().First().Item2;
 
-                ShowGCF<FormCreate, T>();
+                if (FormCreate.PreviousFormType is not null) {
+                    ShowGCFR(typeof(FormCreate), FormCreate.PreviousFormType);
+                } else ShowGCF<FormCreate, T>();
 
                 ((Master as FormSkeleton)!.CurrentForm as FormCreate)!.AssignForeignKey!.Invoke(primary);
             }

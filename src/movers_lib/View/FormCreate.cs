@@ -1,20 +1,23 @@
 ﻿using MaterialSkin.Controls;
 using Model;
-using Nevron.Nov.WinFormControls;
 using System.Reflection;
 
 namespace View;
 
 public partial class FormCreate : Form, GenericCreateableForm {
+    public static Type? PreviousFormType { get; private set; } = null;
+    public Action<int>? AssignForeignKey;
+    public Func<IEnumerable<(string, object)>>? func = null;
+
+
     private Type? _currentType;
     private List<MaterialTextBox> _textBoxes => panel1.Controls.OfType<MaterialTextBox>().ToList();
+
     private int? foreign_id = null;
+    private Type? foreign_type = null;
 
     private static Dictionary<Type, PropertyInfo[]> _propCache = new();
 
-    public Action<int>? AssignForeignKey;
-
-    public Func<IEnumerable<(string, object)>>? func = null;
 
     public FormCreate() {
         InitializeComponent();
@@ -24,6 +27,9 @@ public partial class FormCreate : Form, GenericCreateableForm {
 
     public void Create<T>() where T : IDatabaseModel {
         _currentType = typeof(T);
+        PreviousFormType = _currentType;
+
+        List<(string, Func<string>)> property_values = [];
 
         // Store properties in cache if needed later
         PropertyInfo[] props;
@@ -37,7 +43,8 @@ public partial class FormCreate : Form, GenericCreateableForm {
         var valid_props = props.Where(x => !x.CustomAttributes.Any(x => _skips.Contains(x.AttributeType)));
 
         foreach (var prop in valid_props) {
-            panel1.Controls.Add(new MaterialLabel() { Text = prop.Name });
+            var label = new MaterialLabel() { Text = prop.Name };
+            panel1.Controls.Add(label);
             var txtBox = new MaterialTextBox();
 
             if (Attribute.GetCustomAttribute(prop, typeof(PrimaryKey)) != null ||
@@ -45,23 +52,34 @@ public partial class FormCreate : Form, GenericCreateableForm {
                 Attribute.GetCustomAttribute(prop, typeof(InitialValueString)) != null) {
                 continue;
             }
-            if (Attribute.GetCustomAttribute(prop, typeof(ForeignKey)) != null)
+            if (Attribute.GetCustomAttribute(prop, typeof(ForeignKey)) != null) {
+                var n = prop.Name.Split("Id")[0];
+                var type = ModelHelper.ModelTypes.First(x => x.Name == n);
+                foreign_type = type;
                 txtBox.Tag = "foreign";
+            }
             if (Attribute.GetCustomAttribute(prop, typeof(Date)) != null)
                 txtBox.Tag = "date";
 
             panel1.Controls.Add(txtBox);
+            property_values.Add((label.Text, () => txtBox.Text));
         }
 
         var textBoxes = panel1.Controls.OfType<MaterialTextBox>().ToList();
 
         var textBoxCount = textBoxes.Count();
-        var maxLabelSize = props.Select(x => TextRenderer.MeasureText(x.Name, MaterialButton.DefaultFont)).OrderBy(s => s.Width).Reverse().First();
+        var maxLabelSize = props.
+            Select(x => TextRenderer.MeasureText(x.Name, MaterialButton.DefaultFont)).
+            OrderBy(s => s.Width).
+            Reverse().
+            First();
         var maxTextBoxSize = new Size(150, 50);
         var horizontalSpace = panel1.Width;
         var verticalSpace = panel1.Height;
 
         var labels = panel1.Controls.OfType<MaterialLabel>().ToList();
+
+        #region Random Sizing Stuff
 
         int columns = (int)Math.Ceiling(Math.Sqrt(textBoxCount));
         int rows = (int)Math.Ceiling((double)textBoxCount / columns);
@@ -99,19 +117,15 @@ public partial class FormCreate : Form, GenericCreateableForm {
             textBoxes[i].Size = new Size(textBoxWidth, textBoxHeight);
         }
 
+        #endregion 
+
         var obj = (IDatabaseModel)Activator.CreateInstance(typeof(T))!;
         var btns = obj.CreateButtons();
 
         foreach (var btn in btns) {
             var b = new MaterialButton() { Text = btn.Key, UseAccentColor = true };
 
-            b.Click += (s, e) => {
-                btn.Value.Item1.Invoke(
-                    [
-                    ]
-                    // textBoxes.Select(x => x.Text).Prepend(foreign_id.ToString()).ToList()!
-                    );
-            };
+            b.Click += (s, e) => btn.Value.Item1.Invoke(property_values);
 
             Controls.Add(b);
         }
@@ -148,7 +162,7 @@ public partial class FormCreate : Form, GenericCreateableForm {
             };
 
             btn.Click += (s, e) => {
-                ShowGCF<FormSelectViewModel, T>();
+                ShowGCFR(typeof(FormSelectViewModel), foreign_type!);
             };
 
             AssignForeignKey += x => {
@@ -157,6 +171,10 @@ public partial class FormCreate : Form, GenericCreateableForm {
 
             panel1.Controls.RemoveAt(idx);
             panel1.Controls.Add(btn);
+
+            var prop_val = property_values.ElementAt(idx - 1);
+            prop_val.Item2 = () => btn.Text;
+            property_values[idx - 1] = prop_val;
         }
 
         var datetime_idx = 0;
@@ -166,11 +184,14 @@ public partial class FormCreate : Form, GenericCreateableForm {
                 var s = panel1.Controls[idx].Size;
                 var l = panel1.Controls[idx].Location;
 
-                var dt = new NDateTimeBoxControl { AutoSize = false, Size = s, Location = l };
+                var dt = new DateTimePicker { AutoSize = false, Size = s, Location = l };
                 datetime_idx++;
 
                 panel1.Controls.RemoveAt(idx);
                 panel1.Controls.Add(dt);
+                var prop_val = property_values.ElementAt(idx - 1);
+                prop_val.Item2 = () => dt.Value.ToString();
+                property_values[idx - 1] = prop_val;
             }
         }
     }

@@ -18,7 +18,7 @@ public class CleanJob : IDatabaseModel {
         return new() {
         };
     }
-    public Dictionary<string, (Action<List<string>?>, bool)> CreateButtons() {
+    public Dictionary<string, (Action<List<(string, Func<string>)>>, bool)> CreateButtons() {
         return new() {
         };
     }
