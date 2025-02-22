@@ -26,8 +26,35 @@ public record Employee : IDatabaseModel {
     }
     public Dictionary<string, (Action<List<(string, Func<string>)>>, bool)> CreateButtons() {
         return new() {
-            { "Create", (_ => { }, true) },
-            { "Delete", (_ => { }, false) }
+            { "Create", (list => {
+                    // ShowGCFR(typeof(FormCreate), typeof(Employee));
+                    //var employee = new Employee();
+                    //var employees = DAL.Query<Employee>();
+
+                    //if(!employees.Any()) {
+                    //    employee.Id = 0;
+                    //}
+
+                    //else employee.Id = employees.Select(x => x.Id).Max() + 1;
+
+                    //foreach(var (prop_name, prop_val) in list) {
+                    //    var prop = typeof(Employee).GetProperty(prop_name);
+                    //    if(prop is null) continue;
+
+                    //    if(prop.PropertyType == typeof(string))
+                    //        prop.SetValue(employee, prop_val(), []);
+                    //    else if(prop.PropertyType == typeof(bool))
+                    //        prop.SetValue(employee, Convert.ToBoolean(prop_val()),[]);
+                    //    else if(prop.PropertyType == typeof(int))
+                    //        prop.SetValue(employee, Convert.ToInt32(prop_val()),[]);
+                    //    else if(prop.PropertyType == typeof(double))
+                    //        prop.SetValue(employee, Convert.ToDouble(prop_val()),[]);
+                    //}
+
+                    //employee.Create();
+
+                    //ShowGCFR(typeof(FormViewModel), typeof(Employee));
+            }, true) },
         };
     }
 }

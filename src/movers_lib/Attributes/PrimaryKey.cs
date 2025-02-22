@@ -15,6 +15,9 @@ internal class Name : Attribute {
 }
 
 [AttributeUsage(AttributeTargets.Property)]
+internal class Toggle : Attribute { }
+
+[AttributeUsage(AttributeTargets.Property)]
 internal class InitialValueInt : Attribute {
     public int Value { get; set; }
     public InitialValueInt(int val) {
@@ -32,3 +35,4 @@ internal class InitialValueString : Attribute {
 
 [AttributeUsage(AttributeTargets.Property)]
 internal class InitialValueDate : Attribute { }
+

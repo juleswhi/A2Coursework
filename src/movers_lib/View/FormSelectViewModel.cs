@@ -51,8 +51,6 @@ public partial class FormSelectViewModel : Form, GenericCreateableForm {
         var size = TextRenderer.MeasureText(name, MaterialButton.DefaultFont);
         _currentType = typeof(T);
 
-
-
         var b = new MaterialButton() { Text = "Select" };
 
         b.Click += (s, e) => {
@@ -65,7 +63,9 @@ public partial class FormSelectViewModel : Form, GenericCreateableForm {
                     ShowGCFR(typeof(FormCreate), FormCreate.PreviousFormType);
                 } else ShowGCF<FormCreate, T>();
 
-                ((Master as FormSkeleton)!.CurrentForm as FormCreate)!.AssignForeignKey!.Invoke(primary);
+                // ((Master as FormSkeleton)!.CurrentForm as FormCreate)!.AssignForeignKey!.Invoke(primary);
+                var prop_val = ((Master as FormSkeleton)!.CurrentForm as FormCreate)!.PropertyValues.First(x => x.Type == typeof(T));
+                (prop_val.Control as MaterialButton)!.Text = primary.ToString();
             }
         };
 

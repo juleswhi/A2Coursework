@@ -23,6 +23,7 @@ public class Clean : IDatabaseModel {
 
     public double Price { get; set; }
 
+    [Toggle]
     public bool Paid { get; set; }
 
     public static Clean GenerateFakeData()
@@ -42,11 +43,22 @@ public class Clean : IDatabaseModel {
             { "Create", (_ => {
                     ShowGCFR(typeof(FormCreate), typeof(Clean));
                     var form = Master!.CurrentlyDisplayedForm as FormCreate;
-                    var form_meth = form!.GetType().
-                        GetMethod(nameof(form.Populate))!.
-                        MakeGenericMethod(typeof(Clean)!);
+                    //var form_meth = form!.GetType().
+                    //    GetMethod(nameof(form.Populate))!.
+                    //    MakeGenericMethod(typeof(Clean)!);
             }, false) },
-            { "Delete", (_ => { }, true) }
+            { "Edit", (m => {
+                    ShowGCFR(typeof(FormCreate), typeof(Clean));
+                    var form = Master!.CurrentlyDisplayedForm as FormCreate;
+                    var form_meth = form!.GetType().
+                    GetMethod(nameof(form.Populate))!.
+                    MakeGenericMethod(typeof(Clean)!);
+                form_meth.Invoke(form, [m]);
+            }, true) },
+            { "Delete", (m => {
+                    DAL.Delete((Clean)m!);
+                ShowGCF<FormViewModel, Clean>();
+            }, true) }
         };
     }
     public Dictionary<string, (Action<List<(string, Func<string>)>>, bool)> CreateButtons() {
@@ -83,6 +95,9 @@ public class Clean : IDatabaseModel {
                     clean.HoursWorked = 0;
 
                     clean.Create();
+
+                    ShowGCFR(typeof(FormViewModel), typeof(Clean));
+
             }, true) },
         };
     }

@@ -8,13 +8,12 @@ public partial class FormCreate : Form, GenericCreateableForm {
     public static Type? PreviousFormType { get; private set; } = null;
     public Action<int>? AssignForeignKey;
     public Func<IEnumerable<(string, object)>>? func = null;
-
+    public List<PropValue> PropertyValues = [];
 
     private Type? _currentType;
     private List<MaterialTextBox> _textBoxes => panel1.Controls.OfType<MaterialTextBox>().ToList();
 
     private int? foreign_id = null;
-    private Type? foreign_type = null;
 
     private static Dictionary<Type, PropertyInfo[]> _propCache = new();
 
@@ -25,11 +24,23 @@ public partial class FormCreate : Form, GenericCreateableForm {
 
     private List<Type> _skips = [typeof(PrimaryKey), typeof(InitialValueInt), typeof(InitialValueString), typeof(InitialValueDate)];
 
+    public struct PropValue {
+        public PropValue(string name, Func<string> value, Control control, Type? type, Action<int>? AssignForeignKey) {
+            Name = name;
+            Value = value;
+            Control = control;
+            Type = type;
+        }
+        public string Name { get; set; }
+        public Func<string> Value { get; set; }
+        public Control Control { get; set; }
+        public Type? Type { get; set; }
+        Action<int>? AssignForeignKey { get; set; }
+    }
+
     public void Create<T>() where T : IDatabaseModel {
         _currentType = typeof(T);
         PreviousFormType = _currentType;
-
-        List<(string, Func<string>)> property_values = [];
 
         // Store properties in cache if needed later
         PropertyInfo[] props;
@@ -40,29 +51,33 @@ public partial class FormCreate : Form, GenericCreateableForm {
             _propCache[_currentType] = props;
         }
 
-        var valid_props = props.Where(x => !x.CustomAttributes.Any(x => _skips.Contains(x.AttributeType)));
+        var valid_props = props.Where(x => !x.CustomAttributes.Any(x => _skips.Contains(x.AttributeType))).Select(x => (x, false)).ToList();
 
         foreach (var prop in valid_props) {
-            var label = new MaterialLabel() { Text = prop.Name };
+            var label = new MaterialLabel() { Text = prop.Item1.Name };
             panel1.Controls.Add(label);
             var txtBox = new MaterialTextBox();
 
-            if (Attribute.GetCustomAttribute(prop, typeof(PrimaryKey)) != null ||
-                Attribute.GetCustomAttribute(prop, typeof(InitialValueInt)) != null ||
-                Attribute.GetCustomAttribute(prop, typeof(InitialValueString)) != null) {
+            Type? t = null;
+
+            if (Attribute.GetCustomAttribute(prop.Item1, typeof(PrimaryKey)) != null ||
+                Attribute.GetCustomAttribute(prop.Item1, typeof(InitialValueInt)) != null ||
+                Attribute.GetCustomAttribute(prop.Item1, typeof(InitialValueString)) != null) {
                 continue;
             }
-            if (Attribute.GetCustomAttribute(prop, typeof(ForeignKey)) != null) {
-                var n = prop.Name.Split("Id")[0];
+            if (Attribute.GetCustomAttribute(prop.Item1, typeof(ForeignKey)) != null) {
+                var n = prop.Item1.Name.Split("Id")[0];
                 var type = ModelHelper.ModelTypes.First(x => x.Name == n);
-                foreign_type = type;
+                t = type;
                 txtBox.Tag = "foreign";
             }
-            if (Attribute.GetCustomAttribute(prop, typeof(Date)) != null)
+            if (Attribute.GetCustomAttribute(prop.Item1, typeof(Date)) != null)
                 txtBox.Tag = "date";
+            if (Attribute.GetCustomAttribute(prop.Item1, typeof(Toggle)) != null)
+                txtBox.Tag = "toggle";
 
             panel1.Controls.Add(txtBox);
-            property_values.Add((label.Text, () => txtBox.Text));
+            PropertyValues.Add(new(label.Text, () => txtBox.Text, txtBox, t, null));
         }
 
         var textBoxes = panel1.Controls.OfType<MaterialTextBox>().ToList();
@@ -125,7 +140,7 @@ public partial class FormCreate : Form, GenericCreateableForm {
         foreach (var btn in btns) {
             var b = new MaterialButton() { Text = btn.Key, UseAccentColor = true };
 
-            b.Click += (s, e) => btn.Value.Item1.Invoke(property_values);
+            b.Click += (s, e) => btn.Value.Item1.Invoke(PropertyValues.Select(x => (x.Name, x.Value)).ToList());
 
             Controls.Add(b);
         }
@@ -148,8 +163,12 @@ public partial class FormCreate : Form, GenericCreateableForm {
             currentX += button.Width + spacing;
         }
 
-        var idx = panel1.Controls.IndexOf(textBoxes.Where(x => (string)x.Tag! == "foreign").FirstOrDefault());
-        if (idx != -1) {
+        foreach(var foreignkey in textBoxes.Where(x => (string)x.Tag! == "foreign")) {
+            var idx = panel1.Controls.IndexOf(foreignkey);
+
+            var prop_val = PropertyValues.First(x => x.Control == foreignkey);
+
+            if (idx == -1) continue;
             var s = panel1.Controls[idx].Size;
             var l = panel1.Controls[idx].Location;
 
@@ -162,37 +181,51 @@ public partial class FormCreate : Form, GenericCreateableForm {
             };
 
             btn.Click += (s, e) => {
-                ShowGCFR(typeof(FormSelectViewModel), foreign_type!);
-            };
-
-            AssignForeignKey += x => {
-                btn.Text = $"{x}";
+                ShowGCFR(typeof(FormSelectViewModel), prop_val.Type!);
             };
 
             panel1.Controls.RemoveAt(idx);
             panel1.Controls.Add(btn);
 
-            var prop_val = property_values.ElementAt(idx - 1);
-            prop_val.Item2 = () => btn.Text;
-            property_values[idx - 1] = prop_val;
+            prop_val.Value = () => btn.Text;
+            prop_val.Control = btn;
+            PropertyValues[PropertyValues.IndexOf(PropertyValues.First(x => x.Name == prop_val.Name))] = prop_val;
         }
 
-        var datetime_idx = 0;
         foreach (var datetime in textBoxes.Where(x => (string)x.Tag! == "date")) {
-            idx = panel1.Controls.IndexOf(datetime);
-            if (idx != -1) {
-                var s = panel1.Controls[idx].Size;
-                var l = panel1.Controls[idx].Location;
+            var idx = panel1.Controls.IndexOf(datetime);
+            if (idx != -1) continue;
 
-                var dt = new DateTimePicker { AutoSize = false, Size = s, Location = l };
-                datetime_idx++;
+            var prop_val = PropertyValues.First(x => x.Control == datetime);
+            var s = panel1.Controls[idx].Size;
+            var l = panel1.Controls[idx].Location;
 
-                panel1.Controls.RemoveAt(idx);
-                panel1.Controls.Add(dt);
-                var prop_val = property_values.ElementAt(idx - 1);
-                prop_val.Item2 = () => dt.Value.ToString();
-                property_values[idx - 1] = prop_val;
-            }
+            var dt = new DateTimePicker { AutoSize = false, Size = s, Location = l };
+
+            panel1.Controls.RemoveAt(idx);
+            panel1.Controls.Add(dt);
+            prop_val.Value = () => dt.Value.ToString();
+            prop_val.Control = dt;
+            PropertyValues[PropertyValues.IndexOf(PropertyValues.First(x => x.Name == prop_val.Name))] = prop_val;
+        }
+
+        foreach (var toggle in textBoxes.Where(x => (string)x.Tag! == "toggle")) {
+            var idx = panel1.Controls.IndexOf(toggle);
+            if (idx == -1) continue;
+
+            var prop_val = PropertyValues.First(x => x.Control == toggle);
+            var s = panel1.Controls[idx].Size;
+            var l = panel1.Controls[idx].Location;
+
+            var dt = new MaterialCheckbox { AutoSize = false, Size = s, Location = l };:wa
+
+
+            panel1.Controls.RemoveAt(idx);
+            panel1.Controls.Add(dt);
+
+            prop_val.Value = () => dt.Checked.ToString();
+            prop_val.Control = dt;
+            PropertyValues[PropertyValues.IndexOf(PropertyValues.First(x => x.Name == prop_val.Name)n)] = prop_val;
         }
     }
 

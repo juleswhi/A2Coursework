@@ -13,11 +13,23 @@ public partial class FormHome : Form {
             return start < DateTime.Now && end > DateTime.Now;
         }).Count();
 
+        btnActiveJobs.Click += (s, e) => {
+            ShowGCF<FormViewModel, Clean>();
+        };
+        btnWorkingEmployees.Click += (s, e) => {
+            ShowGCF<FormViewModel, Employee>();
+        };
+        btnPendingDeliveries.Click += (s, e) => {
+            ShowForm<FormDeliveries>();
+        };
+
         var total_jobs = DAL.Query<Clean>().Count();
 
         labelJobsCount.Text = active_jobs.ToString();
         progressJobs.Minimum = 0;
         progressJobs.Maximum = total_jobs;
         progressJobs.Value = active_jobs;
+
+        labelPendingDelivieriesValue.Text = DAL.Query<Delivery>().Count().ToString();
     }
 }
