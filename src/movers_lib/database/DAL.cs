@@ -149,8 +149,6 @@ public static class DAL {
 
         using var command = new SqlCommand($"insert into {type.Name} ({props}) values ({vals})", conn);
 
-        LOG($"insert into {type.Name} ({props}) values ({vals})");
-
         return command.ExecuteNonQuery() == 0;
     }
 }

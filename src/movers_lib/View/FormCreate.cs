@@ -17,20 +17,20 @@ public partial class FormCreate : Form, GenericCreateableForm {
 
     private static Dictionary<Type, PropertyInfo[]> _propCache = new();
 
-
     public FormCreate() {
         InitializeComponent();
     }
 
     private List<Type> _skips = [typeof(PrimaryKey), typeof(InitialValueInt), typeof(InitialValueString), typeof(InitialValueDate)];
 
-    public struct PropValue {
+    public class PropValue {
         public PropValue(string name, Func<string> value, Control control, Type? type, Action<int>? AssignForeignKey) {
             Name = name;
             Value = value;
             Control = control;
             Type = type;
         }
+
         public string Name { get; set; }
         public Func<string> Value { get; set; }
         public Control Control { get; set; }
@@ -65,16 +65,18 @@ public partial class FormCreate : Form, GenericCreateableForm {
                 Attribute.GetCustomAttribute(prop.Item1, typeof(InitialValueString)) != null) {
                 continue;
             }
-            if (Attribute.GetCustomAttribute(prop.Item1, typeof(ForeignKey)) != null) {
+            if (Attribute.GetCustomAttribute(prop.Item1, typeof(ForeignKeyAttribute)) != null) {
                 var n = prop.Item1.Name.Split("Id")[0];
                 var type = ModelHelper.ModelTypes.First(x => x.Name == n);
                 t = type;
                 txtBox.Tag = "foreign";
             }
-            if (Attribute.GetCustomAttribute(prop.Item1, typeof(Date)) != null)
+            if (Attribute.GetCustomAttribute(prop.Item1, typeof(DateAttribute)) != null) {
                 txtBox.Tag = "date";
-            if (Attribute.GetCustomAttribute(prop.Item1, typeof(Toggle)) != null)
+            }
+            if (Attribute.GetCustomAttribute(prop.Item1, typeof(ToggleAttribute)) != null) {
                 txtBox.Tag = "toggle";
+            }
 
             panel1.Controls.Add(txtBox);
             PropertyValues.Add(new(label.Text, () => txtBox.Text, txtBox, t, null));
@@ -132,7 +134,9 @@ public partial class FormCreate : Form, GenericCreateableForm {
             textBoxes[i].Size = new Size(textBoxWidth, textBoxHeight);
         }
 
-        #endregion 
+        #endregion
+
+        #region Custom Buttons Creation and Spacing
 
         var obj = (IDatabaseModel)Activator.CreateInstance(typeof(T))!;
         var btns = obj.CreateButtons();
@@ -163,75 +167,110 @@ public partial class FormCreate : Form, GenericCreateableForm {
             currentX += button.Width + spacing;
         }
 
-        foreach(var foreignkey in textBoxes.Where(x => (string)x.Tag! == "foreign")) {
+        #endregion
+
+        foreach (var foreignkey in textBoxes.Where(x => (string)x.Tag! == "foreign")) {
             var idx = panel1.Controls.IndexOf(foreignkey);
-
-            var prop_val = PropertyValues.First(x => x.Control == foreignkey);
-
             if (idx == -1) continue;
-            var s = panel1.Controls[idx].Size;
-            var l = panel1.Controls[idx].Location;
 
-            var btn = new MaterialButton {
+            var foreignkey_property_kvp = PropertyValues.First(x => x.Control == foreignkey);
+
+            var textbox_size = panel1.Controls[idx].Size;
+            var textbox_location = panel1.Controls[idx].Location;
+
+            var foreignkey_select_button = new MaterialButton {
                 Text = "Choose",
                 AutoSize = false,
                 Type = MaterialButton.MaterialButtonType.Outlined,
-                Size = s,
-                Location = l
+                Size = textbox_size,
+                Location = textbox_location
             };
 
-            btn.Click += (s, e) => {
-                ShowGCFR(typeof(FormSelectViewModel), prop_val.Type!);
+            // TODO: Fix the passthrough here
+            // Maybe modify signature of callback function to accomodate data?
+            foreignkey_select_button.Click += (s, e) => {
+                ShowGCFR(typeof(FormSelectViewModel), foreignkey_property_kvp.Type!);
+                var formSelectViewModel = ((Master as FormSkeleton)!.CurrentForm as FormSelectViewModel)!;
+                // TODO: Fix form passing through data for edit
+                // Create model and pass through
+
+                var needed_prop_vals = PropertyValues.Select(x => (x.Name, x.Value)).ToList();
+
+                var temp_created_obj = typeof(T).GetMethod("CreateFromList")!.Invoke(Activator.CreateInstance<T>(), [needed_prop_vals]);
+
+                typeof(FormSelectViewModel).
+                    GetMethod(nameof(FormSelectViewModel.SetCallbackFromSelectType))!.
+                    MakeGenericMethod(typeof(T)).
+                    Invoke(formSelectViewModel, [FormSelectViewModel.SelectType.GetKey, temp_created_obj]);
             };
 
             panel1.Controls.RemoveAt(idx);
-            panel1.Controls.Add(btn);
+            panel1.Controls.Add(foreignkey_select_button);
 
-            prop_val.Value = () => btn.Text;
-            prop_val.Control = btn;
-            PropertyValues[PropertyValues.IndexOf(PropertyValues.First(x => x.Name == prop_val.Name))] = prop_val;
+            foreignkey_property_kvp.Value = () => foreignkey_select_button.Text;
+            foreignkey_property_kvp.Control = foreignkey_select_button;
+            PropertyValues[PropertyValues.IndexOf(PropertyValues.First(x => x.Name == foreignkey_property_kvp.Name))] = foreignkey_property_kvp;
         }
 
-        foreach (var datetime in textBoxes.Where(x => (string)x.Tag! == "date")) {
-            var idx = panel1.Controls.IndexOf(datetime);
-            if (idx != -1) continue;
+        foreach (var textbox_datetime in textBoxes.Where(x => (string)x.Tag! == "date")) {
+            var textbox_datetime_idx = panel1.Controls.IndexOf(textbox_datetime);
+            if (textbox_datetime_idx == -1) continue;
 
-            var prop_val = PropertyValues.First(x => x.Control == datetime);
-            var s = panel1.Controls[idx].Size;
-            var l = panel1.Controls[idx].Location;
+            var datetime_property_kvp = PropertyValues.First(x => x.Control == textbox_datetime);
 
-            var dt = new DateTimePicker { AutoSize = false, Size = s, Location = l };
+            var textbox_size = panel1.Controls[textbox_datetime_idx].Size;
+            var textbox_location = panel1.Controls[textbox_datetime_idx].Location;
 
-            panel1.Controls.RemoveAt(idx);
-            panel1.Controls.Add(dt);
-            prop_val.Value = () => dt.Value.ToString();
-            prop_val.Control = dt;
-            PropertyValues[PropertyValues.IndexOf(PropertyValues.First(x => x.Name == prop_val.Name))] = prop_val;
+            var datetime_picker = new DateTimePicker {
+                AutoSize = false,
+                Size = textbox_size,
+                Location = textbox_location
+            };
+
+            panel1.Controls.RemoveAt(textbox_datetime_idx);
+            panel1.Controls.Add(datetime_picker);
+
+            datetime_property_kvp.Value = () => datetime_picker.Value.ToString();
+            datetime_property_kvp.Control = datetime_picker;
+            PropertyValues[PropertyValues.IndexOf(PropertyValues.First(x => x.Name == datetime_property_kvp.Name))] = datetime_property_kvp;
         }
 
-        foreach (var toggle in textBoxes.Where(x => (string)x.Tag! == "toggle")) {
-            var idx = panel1.Controls.IndexOf(toggle);
-            if (idx == -1) continue;
+        foreach (var textbox_toggle in textBoxes.Where(x => (string)x.Tag! == "toggle")) {
+            var textbox_toggle_idx = panel1.Controls.IndexOf(textbox_toggle);
+            if (textbox_toggle_idx == -1) continue;
 
-            var prop_val = PropertyValues.First(x => x.Control == toggle);
-            var s = panel1.Controls[idx].Size;
-            var l = panel1.Controls[idx].Location;
+            var textbox_property_kvp = PropertyValues.First(x => x.Control == textbox_toggle);
+            var toggle_textbox_size = panel1.Controls[textbox_toggle_idx].Size;
+            var toggle_textbox_location = panel1.Controls[textbox_toggle_idx].Location;
 
-            var dt = new MaterialCheckbox { AutoSize = false, Size = s, Location = l };:wa
+            var checkbox = new MaterialCheckbox { AutoSize = false, Size = toggle_textbox_size, Location = toggle_textbox_location };
 
+            panel1.Controls.RemoveAt(textbox_toggle_idx);
+            panel1.Controls.Add(checkbox);
 
-            panel1.Controls.RemoveAt(idx);
-            panel1.Controls.Add(dt);
-
-            prop_val.Value = () => dt.Checked.ToString();
-            prop_val.Control = dt;
-            PropertyValues[PropertyValues.IndexOf(PropertyValues.First(x => x.Name == prop_val.Name)n)] = prop_val;
+            textbox_property_kvp.Value = () => checkbox.Checked.ToString();
+            textbox_property_kvp.Control = checkbox;
+            PropertyValues[PropertyValues.IndexOf(PropertyValues.First(x => x.Name == textbox_property_kvp.Name))] = textbox_property_kvp;
         }
     }
 
-    public void Populate<T>(T obj) {
-        obj!.GetType().GetProperties().Zip(_textBoxes).ToList().ForEach(x => {
-            x.Second.Text = Convert.ChangeType(x.First.GetValue(obj), x.First.PropertyType)!.ToString();
-        });
+    // TODO: Deleting doesnt work right
+    public void Populate<T>(T obj) where T : IDatabaseModel {
+        var obj_props = obj!.GetType().GetProperties();
+
+        foreach (var obj_prop in obj_props) {
+            var matching_property_value = PropertyValues.FirstOrDefault(property_value => property_value.Name == obj_prop.Name);
+            if (matching_property_value is null) continue;
+
+            if (Attribute.GetCustomAttribute(obj_prop, typeof(DateAttribute)) != null) {
+                (matching_property_value.Control as DateTimePicker)!.Value = Convert.ToDateTime(obj_prop.GetValue(obj, null));
+            } else if (Attribute.GetCustomAttribute(obj_prop, typeof(ToggleAttribute)) != null) {
+                (matching_property_value.Control as MaterialCheckbox)!.Checked = Convert.ToBoolean(obj_prop.GetValue(obj, null));
+            } else if (Attribute.GetCustomAttribute(obj_prop, typeof(ForeignKeyAttribute)) != null) {
+                (matching_property_value.Control as MaterialButton)!.Text = Convert.ToString(obj_prop.GetValue(obj, null));
+            } else {
+                (matching_property_value.Control as MaterialTextBox)!.Text = Convert.ToString(obj_prop.GetValue(obj, null));
+            }
+        }
     }
 }

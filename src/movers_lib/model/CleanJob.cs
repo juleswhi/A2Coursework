@@ -2,10 +2,10 @@
 
 public class CleanJob : IDatabaseModel {
     [PrimaryKey]
-    [ForeignKey(typeof(Clean))]
+    [ForeignKeyAttribute(typeof(Clean))]
     public int CleanId { get; set; }
     [PrimaryKey]
-    [ForeignKey(typeof(Employee))]
+    [ForeignKeyAttribute(typeof(Employee))]
     public int EmployeeId { get; set; }
 
 
@@ -21,5 +21,9 @@ public class CleanJob : IDatabaseModel {
     public Dictionary<string, (Action<List<(string, Func<string>)>>, bool)> CreateButtons() {
         return new() {
         };
+    }
+
+    public IDatabaseModel CreateFromList(List<(string, Func<string>)> list) {
+        throw new NotImplementedException();
     }
 }

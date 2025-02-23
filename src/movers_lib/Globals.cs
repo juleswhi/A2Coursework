@@ -9,9 +9,9 @@ global using static Model.Validation.ValidationType;
 
 // Todo:
 // Validation
-// Toggle buttons for booleans
 // Add create methods to buttons for FormCreate
-// Fix multiple foreign keys
+// fix Date stuff
 // Deliveries
 // Finish Buttons
 // Everything Else
+// Pass state around when pressing foreign key in create method

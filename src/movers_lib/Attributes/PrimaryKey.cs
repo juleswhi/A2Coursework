@@ -1,10 +1,11 @@
-﻿namespace Attributes;
+﻿using Model;
+namespace Attributes;
 
 [AttributeUsage(AttributeTargets.Property)]
 internal class PrimaryKey : Attribute { }
 
 [AttributeUsage(AttributeTargets.Property)]
-internal class Date : Attribute { }
+internal class DateAttribute : Attribute { }
 
 [AttributeUsage(AttributeTargets.Property)]
 internal class Name : Attribute {
@@ -15,7 +16,15 @@ internal class Name : Attribute {
 }
 
 [AttributeUsage(AttributeTargets.Property)]
-internal class Toggle : Attribute { }
+internal class ForeignKeyAttribute : Attribute {
+    public Type Type { get; set; } = typeof(IDatabaseModel);
+    public ForeignKeyAttribute(Type type) {
+        Type = type;
+    }
+}
+
+[AttributeUsage(AttributeTargets.Property)]
+internal class ToggleAttribute : Attribute { }
 
 [AttributeUsage(AttributeTargets.Property)]
 internal class InitialValueInt : Attribute {
@@ -29,6 +38,14 @@ internal class InitialValueInt : Attribute {
 internal class InitialValueString : Attribute {
     public string Value { get; set; }
     public InitialValueString(string val) {
+        Value = val;
+    }
+}
+
+[AttributeUsage(AttributeTargets.Property)]
+internal class InitialValueBool : Attribute {
+    public bool Value { get; set; }
+    public InitialValueBool(bool val) {
         Value = val;
     }
 }

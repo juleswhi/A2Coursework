@@ -3,13 +3,14 @@
 public record StockReorder : IDatabaseModel {
     [PrimaryKey]
     public int Id { get; set; }
-    [ForeignKey(typeof(Employee))]
-    public int EmployeeId { get; set; }
-    [ForeignKey(typeof(Stock))]
+    [ForeignKeyAttribute(typeof(Stock))]
     public int StockId { get; set; }
     public int Quantity { get; set; }
+    [DateAttribute]
     public string OrderDate { get; set; } = String.Empty;
-    public string ReceivedDate { get; set; } = String.Empty;
+    [DateAttribute]
+    public string ExpectedDate { get; set; } = String.Empty;
+    public string Status { get; set; } = String.Empty;
 
     /// <summary>
     /// TODO: UPDATE STOCK TO USE STOCK
@@ -18,11 +19,10 @@ public record StockReorder : IDatabaseModel {
     public static StockReorder GenerateFakeData()
         => new Faker<StockReorder>()
             .RuleFor(o => o.Id, f => DAL.Query<StockReorder>().Select(x => x.Id).Max() + 1)
-            .RuleFor(o => o.EmployeeId, f => DAL.Query<Employee>().Select(x => x.Id).Max() + 1)
             .RuleFor(o => o.StockId, f => DAL.Query<Employee>().Select(x => x.Id).Max() + 1)
             .RuleFor(o => o.Quantity, f => f.Random.Number(1_000))
             .RuleFor(o => o.OrderDate, f => f.Date.Past().ToString())
-            .RuleFor(o => o.ReceivedDate, f => f.Date.Future().ToString())
+            .RuleFor(o => o.ExpectedDate, f => f.Date.Future().ToString())
             .Generate();
     public Dictionary<string, (Action<IDatabaseModel?>, bool)> ViewButtons() {
         return new() {
@@ -36,5 +36,9 @@ public record StockReorder : IDatabaseModel {
             { "Create", (_ => { }, true) },
             { "Delete", (_ => { }, false) }
         };
+    }
+
+    public IDatabaseModel CreateFromList(List<(string, Func<string>)> list) {
+        throw new NotImplementedException();
     }
 }

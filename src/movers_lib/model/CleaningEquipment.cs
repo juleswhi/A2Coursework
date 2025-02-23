@@ -3,7 +3,7 @@
 public record CleaningEquipment : IDatabaseModel {
     [PrimaryKey]
     public int Id { get; set; }
-    [ForeignKey(typeof(Equipment))]
+    [ForeignKeyAttribute(typeof(Equipment))]
     public int EquipmentId { get; set; }
     public CleaningEquipment GenerateFakeData()
         => new Faker<CleaningEquipment>()
@@ -23,5 +23,9 @@ public record CleaningEquipment : IDatabaseModel {
             { "Edit", (_ => { }, true ) },
             { "Delete", (_ => { }, true) }
         };
+    }
+
+    public IDatabaseModel CreateFromList(List<(string, Func<string>)> list) {
+        throw new NotImplementedException();
     }
 }

@@ -3,19 +3,23 @@
 namespace Model;
 
 public class Clean : IDatabaseModel {
+    public Clean() {
+    }
+
     [PrimaryKey]
     public int Id { get; set; }
-    [ForeignKey(typeof(Customer))]
+    [ForeignKeyAttribute(typeof(Customer))]
     public int CustomerId { get; set; }
 
-    [Date]
+    [DateAttribute]
     [InitialValueDate]
     public string BookDate { get; set; } = String.Empty;
 
-    [Date]
+    // TODO: Fix date not working properly in FormCreate
+    [DateAttribute]
     public string StartDate { get; set; } = String.Empty;
 
-    [Date]
+    [DateAttribute]
     public string EndDate { get; set; } = String.Empty;
 
     [InitialValueInt(0)]
@@ -23,7 +27,7 @@ public class Clean : IDatabaseModel {
 
     public double Price { get; set; }
 
-    [Toggle]
+    [ToggleAttribute]
     public bool Paid { get; set; }
 
     public static Clean GenerateFakeData()
@@ -61,44 +65,46 @@ public class Clean : IDatabaseModel {
             }, true) }
         };
     }
+
     public Dictionary<string, (Action<List<(string, Func<string>)>>, bool)> CreateButtons() {
         return new() {
-            { "Create", (list => {
+            { "Create", (new Action<List<(string, Func<string>)>>(list => {
                     ShowGCFR(typeof(FormCreate), typeof(Clean));
-                    var clean = new Clean();
-                    var cleans = DAL.Query<Clean>();
 
-                    if(!cleans.Any()) {
-                        clean.Id = 0;
-                    }
-                    else clean.Id = cleans.Select(x => x.Id).Max() + 1;
-
-                    foreach(var (prop_name, prop_val) in list) {
-                        LOG($"Property Name: {prop_name}, Value: {prop_val()}");
-                    }
-
-                    foreach(var (prop_name, prop_val) in list) {
-                        var prop = typeof(Clean).GetProperty(prop_name);
-                        if(prop is null) continue;
-
-                        if(prop.PropertyType == typeof(string))
-                            prop.SetValue(clean, prop_val(), []);
-                        else if(prop.PropertyType == typeof(bool))
-                            prop.SetValue(clean, Convert.ToBoolean(prop_val()),[]);
-                        else if(prop.PropertyType == typeof(int))
-                            prop.SetValue(clean, Convert.ToInt32(prop_val()),[]);
-                        else if(prop.PropertyType == typeof(double))
-                            prop.SetValue(clean, Convert.ToDouble(prop_val()),[]);
-                    }
-
-                    clean.BookDate = DateTime.Now.ToString();
-                    clean.HoursWorked = 0;
+                    var clean = CreateFromList(list);
 
                     clean.Create();
-
                     ShowGCFR(typeof(FormViewModel), typeof(Clean));
 
-            }, true) },
+            }), true) },
         };
+    }
+
+    public IDatabaseModel CreateFromList(List<(string, Func<string>)> list) {
+        var clean = new Clean();
+        var cleans = DAL.Query<Clean>();
+
+        if (!cleans.Any())
+            clean.Id = 0;
+        else clean.Id = cleans.Select(x => x.Id).Max() + 1;
+
+        foreach (var (prop_name, prop_val) in list) {
+            var prop = typeof(Clean).GetProperty(prop_name);
+            if (prop is null) continue;
+
+            if (prop.PropertyType == typeof(string))
+                prop.SetValue(clean, prop_val(), []);
+            else if (prop.PropertyType == typeof(bool))
+                prop.SetValue(clean, Convert.ToBoolean(prop_val()), []);
+            else if (prop.PropertyType == typeof(int))
+                prop.SetValue(clean, Convert.ToInt32(prop_val()), []);
+            else if (prop.PropertyType == typeof(double))
+                prop.SetValue(clean, Convert.ToDouble(prop_val()), []);
+        }
+
+        clean.BookDate = DateTime.Now.ToString();
+        clean.HoursWorked = 0;
+
+        return clean;
     }
 }

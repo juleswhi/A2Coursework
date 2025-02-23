@@ -18,4 +18,8 @@ public record Equipment : IDatabaseModel {
             { "Delete", (_ => { }, false) }
         };
     }
+
+    public IDatabaseModel CreateFromList(List<(string, Func<string>)> list) {
+        throw new NotImplementedException();
+    }
 }

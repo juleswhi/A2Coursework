@@ -57,4 +57,8 @@ public record Stock : IDatabaseModel {
             }, true) },
         };
     }
+
+    public IDatabaseModel CreateFromList(List<(string, Func<string>)> list) {
+        throw new NotImplementedException();
+    }
 }
