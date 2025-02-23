@@ -72,10 +72,22 @@ public partial class FormSelectViewModel : Form, GenericCreateableForm {
             GetKey => (s, e) => {
                 if (dataGridView.SelectedRows.Count == 1) {
                     //TODO: Fix here
-                    var db_query_result = (T)Query<T>()[dataGridView.SelectedRows[0].Index];
+                    LOG($"Type in method: {typeof(T).Name}, _currentType: {_currentType}");
+                    dynamic db_query_result = (typeof(DAL).
+                        GetMethod(nameof(DAL.Query))!.
+                        MakeGenericMethod(_currentType!).
+                        Invoke(null, [new string[] { }])!);
+
 
                     // TODO: this looks fishy
-                    var primary_key = db_query_result.GetPrimaryKey().First().Item2;
+                    IDatabaseModel typed_model_idx = db_query_result[dataGridView.SelectedRows[0].Index];
+
+                    var get_primary_key = (IEnumerable<(string, int)>)typeof(ModelHelper).
+                        GetMethod(nameof(ModelHelper.GetPrimaryKey))!.
+                        MakeGenericMethod(_currentType!).
+                        Invoke(null, [typed_model_idx])!;
+
+                    var primary_key = get_primary_key.First().Item2;
 
                     if (FormCreate.PreviousFormType is not null) {
                         ShowGCFR(typeof(FormCreate), FormCreate.PreviousFormType);
@@ -87,20 +99,16 @@ public partial class FormSelectViewModel : Form, GenericCreateableForm {
                     var form = Master!.CurrentlyDisplayedForm as FormCreate;
                     var form_meth = form!.GetType().
                         GetMethod(nameof(form.Populate))!.
-                        MakeGenericMethod(typeof(Clean)!);
-                    form_meth.Invoke(null, [database_model]);
+                        MakeGenericMethod(typeof(T)!);
+                    form_meth.Invoke(form, [database_model]);
 
-                    var prop_val = ((Master as FormSkeleton)!.CurrentForm as FormCreate)!.PropertyValues.First(x => x.Type == typeof(T));
+                    var prop_val = ((Master as FormSkeleton)!.CurrentForm as FormCreate)!.PropertyValues.First(x => x.Type == _currentType);
                     (prop_val.Control as MaterialButton)!.Text = primary_key.ToString();
                 }
             }
             ,
             _ => (s, e) => { }
         };
-        switch (select_type) {
-            case SelectType.GetKey:
-                break;
-        }
     }
 
     private void Select_btn_Click(object? sender, EventArgs e) {
