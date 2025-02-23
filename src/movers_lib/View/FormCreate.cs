@@ -12,8 +12,7 @@ public partial class FormCreate : Form, GenericCreateableForm {
 
     private Type? _currentType;
     private List<MaterialTextBox> _textBoxes => panel1.Controls.OfType<MaterialTextBox>().ToList();
-
-    private int? foreign_id = null;
+    private IDatabaseModel? _edited_object;
 
     private static Dictionary<Type, PropertyInfo[]> _propCache = new();
 
@@ -52,6 +51,8 @@ public partial class FormCreate : Form, GenericCreateableForm {
         }
 
         var valid_props = props.Where(x => !x.CustomAttributes.Any(x => _skips.Contains(x.AttributeType))).Select(x => (x, false)).ToList();
+
+
 
         foreach (var prop in valid_props) {
             var label = new MaterialLabel() { Text = prop.Item1.Name };
@@ -144,7 +145,7 @@ public partial class FormCreate : Form, GenericCreateableForm {
         foreach (var btn in btns) {
             var b = new MaterialButton() { Text = btn.Key, UseAccentColor = true };
 
-            b.Click += (s, e) => btn.Value.Item1.Invoke(PropertyValues.Select(x => (x.Name, x.Value)).ToList());
+            b.Click += (s, e) => btn.Value.Item1.Invoke((PropertyValues.Select(x => (x.Name, x.Value)).ToList(), _edited_object));
 
             Controls.Add(b);
         }
@@ -272,5 +273,6 @@ public partial class FormCreate : Form, GenericCreateableForm {
                 (matching_property_value.Control as MaterialTextBox)!.Text = Convert.ToString(obj_prop.GetValue(obj, null));
             }
         }
+        _edited_object = obj;
     }
 }

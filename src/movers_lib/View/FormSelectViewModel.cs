@@ -71,15 +71,12 @@ public partial class FormSelectViewModel : Form, GenericCreateableForm {
         select_btn.Click += select_type switch {
             GetKey => (s, e) => {
                 if (dataGridView.SelectedRows.Count == 1) {
-                    //TODO: Fix here
                     LOG($"Type in method: {typeof(T).Name}, _currentType: {_currentType}");
                     dynamic db_query_result = (typeof(DAL).
                         GetMethod(nameof(DAL.Query))!.
                         MakeGenericMethod(_currentType!).
                         Invoke(null, [new string[] { }])!);
 
-
-                    // TODO: this looks fishy
                     IDatabaseModel typed_model_idx = db_query_result[dataGridView.SelectedRows[0].Index];
 
                     var get_primary_key = (IEnumerable<(string, int)>)typeof(ModelHelper).

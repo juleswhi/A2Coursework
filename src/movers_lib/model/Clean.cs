@@ -57,7 +57,7 @@ public class Clean : IDatabaseModel {
                     var form_meth = form!.GetType().
                     GetMethod(nameof(form.Populate))!.
                     MakeGenericMethod(typeof(Clean)!);
-                form_meth.Invoke(form, [m]);
+                    form_meth.Invoke(form, [m]);
             }, true) },
             { "Delete", (m => {
                     DAL.Delete((Clean)m!);
@@ -66,12 +66,14 @@ public class Clean : IDatabaseModel {
         };
     }
 
-    public Dictionary<string, (Action<List<(string, Func<string>)>>, bool)> CreateButtons() {
+    public Dictionary<string, (Action<(List<(string, Func<string>)>, IDatabaseModel?)>, bool)> CreateButtons() {
         return new() {
-            { "Create", (new Action<List<(string, Func<string>)>>(list => {
-                    ShowGCFR(typeof(FormCreate), typeof(Clean));
+            { "Create", (new Action<(List<(string, Func<string>)>, IDatabaseModel?)>(list => {
+                    //ShowGCFR(typeof(FormCreate), typeof(Clean));
 
-                    var clean = CreateFromList(list);
+                    var clean = (Clean)CreateFromList(list);
+
+                    clean.Delete();
 
                     clean.Create();
                     ShowGCFR(typeof(FormViewModel), typeof(Clean));
@@ -80,7 +82,7 @@ public class Clean : IDatabaseModel {
         };
     }
 
-    public IDatabaseModel CreateFromList(List<(string, Func<string>)> list) {
+    public IDatabaseModel CreateFromList((List<(string, Func<string>)>, IDatabaseModel?) list) {
         var clean = new Clean();
         var cleans = DAL.Query<Clean>();
 
@@ -88,7 +90,7 @@ public class Clean : IDatabaseModel {
             clean.Id = 0;
         else clean.Id = cleans.Select(x => x.Id).Max() + 1;
 
-        foreach (var (prop_name, prop_val) in list) {
+        foreach (var (prop_name, prop_val) in list.Item1) {
             var prop = typeof(Clean).GetProperty(prop_name);
             if (prop is null) continue;
 

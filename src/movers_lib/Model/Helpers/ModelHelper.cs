@@ -5,6 +5,7 @@ public static class ModelHelper {
         typeof(Customer), typeof(Employee), typeof(Equipment),
         typeof(Job), typeof(Stock), typeof(StockReorder),
         ];
+
     public static IEnumerable<(string, int)> GetPrimaryKey<T>(this T model) where T : IDatabaseModel {
         foreach (var prop in model.GetType().GetProperties()) {
             var attr = Attribute.GetCustomAttribute(prop, typeof(PrimaryKey));

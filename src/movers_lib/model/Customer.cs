@@ -1,4 +1,5 @@
-﻿namespace Model;
+﻿
+namespace Model;
 
 public class Customer : IDatabaseModel {
     [PrimaryKey]
@@ -18,21 +19,16 @@ public class Customer : IDatabaseModel {
             .RuleFor(o => o.BillingAddress, f => f.Address.StreetAddress())
             .RuleFor(o => o.ContactNumber, f => f.Phone.PhoneNumber())
             .Generate();
-    public Dictionary<string, (Action<IDatabaseModel?>, bool)> ViewButtons() {
-        return new() {
-            { "Create", (_ => { }, false) },
-            { "Edit", (_ => { }, true) },
-            { "Delete", (_ => { }, true) }
-        };
-    }
-    public Dictionary<string, (Action<List<(string, Func<string>)>>, bool)> CreateButtons() {
-        return new() {
-            { "Create", (_ => { }, true) },
-            { "Delete", (_ => { }, false) }
-        };
+
+    public Dictionary<string, (Action<(List<(string, Func<string>)>, IDatabaseModel?)>, bool)> CreateButtons() {
+        return new();
     }
 
-    public IDatabaseModel CreateFromList(List<(string, Func<string>)> list) {
-        throw new NotImplementedException();
+    public Dictionary<string, (Action<IDatabaseModel?>, bool)> ViewButtons() {
+        return new();
+    }
+
+    public IDatabaseModel? CreateFromList(List<(string, Func<string>, IDatabaseModel?)> list) {
+        return default;
     }
 }

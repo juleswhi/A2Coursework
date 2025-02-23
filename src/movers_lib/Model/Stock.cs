@@ -27,7 +27,7 @@ public record Stock : IDatabaseModel {
             }, false )}
         };
     }
-    public Dictionary<string, (Action<List<(string, Func<string>)>>, bool)> CreateButtons() {
+    public Dictionary<string, (Action<(List<(string, Func<string>)>, IDatabaseModel?)>, bool)> CreateButtons() {
         return new() {
             { "Create", (list => {
                 ShowGCFR(typeof(FormCreate), typeof(Stock));
@@ -38,7 +38,7 @@ public record Stock : IDatabaseModel {
                     stock.Id = 0;
                 else stock.Id = stocks.Select(x => x.Id).Max() + 1;
 
-                foreach(var (prop_name, prop_val) in list) {
+                foreach(var (prop_name, prop_val) in list.Item1) {
                     var prop = typeof(Stock).GetProperty(prop_name);
                     if(prop is null) continue;
 
@@ -58,7 +58,7 @@ public record Stock : IDatabaseModel {
         };
     }
 
-    public IDatabaseModel CreateFromList(List<(string, Func<string>)> list) {
-        throw new NotImplementedException();
+    public IDatabaseModel? CreateFromList(List<(string, Func<string>, IDatabaseModel?)> list) {
+        return default;
     }
 }

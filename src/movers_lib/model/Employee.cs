@@ -43,7 +43,7 @@ public record Employee : IDatabaseModel {
             }, true) }
         };
     }
-    public Dictionary<string, (Action<List<(string, Func<string>)>>, bool)> CreateButtons() {
+    public Dictionary<string, (Action<(List<(string, Func<string>)>, IDatabaseModel?)>, bool)> CreateButtons() {
         return new() {
             { "Create", (list => {
                      //ShowGCFR(typeof(FormCreate), typeof(Employee));
@@ -56,7 +56,7 @@ public record Employee : IDatabaseModel {
 
                     else employee.Id = employees.Select(x => x.Id).Max() + 1;
 
-                    foreach(var (prop_name, prop_val) in list) {
+                    foreach(var (prop_name, prop_val) in list.Item1) {
                         var prop = typeof(Employee).GetProperty(prop_name);
                         if(prop is null) continue;
 
@@ -77,7 +77,7 @@ public record Employee : IDatabaseModel {
         };
     }
 
-    public IDatabaseModel CreateFromList(List<(string, Func<string>)> list) {
+    public IDatabaseModel? CreateFromList(List<(string, Func<string>, IDatabaseModel?)> list) {
         throw new NotImplementedException();
     }
 }
