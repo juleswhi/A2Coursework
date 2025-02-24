@@ -77,7 +77,7 @@ public record Employee : IDatabaseModel {
         };
     }
 
-    public IDatabaseModel? CreateFromList(List<(string, Func<string>, IDatabaseModel?)> list) {
-        throw new NotImplementedException();
+    public IDatabaseModel? CreateFromList(List<(string, Func<string>)> list, IDatabaseModel? model) {
+        return default;
     }
 }

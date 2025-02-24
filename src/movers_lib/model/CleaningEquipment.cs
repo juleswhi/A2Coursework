@@ -17,7 +17,7 @@ public record CleaningEquipment : IDatabaseModel {
             { "Delete", (_ => { }, true) }
         };
     }
-    public Dictionary<string, (Action<List<(string, Func<string>)>>, bool)> CreateButtons() {
+    public Dictionary<string, (Action<(List<(string, Func<string>)>, IDatabaseModel?)>, bool)> CreateButtons() {
         return new() {
             { "Create", (_ => { }, false) },
             { "Edit", (_ => { }, true ) },
@@ -25,15 +25,7 @@ public record CleaningEquipment : IDatabaseModel {
         };
     }
 
-    public IDatabaseModel CreateFromList(List<(string, Func<string>)> list) {
-        throw new NotImplementedException();
-    }
-
-    Dictionary<string, (Action<(List<(string, Func<string>)>, IDatabaseModel?)>, bool)> IDatabaseModel.CreateButtons() {
-        throw new NotImplementedException();
-    }
-
-    public IDatabaseModel? CreateFromList(List<(string, Func<string>, IDatabaseModel?)> list) {
-        throw new NotImplementedException();
+    public IDatabaseModel? CreateFromList(List<(string, Func<string>)> list, IDatabaseModel? model) {
+        return default;
     }
 }

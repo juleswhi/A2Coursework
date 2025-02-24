@@ -28,4 +28,8 @@ public class CleanJob : IDatabaseModel {
     public IDatabaseModel? CreateFromList(List<(string, Func<string>, IDatabaseModel?)> list) {
         return default;
     }
+
+    public IDatabaseModel? CreateFromList(List<(string, Func<string>)> list, IDatabaseModel? model) {
+        throw new NotImplementedException();
+    }
 }

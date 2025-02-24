@@ -34,7 +34,7 @@ public record StockReorder : IDatabaseModel {
         return new();
     }
 
-    public IDatabaseModel? CreateFromList(List<(string, Func<string>, IDatabaseModel?)> list) {
+    public IDatabaseModel? CreateFromList(List<(string, Func<string>)> list, IDatabaseModel? model) {
         return default;
     }
 }

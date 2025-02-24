@@ -71,7 +71,7 @@ public class Clean : IDatabaseModel {
             { "Create", (new Action<(List<(string, Func<string>)>, IDatabaseModel?)>(list => {
                     //ShowGCFR(typeof(FormCreate), typeof(Clean));
 
-                    var clean = (Clean)CreateFromList(list);
+                    var clean = (Clean)CreateFromList(list.Item1, list.Item2);
 
                     clean.Delete();
 
@@ -82,7 +82,7 @@ public class Clean : IDatabaseModel {
         };
     }
 
-    public IDatabaseModel CreateFromList((List<(string, Func<string>)>, IDatabaseModel?) list) {
+    public IDatabaseModel CreateFromList(List<(string, Func<string>)> list, IDatabaseModel? model) {
         var clean = new Clean();
         var cleans = DAL.Query<Clean>();
 
@@ -90,7 +90,7 @@ public class Clean : IDatabaseModel {
             clean.Id = 0;
         else clean.Id = cleans.Select(x => x.Id).Max() + 1;
 
-        foreach (var (prop_name, prop_val) in list.Item1) {
+        foreach (var (prop_name, prop_val) in list) {
             var prop = typeof(Clean).GetProperty(prop_name);
             if (prop is null) continue;
 
