@@ -1,0 +1,23 @@
+function query 
+parameter T 
+
+	fields -> get all properties from names
+
+	connect to database
+
+	get propertynames fields from database
+
+	list -> new list
+
+	loop results
+		
+		assign results to new object of type T
+
+	end loop
+
+	return list of objects
+
+end function
+
+
+

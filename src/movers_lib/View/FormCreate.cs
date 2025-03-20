@@ -197,7 +197,7 @@ public partial class FormCreate : Form, GenericCreateableForm {
 
                 var needed_prop_vals = PropertyValues.Select(x => (x.Name, x.Value)).ToList();
 
-                var temp_created_obj = typeof(T).GetMethod("CreateFromList")!.Invoke(Activator.CreateInstance<T>(), [needed_prop_vals]);
+                var temp_created_obj = typeof(T).GetMethod("CreateFromList")!.Invoke(Activator.CreateInstance<T>(), [needed_prop_vals, null]);
 
                 typeof(FormSelectViewModel).
                     GetMethod(nameof(FormSelectViewModel.SetCallbackFromSelectType))!.

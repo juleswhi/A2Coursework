@@ -1,7 +1,10 @@
 namespace Forms;
 
+using WinFormsScraper;
+using static WinFormsScraper.ScrapeType;
 using Model;
 using View;
+using QuestPDF.Infrastructure;
 
 public static class FormManager {
     ///<summary>
@@ -16,7 +19,11 @@ public static class FormManager {
     public static void Start<T>() where T : Form, new() {
         Master = new FormSkeleton();
 
+        QuestPDF.Settings.License = LicenseType.Community;
+
         ShowForm<T>();
+
+        WinFormsScraper.Scrape(ALL);
 
         Application.Run((FormSkeleton)Master);
     }
@@ -61,6 +68,7 @@ public static class FormManager {
             GetMethod(nameof(ShowGCF))!.
             MakeGenericMethod(T, V).
             Invoke(null, null);
+
     }
 
     /// <summary>

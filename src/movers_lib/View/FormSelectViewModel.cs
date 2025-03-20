@@ -71,7 +71,7 @@ public partial class FormSelectViewModel : Form, GenericCreateableForm {
         select_btn.Click += select_type switch {
             GetKey => (s, e) => {
                 if (dataGridView.SelectedRows.Count == 1) {
-                    LOG($"Type in method: {typeof(T).Name}, _currentType: {_currentType}");
+                    // LOG($"Type in method: {typeof(T).Name}, _currentType: {_currentType}");
                     dynamic db_query_result = (typeof(DAL).
                         GetMethod(nameof(DAL.Query))!.
                         MakeGenericMethod(_currentType!).
@@ -92,7 +92,6 @@ public partial class FormSelectViewModel : Form, GenericCreateableForm {
 
                     // ((Master as FormSkeleton)!.CurrentForm as FormCreate)!.AssignForeignKey!.Invoke(primary);
 
-                    // TODO: How do know its clean
                     var form = Master!.CurrentlyDisplayedForm as FormCreate;
                     var form_meth = form!.GetType().
                         GetMethod(nameof(form.Populate))!.

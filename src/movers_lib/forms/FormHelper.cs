@@ -1,4 +1,8 @@
-﻿namespace Forms;
+﻿using static Model.Helpers.PdfTools;
+using View;
+using Model.Helpers;
+
+namespace Forms;
 
 public static class FormHelper {
     public static void CenterX(this Control control, int x) {
@@ -7,6 +11,10 @@ public static class FormHelper {
 
     public static void CenterY(this Control control, int y) {
         control.Location = new Point(control.Location.X, (int)((control.Parent!.Height / 2) - 0.5 * control.Height) - y);
+    }
+
+    public static void PassPdfToViewer(ReportModel model) {
+        ((Master as FormSkeleton)!.CurrentForm as FormReportViewer)?.PassPdf(LoadGeneratePdf(model));
     }
 
     public static Color Earth() => Color.FromArgb(255, 149, 113, 79);

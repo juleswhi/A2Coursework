@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg width="1267.14" height="548.86" xmlns="http://www.w3.org/2000/svg">
+<rect width="1167.14" height="508.86" fill="#282828" x="40.00px" y="20.00px"/>
+<g font-family="Jetbrains Mono NF" font-size="12.00px" fill="#ebdbb2" clip-path="url(#terminalMask)">
+<text x="60.00px" y="54.40px" xml:space="preserve"><tspan fill="#fe8019">namespace</tspan> movers_admin;
+</text><text x="60.00px" y="68.80px" xml:space="preserve">
+</text><text x="60.00px" y="83.20px" xml:space="preserve"><tspan fill="#fe8019">using</tspan> MaterialSkin;
+</text><text x="60.00px" y="97.60px" xml:space="preserve"><tspan fill="#fe8019">using</tspan> System.Diagnostics;
+</text><text x="60.00px" y="112.00px" xml:space="preserve"><tspan fill="#fe8019">using</tspan> View;
+</text><text x="60.00px" y="126.40px" xml:space="preserve"><tspan fill="#fe8019">using</tspan> static Forms.FormManager;
+</text><text x="60.00px" y="140.80px" xml:space="preserve">
+</text><text x="60.00px" y="155.20px" xml:space="preserve"><tspan fill="#fe8019">internal</tspan> <tspan fill="#fe8019">static</tspan> <tspan fill="#fe8019">class</tspan> Program {
+</text><text x="60.00px" y="169.60px" xml:space="preserve"><tspan fill="#b8bb26" font-weight="bold">
+</tspan></text><text x="60.00px" y="184.00px" xml:space="preserve"><tspan fill="#b8bb26" font-weight="bold">    [STAThread]</tspan>
+</text><text x="60.00px" y="198.40px" xml:space="preserve">    <tspan fill="#fe8019">static</tspan> <tspan fill="#fe8019">void</tspan> Main() {
+</text><text x="60.00px" y="212.80px" xml:space="preserve">        ApplicationConfiguration.Initialize();
+</text><text x="60.00px" y="227.20px" xml:space="preserve">
+</text><text x="60.00px" y="241.60px" xml:space="preserve">        <tspan fill="#928374" font-style="italic">// Set colourscheme</tspan>
+</text><text x="60.00px" y="256.00px" xml:space="preserve">        MaterialSkinManager.Instance.ColorScheme = <tspan fill="#fe8019">new</tspan> ColorScheme(Primary.Brown400, Primary.Brown200, Primary.Brown700, Accent.Teal400, TextShade.BLACK);
+</text><text x="60.00px" y="270.40px" xml:space="preserve">
+</text><text x="60.00px" y="284.80px" xml:space="preserve">        <tspan fill="#fe8019">for</tspan> (<tspan fill="#fabd2f">int</tspan> i = <tspan fill="#d3869b">0</tspan>; i &lt; <tspan fill="#d3869b">50</tspan>; i++) {
+</text><text x="60.00px" y="299.20px" xml:space="preserve">            <tspan fill="#928374" font-style="italic">// Employee.GenerateFakeData().Create();</tspan>
+</text><text x="60.00px" y="313.60px" xml:space="preserve">        }
+</text><text x="60.00px" y="328.00px" xml:space="preserve">
+</text><text x="60.00px" y="342.40px" xml:space="preserve">        Debug.Print(<tspan fill="#b8bb26">$&quot;{typeof(Example).Name}&quot;</tspan>);
+</text><text x="60.00px" y="356.80px" xml:space="preserve">
+</text><text x="60.00px" y="371.20px" xml:space="preserve">
+</text><text x="60.00px" y="385.60px" xml:space="preserve">        <tspan fill="#928374" font-style="italic">// Start form using my own Form Management System rather than the default way</tspan>
+</text><text x="60.00px" y="400.00px" xml:space="preserve">        Start&lt;FormHome&gt;();
+</text><text x="60.00px" y="414.40px" xml:space="preserve">    }
+</text><text x="60.00px" y="428.80px" xml:space="preserve">}
+</text><text x="60.00px" y="443.20px" xml:space="preserve">
+</text><text x="60.00px" y="457.60px" xml:space="preserve"><tspan fill="#fe8019">public</tspan> <tspan fill="#fe8019">class</tspan> Example {
+</text><text x="60.00px" y="472.00px" xml:space="preserve">    <tspan fill="#fe8019">public</tspan> <tspan fill="#fabd2f">int</tspan> Id { <tspan fill="#fe8019">get</tspan>; <tspan fill="#fe8019">set</tspan>; }
+</text><text x="60.00px" y="486.40px" xml:space="preserve">}</text>
+</g>
+</svg>

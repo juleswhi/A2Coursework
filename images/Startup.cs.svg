@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg width="1717.14" height="952.57" xmlns="http://www.w3.org/2000/svg">
+<rect width="1617.14" height="912.57" fill="#282828" x="40.00px" y="20.00px"/>
+<g font-family="Jetbrains Mono" font-size="12.00px" fill="#ebdbb2" clip-path="url(#terminalMask)">
+<text x="60.00px" y="54.40px" xml:space="preserve">﻿<tspan fill="#fe8019">using</tspan> View;
+</text><text x="60.00px" y="68.80px" xml:space="preserve">
+</text><text x="60.00px" y="83.20px" xml:space="preserve"><tspan fill="#fe8019">namespace</tspan> movers_lib.View;
+</text><text x="60.00px" y="97.60px" xml:space="preserve">
+</text><text x="60.00px" y="112.00px" xml:space="preserve"><tspan fill="#fe8019">public</tspan> <tspan fill="#fe8019">partial</tspan> <tspan fill="#fe8019">class</tspan> Startup : Form {
+</text><text x="60.00px" y="126.40px" xml:space="preserve">    <tspan fill="#fe8019">private</tspan> <tspan fill="#fe8019">const</tspan> <tspan fill="#fabd2f">int</tspan> FRAME_DELAY = <tspan fill="#d3869b">1</tspan>;
+</text><text x="60.00px" y="140.80px" xml:space="preserve">    <tspan fill="#fe8019">private</tspan> <tspan fill="#fe8019">const</tspan> <tspan fill="#fabd2f">double</tspan> max_progress = <tspan fill="#d3869b">100</tspan>;
+</text><text x="60.00px" y="155.20px" xml:space="preserve">    <tspan fill="#fe8019">private</tspan> <tspan fill="#fe8019">const</tspan> <tspan fill="#fabd2f">int</tspan> PROGRESS_PAUSE = <tspan fill="#d3869b">200</tspan>;
+</text><text x="60.00px" y="169.60px" xml:space="preserve">    <tspan fill="#fe8019">private</tspan> Font font = <tspan fill="#fe8019">new</tspan> Font(FontFamily.GenericMonospace, <tspan fill="#d3869b">40</tspan>, FontStyle.Bold);
+</text><text x="60.00px" y="184.00px" xml:space="preserve">    <tspan fill="#fe8019">private</tspan> <tspan fill="#fabd2f">double</tspan> percentage_across = <tspan fill="#d3869b">0</tspan>;
+</text><text x="60.00px" y="198.40px" xml:space="preserve">    <tspan fill="#fe8019">public</tspan> Startup() {
+</text><text x="60.00px" y="212.80px" xml:space="preserve">        InitializeComponent();
+</text><text x="60.00px" y="227.20px" xml:space="preserve">
+</text><text x="60.00px" y="241.60px" xml:space="preserve">        SetStyle(ControlStyles.OptimizedDoubleBuffer, <tspan fill="#fe8019">true</tspan>);
+</text><text x="60.00px" y="256.00px" xml:space="preserve">
+</text><text x="60.00px" y="270.40px" xml:space="preserve">        (Master <tspan fill="#fe8019">as</tspan> Form)!.FormBorderStyle = FormBorderStyle.None;
+</text><text x="60.00px" y="284.80px" xml:space="preserve">
+</text><text x="60.00px" y="299.20px" xml:space="preserve">        Task.Run(() =&gt; ShowLoading());
+</text><text x="60.00px" y="313.60px" xml:space="preserve">    }
+</text><text x="60.00px" y="328.00px" xml:space="preserve">
+</text><text x="60.00px" y="342.40px" xml:space="preserve">    <tspan fill="#fe8019">protected</tspan> <tspan fill="#fe8019">override</tspan> <tspan fill="#fe8019">void</tspan> OnPaint(PaintEventArgs e) {
+</text><text x="60.00px" y="356.80px" xml:space="preserve">        e.Graphics.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
+</text><text x="60.00px" y="371.20px" xml:space="preserve">        e.Graphics.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighSpeed;
+</text><text x="60.00px" y="385.60px" xml:space="preserve">        e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+</text><text x="60.00px" y="400.00px" xml:space="preserve">        e.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
+</text><text x="60.00px" y="414.40px" xml:space="preserve">        e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighSpeed;
+</text><text x="60.00px" y="428.80px" xml:space="preserve">
+</text><text x="60.00px" y="443.20px" xml:space="preserve">        <tspan fill="#fe8019">base</tspan>.OnPaint(e);
+</text><text x="60.00px" y="457.60px" xml:space="preserve">
+</text><text x="60.00px" y="472.00px" xml:space="preserve">        <tspan fill="#fabd2f">var</tspan> g = e.Graphics;
+</text><text x="60.00px" y="486.40px" xml:space="preserve">
+</text><text x="60.00px" y="500.80px" xml:space="preserve">        <tspan fill="#928374" font-style="italic">// var img = images.MoversCompanyLogo;</tspan>
+</text><text x="60.00px" y="515.20px" xml:space="preserve">
+</text><text x="60.00px" y="529.60px" xml:space="preserve">        <tspan fill="#928374" font-style="italic">// g.DrawImage(img, new Rectangle(half_x - 200, half_y - 188, 400, 375), new(0, 0, img.Width, img.Height), GraphicsUnit.Pixel);</tspan>
+</text><text x="60.00px" y="544.00px" xml:space="preserve">
+</text><text x="60.00px" y="558.40px" xml:space="preserve">        <tspan fill="#928374" font-style="italic">// var text_size = TextRenderer.MeasureText(&quot;Loading..&quot;, font);</tspan>
+</text><text x="60.00px" y="572.80px" xml:space="preserve">        <tspan fill="#928374" font-style="italic">// TextFormatFlags flags = TextFormatFlags.Bottom;</tspan>
+</text><text x="60.00px" y="587.20px" xml:space="preserve">        <tspan fill="#928374" font-style="italic">// TextRenderer.DrawText(g, &quot;Loading..&quot;, font, new Rectangle(half_x - (int)(0.5 * text_size.Width), half_y - (int)(0.5 * text_size.Height), text_size.Width, text_size.Height), SystemColors.ControlText, flags);</tspan>
+</text><text x="60.00px" y="601.60px" xml:space="preserve">    }
+</text><text x="60.00px" y="616.00px" xml:space="preserve">
+</text><text x="60.00px" y="630.40px" xml:space="preserve">    <tspan fill="#fe8019">public</tspan> <tspan fill="#fe8019">async</tspan> Task ShowLoading(<tspan fill="#fabd2f">int</tspan> duration = <tspan fill="#d3869b">1000</tspan>) {
+</text><text x="60.00px" y="644.80px" xml:space="preserve">        <tspan fill="#fe8019">while</tspan> (percentage_across &lt; <tspan fill="#d3869b">1</tspan>) {
+</text><text x="60.00px" y="659.20px" xml:space="preserve">            <tspan fill="#fe8019">await</tspan> Task.Delay(FRAME_DELAY);
+</text><text x="60.00px" y="673.60px" xml:space="preserve">
+</text><text x="60.00px" y="688.00px" xml:space="preserve">            percentage_across += <tspan fill="#d3869b">0.01</tspan>;
+</text><text x="60.00px" y="702.40px" xml:space="preserve">
+</text><text x="60.00px" y="716.80px" xml:space="preserve">            <tspan fill="#928374" font-style="italic">// Invoke(() =&gt; IncrementMasterSize(1, 0));</tspan>
+</text><text x="60.00px" y="731.20px" xml:space="preserve">            <tspan fill="#928374" font-style="italic">// Invoke(Refresh);</tspan>
+</text><text x="60.00px" y="745.60px" xml:space="preserve">            <tspan fill="#928374" font-style="italic">// Invoke(CenterMaster);</tspan>
+</text><text x="60.00px" y="760.00px" xml:space="preserve">        }
+</text><text x="60.00px" y="774.40px" xml:space="preserve">
+</text><text x="60.00px" y="788.80px" xml:space="preserve">        <tspan fill="#928374" font-style="italic">// Pause with the loading bar full</tspan>
+</text><text x="60.00px" y="803.20px" xml:space="preserve">        <tspan fill="#fe8019">await</tspan> Task.Delay(PROGRESS_PAUSE);
+</text><text x="60.00px" y="817.60px" xml:space="preserve">
+</text><text x="60.00px" y="832.00px" xml:space="preserve">        (Master <tspan fill="#fe8019">as</tspan> Form)!.FormBorderStyle = FormBorderStyle.FixedSingle;
+</text><text x="60.00px" y="846.40px" xml:space="preserve">
+</text><text x="60.00px" y="860.80px" xml:space="preserve">        Invoke(() =&gt; ShowForm&lt;FormSkeleton&gt;());
+</text><text x="60.00px" y="875.20px" xml:space="preserve">    }
+</text><text x="60.00px" y="889.60px" xml:space="preserve">}
+</text>
+</g>
+</svg>

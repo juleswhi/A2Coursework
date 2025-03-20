@@ -12,8 +12,11 @@ public record Stock : IDatabaseModel {
     public Dictionary<string, (Action<IDatabaseModel?>, bool)> ViewButtons() {
         return new() {
             { "Order Stock", (s => {
-                if(s is null) return;
-            }, true) },
+                //if(s is null) return;
+
+                ShowGCFR(typeof(FormCreate), typeof(StockReorder));
+                var form = Master!.CurrentlyDisplayedForm as FormCreate;
+            }, false) },
             { "Return Stock", (s => {
                 if(s is null) return;
             }, true )},

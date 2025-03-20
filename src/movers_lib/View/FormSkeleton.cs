@@ -25,7 +25,7 @@ public partial class FormSkeleton : Form, IFormMaster {
         btnHome.Click += (s, e) => ShowForm<FormHome>();
         btnJobs.Click += (s, e) => ShowGCF<FormViewModel, Clean>();
         btnStock.Click += (s, e) => ShowGCF<FormViewModel, Stock>();
-        btnStaff.Click += (s, e) => ShowGCF<FormViewModel, Employee>();
+        btnStaff.Click += (s, e) => ShowGCF<FormViewModel, Customer>();
         btnReports.Click += (s, e) => ShowForm<FormReports>();
         btnDeliveries.Click += (s, e) => ShowForm<FormDeliveries>();
     }
@@ -53,5 +53,9 @@ public partial class FormSkeleton : Form, IFormMaster {
         form.Show();
 
         Refresh();
+    }
+
+    private void btnStaff_Click(object sender, EventArgs e) {
+
     }
 }

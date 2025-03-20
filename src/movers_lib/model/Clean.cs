@@ -3,11 +3,11 @@
 namespace Model;
 
 public class Clean : IDatabaseModel {
-    public Clean() {
-    }
 
     [PrimaryKey]
     public int Id { get; set; }
+
+
     [ForeignKeyAttribute(typeof(Customer))]
     public int CustomerId { get; set; }
 
@@ -82,7 +82,7 @@ public class Clean : IDatabaseModel {
         };
     }
 
-    public IDatabaseModel CreateFromList(List<(string, Func<string>)> list, IDatabaseModel? model) {
+    public IDatabaseModel? CreateFromList(List<(string, Func<string>)> list, IDatabaseModel? model) {
         var clean = new Clean();
         var cleans = DAL.Query<Clean>();
 
@@ -93,7 +93,9 @@ public class Clean : IDatabaseModel {
         foreach (var (prop_name, prop_val) in list) {
             var prop = typeof(Clean).GetProperty(prop_name);
             if (prop is null) continue;
+            if (model is null) continue;
 
+            LOG($"Property: {prop.Name} Property Type: {prop.PropertyType} Settings to: {prop_val()}");
             if (prop.PropertyType == typeof(string))
                 prop.SetValue(clean, prop_val(), []);
             else if (prop.PropertyType == typeof(bool))
@@ -106,6 +108,16 @@ public class Clean : IDatabaseModel {
 
         clean.BookDate = DateTime.Now.ToString();
         clean.HoursWorked = 0;
+        
+        //clean.OrderDate = DateTime.Now.ToString();
+        //clean.ExpectedDate = DateTime.Now.AddDays(new Random().Next(6, 8)).ToString();
+
+        list.ForEach(x => LOG($"{x.Item1}, {x.Item2()}"));
+        LOG($"{model}, MODEL");
+        LOG($"{clean}, CLEAN");
+
+        LOG($"Model: {model}");
+        LOG($"Clean: {clean}");
 
         return clean;
     }

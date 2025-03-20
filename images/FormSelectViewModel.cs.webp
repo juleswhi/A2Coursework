@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg width="1167.14" height="2320.57" xmlns="http://www.w3.org/2000/svg">
+<rect width="1067.14" height="2280.57" fill="#282828" x="40.00px" y="20.00px"/>
+<g font-family="Jetbrains Mono NF" font-size="12.00px" fill="#ebdbb2" clip-path="url(#terminalMask)">
+<text x="60.00px" y="54.40px" xml:space="preserve">﻿<tspan fill="#fe8019">using</tspan> MaterialSkin.Controls;
+</text><text x="60.00px" y="68.80px" xml:space="preserve"><tspan fill="#fe8019">using</tspan> Model;
+</text><text x="60.00px" y="83.20px" xml:space="preserve"><tspan fill="#fe8019">using</tspan> static View.FormSelectViewModel.SelectType;
+</text><text x="60.00px" y="97.60px" xml:space="preserve">
+</text><text x="60.00px" y="112.00px" xml:space="preserve"><tspan fill="#fe8019">namespace</tspan> View;
+</text><text x="60.00px" y="126.40px" xml:space="preserve">
+</text><text x="60.00px" y="140.80px" xml:space="preserve"><tspan fill="#fe8019">public</tspan> <tspan fill="#fe8019">partial</tspan> <tspan fill="#fe8019">class</tspan> FormSelectViewModel : Form, GenericCreateableForm {
+</text><text x="60.00px" y="155.20px" xml:space="preserve">    <tspan fill="#fe8019">protected</tspan> Type? _currentType;
+</text><text x="60.00px" y="169.60px" xml:space="preserve">
+</text><text x="60.00px" y="184.00px" xml:space="preserve">    <tspan fill="#fe8019">public</tspan> FormSelectViewModel() {
+</text><text x="60.00px" y="198.40px" xml:space="preserve">        InitializeComponent();
+</text><text x="60.00px" y="212.80px" xml:space="preserve">
+</text><text x="60.00px" y="227.20px" xml:space="preserve">        <tspan fill="#fabd2f">var</tspan> fore = Earth();
+</text><text x="60.00px" y="241.60px" xml:space="preserve">        <tspan fill="#fabd2f">var</tspan> back = Almond();
+</text><text x="60.00px" y="256.00px" xml:space="preserve">
+</text><text x="60.00px" y="270.40px" xml:space="preserve">        dataGridView.ColumnHeadersDefaultCellStyle.BackColor = back;
+</text><text x="60.00px" y="284.80px" xml:space="preserve">        dataGridView.ColumnHeadersDefaultCellStyle.ForeColor = fore;
+</text><text x="60.00px" y="299.20px" xml:space="preserve">        dataGridView.ColumnHeadersDefaultCellStyle.SelectionBackColor = back;
+</text><text x="60.00px" y="313.60px" xml:space="preserve">
+</text><text x="60.00px" y="328.00px" xml:space="preserve">        dataGridView.AdvancedColumnHeadersBorderStyle.Top = DataGridViewAdvancedCellBorderStyle.None;
+</text><text x="60.00px" y="342.40px" xml:space="preserve">        dataGridView.AdvancedColumnHeadersBorderStyle.Left = DataGridViewAdvancedCellBorderStyle.None;
+</text><text x="60.00px" y="356.80px" xml:space="preserve">        dataGridView.AdvancedColumnHeadersBorderStyle.Right = DataGridViewAdvancedCellBorderStyle.None;
+</text><text x="60.00px" y="371.20px" xml:space="preserve">        dataGridView.AdvancedColumnHeadersBorderStyle.Bottom = DataGridViewAdvancedCellBorderStyle.None;
+</text><text x="60.00px" y="385.60px" xml:space="preserve">
+</text><text x="60.00px" y="400.00px" xml:space="preserve">        dataGridView.RowHeadersDefaultCellStyle.BackColor = back;
+</text><text x="60.00px" y="414.40px" xml:space="preserve">        dataGridView.RowHeadersDefaultCellStyle.ForeColor = fore;
+</text><text x="60.00px" y="428.80px" xml:space="preserve">        dataGridView.RowHeadersDefaultCellStyle.SelectionBackColor = Sand();
+</text><text x="60.00px" y="443.20px" xml:space="preserve">        dataGridView.RowHeadersDefaultCellStyle.SelectionForeColor = Earth();
+</text><text x="60.00px" y="457.60px" xml:space="preserve">
+</text><text x="60.00px" y="472.00px" xml:space="preserve">        dataGridView.RowsDefaultCellStyle.BackColor = back;
+</text><text x="60.00px" y="486.40px" xml:space="preserve">        dataGridView.RowsDefaultCellStyle.ForeColor = fore;
+</text><text x="60.00px" y="500.80px" xml:space="preserve">        dataGridView.RowsDefaultCellStyle.SelectionBackColor = Sand();
+</text><text x="60.00px" y="515.20px" xml:space="preserve">        dataGridView.RowsDefaultCellStyle.SelectionForeColor = Earth();
+</text><text x="60.00px" y="529.60px" xml:space="preserve">
+</text><text x="60.00px" y="544.00px" xml:space="preserve">        dataGridView.AdvancedRowHeadersBorderStyle.Top = DataGridViewAdvancedCellBorderStyle.None;
+</text><text x="60.00px" y="558.40px" xml:space="preserve">        dataGridView.AdvancedRowHeadersBorderStyle.Left = DataGridViewAdvancedCellBorderStyle.None;
+</text><text x="60.00px" y="572.80px" xml:space="preserve">        dataGridView.AdvancedRowHeadersBorderStyle.Right = DataGridViewAdvancedCellBorderStyle.None;
+</text><text x="60.00px" y="587.20px" xml:space="preserve">        dataGridView.AdvancedRowHeadersBorderStyle.Bottom = DataGridViewAdvancedCellBorderStyle.None;
+</text><text x="60.00px" y="601.60px" xml:space="preserve">
+</text><text x="60.00px" y="616.00px" xml:space="preserve">        dataGridView.GridColor = Color.LightGray;
+</text><text x="60.00px" y="630.40px" xml:space="preserve">        dataGridView.DefaultCellStyle.BackColor = back;
+</text><text x="60.00px" y="644.80px" xml:space="preserve">        dataGridView.DefaultCellStyle.ForeColor = fore;
+</text><text x="60.00px" y="659.20px" xml:space="preserve">        dataGridView.DefaultCellStyle.SelectionBackColor = Sand();
+</text><text x="60.00px" y="673.60px" xml:space="preserve">        dataGridView.DefaultCellStyle.SelectionForeColor = Earth();
+</text><text x="60.00px" y="688.00px" xml:space="preserve">
+</text><text x="60.00px" y="702.40px" xml:space="preserve">        <tspan fill="#928374" font-style="italic">// TODO: Fix state keeping after selecting foreign key.</tspan>
+</text><text x="60.00px" y="716.80px" xml:space="preserve">        <tspan fill="#928374" font-style="italic">// TODO: Remove / Make better weird team table that seeminly has no use</tspan>
+</text><text x="60.00px" y="731.20px" xml:space="preserve">
+</text><text x="60.00px" y="745.60px" xml:space="preserve">        dataGridView.BackgroundColor = back;
+</text><text x="60.00px" y="760.00px" xml:space="preserve">        dataGridView.ForeColor = fore;
+</text><text x="60.00px" y="774.40px" xml:space="preserve">    }
+</text><text x="60.00px" y="788.80px" xml:space="preserve">
+</text><text x="60.00px" y="803.20px" xml:space="preserve">    <tspan fill="#fe8019">public</tspan> <tspan fill="#fe8019">enum</tspan> SelectType {
+</text><text x="60.00px" y="817.60px" xml:space="preserve">        GetKey,
+</text><text x="60.00px" y="832.00px" xml:space="preserve">    }
+</text><text x="60.00px" y="846.40px" xml:space="preserve">
+</text><text x="60.00px" y="860.80px" xml:space="preserve">    <tspan fill="#fe8019">public</tspan> <tspan fill="#fe8019">void</tspan> SetCallback(Action&lt;Type, DataGridView&gt; callback) {
+</text><text x="60.00px" y="875.20px" xml:space="preserve">        <tspan fill="#fabd2f">var</tspan> btn = Controls.OfType&lt;MaterialButton&gt;().FirstOrDefault();
+</text><text x="60.00px" y="889.60px" xml:space="preserve">
+</text><text x="60.00px" y="904.00px" xml:space="preserve">        <tspan fill="#fe8019">if</tspan> (btn <tspan fill="#fe8019">is</tspan> <tspan fill="#fe8019">null</tspan>) <tspan fill="#fe8019">return</tspan>;
+</text><text x="60.00px" y="918.40px" xml:space="preserve">
+</text><text x="60.00px" y="932.80px" xml:space="preserve">        btn.Click += (s, e) =&gt; {
+</text><text x="60.00px" y="947.20px" xml:space="preserve">            callback(_currentType!, dataGridView);
+</text><text x="60.00px" y="961.60px" xml:space="preserve">        };
+</text><text x="60.00px" y="976.00px" xml:space="preserve">    }
+</text><text x="60.00px" y="990.40px" xml:space="preserve">
+</text><text x="60.00px" y="1004.80px" xml:space="preserve">    <tspan fill="#fe8019">public</tspan> <tspan fill="#fe8019">void</tspan> SetCallbackFromSelectType&lt;T&gt;(SelectType select_type, T database_model) <tspan fill="#fe8019">where</tspan> T : IDatabaseModel {
+</text><text x="60.00px" y="1019.20px" xml:space="preserve">        <tspan fill="#fabd2f">var</tspan> select_btn = Controls.OfType&lt;MaterialButton&gt;().FirstOrDefault();
+</text><text x="60.00px" y="1033.60px" xml:space="preserve">        <tspan fill="#fe8019">if</tspan> (select_btn <tspan fill="#fe8019">is</tspan> <tspan fill="#fe8019">null</tspan>) <tspan fill="#fe8019">return</tspan>;
+</text><text x="60.00px" y="1048.00px" xml:space="preserve">
+</text><text x="60.00px" y="1062.40px" xml:space="preserve">        select_btn.Click += select_type <tspan fill="#fe8019">switch</tspan> {
+</text><text x="60.00px" y="1076.80px" xml:space="preserve">            GetKey =&gt; (s, e) =&gt; {
+</text><text x="60.00px" y="1091.20px" xml:space="preserve">                <tspan fill="#fe8019">if</tspan> (dataGridView.SelectedRows.Count == <tspan fill="#d3869b">1</tspan>) {
+</text><text x="60.00px" y="1105.60px" xml:space="preserve">                    LOG(<tspan fill="#b8bb26">$&quot;Type in method: {typeof(T).Name}, _currentType: {_currentType}&quot;</tspan>);
+</text><text x="60.00px" y="1120.00px" xml:space="preserve">                    <tspan fill="#fabd2f">dynamic</tspan> db_query_result = (<tspan fill="#fe8019">typeof</tspan>(DAL).
+</text><text x="60.00px" y="1134.40px" xml:space="preserve">                        GetMethod(nameof(DAL.Query))!.
+</text><text x="60.00px" y="1148.80px" xml:space="preserve">                        MakeGenericMethod(_currentType!).
+</text><text x="60.00px" y="1163.20px" xml:space="preserve">                        Invoke(<tspan fill="#fe8019">null</tspan>, [<tspan fill="#fe8019">new</tspan> <tspan fill="#fabd2f">string</tspan>[] { }])!);
+</text><text x="60.00px" y="1177.60px" xml:space="preserve">
+</text><text x="60.00px" y="1192.00px" xml:space="preserve">                    IDatabaseModel typed_model_idx = db_query_result[dataGridView.SelectedRows[<tspan fill="#d3869b">0</tspan>].Index];
+</text><text x="60.00px" y="1206.40px" xml:space="preserve">
+</text><text x="60.00px" y="1220.80px" xml:space="preserve">                    <tspan fill="#fabd2f">var</tspan> get_primary_key = (IEnumerable&lt;(<tspan fill="#fabd2f">string</tspan>, <tspan fill="#fabd2f">int</tspan>)&gt;)<tspan fill="#fe8019">typeof</tspan>(ModelHelper).
+</text><text x="60.00px" y="1235.20px" xml:space="preserve">                        GetMethod(nameof(ModelHelper.GetPrimaryKey))!.
+</text><text x="60.00px" y="1249.60px" xml:space="preserve">                        MakeGenericMethod(_currentType!).
+</text><text x="60.00px" y="1264.00px" xml:space="preserve">                        Invoke(<tspan fill="#fe8019">null</tspan>, [typed_model_idx])!;
+</text><text x="60.00px" y="1278.40px" xml:space="preserve">
+</text><text x="60.00px" y="1292.80px" xml:space="preserve">                    <tspan fill="#fabd2f">var</tspan> primary_key = get_primary_key.First().Item2;
+</text><text x="60.00px" y="1307.20px" xml:space="preserve">
+</text><text x="60.00px" y="1321.60px" xml:space="preserve">                    <tspan fill="#fe8019">if</tspan> (FormCreate.PreviousFormType <tspan fill="#fe8019">is</tspan> not <tspan fill="#fe8019">null</tspan>) {
+</text><text x="60.00px" y="1336.00px" xml:space="preserve">                        ShowGCFR(<tspan fill="#fe8019">typeof</tspan>(FormCreate), FormCreate.PreviousFormType);
+</text><text x="60.00px" y="1350.40px" xml:space="preserve">                    } <tspan fill="#fe8019">else</tspan> ShowGCF&lt;FormCreate, T&gt;();
+</text><text x="60.00px" y="1364.80px" xml:space="preserve">
+</text><text x="60.00px" y="1379.20px" xml:space="preserve">                    <tspan fill="#928374" font-style="italic">// ((Master as FormSkeleton)!.CurrentForm as FormCreate)!.AssignForeignKey!.Invoke(primary);</tspan>
+</text><text x="60.00px" y="1393.60px" xml:space="preserve">
+</text><text x="60.00px" y="1408.00px" xml:space="preserve">                    <tspan fill="#928374" font-style="italic">// TODO: How do know its clean</tspan>
+</text><text x="60.00px" y="1422.40px" xml:space="preserve">                    <tspan fill="#fabd2f">var</tspan> form = Master!.CurrentlyDisplayedForm <tspan fill="#fe8019">as</tspan> FormCreate;
+</text><text x="60.00px" y="1436.80px" xml:space="preserve">                    <tspan fill="#fabd2f">var</tspan> form_meth = form!.GetType().
+</text><text x="60.00px" y="1451.20px" xml:space="preserve">                        GetMethod(nameof(form.Populate))!.
+</text><text x="60.00px" y="1465.60px" xml:space="preserve">                        MakeGenericMethod(<tspan fill="#fe8019">typeof</tspan>(T)!);
+</text><text x="60.00px" y="1480.00px" xml:space="preserve">                    form_meth.Invoke(form, [database_model]);
+</text><text x="60.00px" y="1494.40px" xml:space="preserve">
+</text><text x="60.00px" y="1508.80px" xml:space="preserve">                    <tspan fill="#fabd2f">var</tspan> prop_val = ((Master <tspan fill="#fe8019">as</tspan> FormSkeleton)!.CurrentForm <tspan fill="#fe8019">as</tspan> FormCreate)!.PropertyValues.First(x =&gt; x.Type == _currentType);
+</text><text x="60.00px" y="1523.20px" xml:space="preserve">                    (prop_val.Control <tspan fill="#fe8019">as</tspan> MaterialButton)!.Text = primary_key.ToString();
+</text><text x="60.00px" y="1537.60px" xml:space="preserve">                }
+</text><text x="60.00px" y="1552.00px" xml:space="preserve">            }
+</text><text x="60.00px" y="1566.40px" xml:space="preserve">            ,
+</text><text x="60.00px" y="1580.80px" xml:space="preserve">            _ =&gt; (s, e) =&gt; { }
+</text><text x="60.00px" y="1595.20px" xml:space="preserve">        };
+</text><text x="60.00px" y="1609.60px" xml:space="preserve">    }
+</text><text x="60.00px" y="1624.00px" xml:space="preserve">
+</text><text x="60.00px" y="1638.40px" xml:space="preserve">    <tspan fill="#fe8019">private</tspan> <tspan fill="#fe8019">void</tspan> Select_btn_Click(<tspan fill="#fabd2f">object?</tspan> sender, EventArgs e) {
+</text><text x="60.00px" y="1652.80px" xml:space="preserve">        <tspan fill="#fe8019">throw</tspan> <tspan fill="#fe8019">new</tspan> NotImplementedException();
+</text><text x="60.00px" y="1667.20px" xml:space="preserve">    }
+</text><text x="60.00px" y="1681.60px" xml:space="preserve">
+</text><text x="60.00px" y="1696.00px" xml:space="preserve">    <tspan fill="#fe8019">public</tspan> <tspan fill="#fe8019">void</tspan> Create&lt;T&gt;() <tspan fill="#fe8019">where</tspan> T : IDatabaseModel {
+</text><text x="60.00px" y="1710.40px" xml:space="preserve">        <tspan fill="#fabd2f">var</tspan> values = DAL.Query&lt;T&gt;([]);
+</text><text x="60.00px" y="1724.80px" xml:space="preserve">        dataGridView.DataSource = values;
+</text><text x="60.00px" y="1739.20px" xml:space="preserve">        <tspan fill="#fabd2f">string</tspan> name = <tspan fill="#b8bb26">$&quot;Create {typeof(T).Name}&quot;</tspan>;
+</text><text x="60.00px" y="1753.60px" xml:space="preserve">        <tspan fill="#fabd2f">var</tspan> size = TextRenderer.MeasureText(name, MaterialButton.DefaultFont);
+</text><text x="60.00px" y="1768.00px" xml:space="preserve">        _currentType = <tspan fill="#fe8019">typeof</tspan>(T);
+</text><text x="60.00px" y="1782.40px" xml:space="preserve">
+</text><text x="60.00px" y="1796.80px" xml:space="preserve">        <tspan fill="#fabd2f">var</tspan> b = <tspan fill="#fe8019">new</tspan> MaterialButton() { Text = <tspan fill="#b8bb26">&quot;Select&quot;</tspan> };
+</text><text x="60.00px" y="1811.20px" xml:space="preserve">
+</text><text x="60.00px" y="1825.60px" xml:space="preserve">        b.UseAccentColor = <tspan fill="#fe8019">true</tspan>;
+</text><text x="60.00px" y="1840.00px" xml:space="preserve">        b.Enabled = <tspan fill="#fe8019">false</tspan>;
+</text><text x="60.00px" y="1854.40px" xml:space="preserve">
+</text><text x="60.00px" y="1868.80px" xml:space="preserve">        Controls.Add(b);
+</text><text x="60.00px" y="1883.20px" xml:space="preserve">
+</text><text x="60.00px" y="1897.60px" xml:space="preserve">        <tspan fill="#fabd2f">var</tspan> horizontalSpace = dataGridView.Width;
+</text><text x="60.00px" y="1912.00px" xml:space="preserve">
+</text><text x="60.00px" y="1926.40px" xml:space="preserve">        <tspan fill="#fabd2f">int</tspan> totalButtonsWidth = <tspan fill="#d3869b">0</tspan>;
+</text><text x="60.00px" y="1940.80px" xml:space="preserve">        <tspan fill="#fe8019">foreach</tspan> (<tspan fill="#fabd2f">var</tspan> button <tspan fill="#fe8019">in</tspan> Controls.OfType&lt;MaterialButton&gt;()) {
+</text><text x="60.00px" y="1955.20px" xml:space="preserve">            totalButtonsWidth += button.Width;
+</text><text x="60.00px" y="1969.60px" xml:space="preserve">        }
+</text><text x="60.00px" y="1984.00px" xml:space="preserve">
+</text><text x="60.00px" y="1998.40px" xml:space="preserve">        <tspan fill="#928374" font-style="italic">// Calculate the available space between buttons</tspan>
+</text><text x="60.00px" y="2012.80px" xml:space="preserve">        <tspan fill="#fabd2f">int</tspan> availableSpace = horizontalSpace - totalButtonsWidth;
+</text><text x="60.00px" y="2027.20px" xml:space="preserve">        <tspan fill="#fabd2f">int</tspan> spacing = availableSpace / (<tspan fill="#d3869b">2</tspan>);
+</text><text x="60.00px" y="2041.60px" xml:space="preserve">
+</text><text x="60.00px" y="2056.00px" xml:space="preserve">        <tspan fill="#fabd2f">int</tspan> startX = (<tspan fill="#fe8019">this</tspan>.ClientSize.Width - horizontalSpace) / <tspan fill="#d3869b">2</tspan>;
+</text><text x="60.00px" y="2070.40px" xml:space="preserve">        <tspan fill="#fabd2f">int</tspan> currentX = startX + spacing;
+</text><text x="60.00px" y="2084.80px" xml:space="preserve">
+</text><text x="60.00px" y="2099.20px" xml:space="preserve">        <tspan fill="#fe8019">foreach</tspan> (<tspan fill="#fabd2f">var</tspan> button <tspan fill="#fe8019">in</tspan> Controls.OfType&lt;MaterialButton&gt;()) {
+</text><text x="60.00px" y="2113.60px" xml:space="preserve">            button.Location = <tspan fill="#fe8019">new</tspan> Point(currentX, dataGridView.Bottom + <tspan fill="#d3869b">30</tspan>);
+</text><text x="60.00px" y="2128.00px" xml:space="preserve">            currentX += button.Width + spacing;
+</text><text x="60.00px" y="2142.40px" xml:space="preserve">        }
+</text><text x="60.00px" y="2156.80px" xml:space="preserve">
+</text><text x="60.00px" y="2171.20px" xml:space="preserve">        dataGridView.RowStateChanged += (s, e) =&gt; {
+</text><text x="60.00px" y="2185.60px" xml:space="preserve">            <tspan fill="#fe8019">foreach</tspan> (<tspan fill="#fabd2f">var</tspan> btn <tspan fill="#fe8019">in</tspan> Controls.OfType&lt;MaterialButton&gt;()) {
+</text><text x="60.00px" y="2200.00px" xml:space="preserve">                btn.Enabled = dataGridView.SelectedRows.Count == <tspan fill="#d3869b">1</tspan>;
+</text><text x="60.00px" y="2214.40px" xml:space="preserve">            }
+</text><text x="60.00px" y="2228.80px" xml:space="preserve">        };
+</text><text x="60.00px" y="2243.20px" xml:space="preserve">    }
+</text><text x="60.00px" y="2257.60px" xml:space="preserve">}
+</text>
+</g>
+</svg>

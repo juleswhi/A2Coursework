@@ -13,15 +13,9 @@ public partial class FormHome : Form {
             return start < DateTime.Now && end > DateTime.Now;
         }).Count();
 
-        btnActiveJobs.Click += (s, e) => {
-            ShowGCF<FormViewModel, Clean>();
-        };
-        btnWorkingEmployees.Click += (s, e) => {
-            ShowGCF<FormViewModel, Employee>();
-        };
-        btnPendingDeliveries.Click += (s, e) => {
-            ShowForm<FormDeliveries>();
-        };
+        btnActiveJobs.Click += (s, e) => ShowGCF<FormViewModel, Clean>();
+        btnWorkingEmployees.Click += (s, e) => ShowGCF<FormViewModel, Employee>();
+        btnPendingDeliveries.Click += (s, e) => ShowForm<FormDeliveries>();
 
         var total_jobs = DAL.Query<Clean>().Count();
 
@@ -30,6 +24,11 @@ public partial class FormHome : Form {
         progressJobs.Maximum = total_jobs;
         progressJobs.Value = active_jobs;
 
-        labelPendingDelivieriesValue.Text = DAL.Query<Delivery>().Count().ToString();
+        labelPendingDelivieriesValue.Text = DAL.
+            Query<StockReorder>().
+            Where(x => Convert.ToDateTime(x.ExpectedDate) > DateTime.Now).
+            Where(x => x.Status != "Delivered" || x.Status != "Lost").
+            Count().
+            ToString();
     }
 }

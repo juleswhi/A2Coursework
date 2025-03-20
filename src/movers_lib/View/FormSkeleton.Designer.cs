@@ -198,10 +198,11 @@ partial class FormSkeleton
         btnStaff.NoAccentTextColor = Color.Empty;
         btnStaff.Size = new Size(172, 50);
         btnStaff.TabIndex = 2;
-        btnStaff.Text = "Staff";
+        btnStaff.Text = "Customers";
         btnStaff.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Text;
         btnStaff.UseAccentColor = false;
         btnStaff.UseVisualStyleBackColor = true;
+        btnStaff.Click += btnStaff_Click;
         // 
         // btnDeliveries
         // 

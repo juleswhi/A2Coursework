@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg width="674.29" height="923.43" xmlns="http://www.w3.org/2000/svg">
+<rect width="574.29" height="883.43" fill="#282828" x="40.00px" y="20.00px"/>
+<g font-family="Jetbrains Mono NF" font-size="12.00px" fill="#ebdbb2" clip-path="url(#terminalMask)">
+<text x="60.00px" y="54.40px" xml:space="preserve">﻿<tspan fill="#fe8019">using</tspan> Forms;
+</text><text x="60.00px" y="68.80px" xml:space="preserve"><tspan fill="#fe8019">using</tspan> Model;
+</text><text x="60.00px" y="83.20px" xml:space="preserve">
+</text><text x="60.00px" y="97.60px" xml:space="preserve"><tspan fill="#fe8019">namespace</tspan> View;
+</text><text x="60.00px" y="112.00px" xml:space="preserve">
+</text><text x="60.00px" y="126.40px" xml:space="preserve"><tspan fill="#928374" font-style="italic">/// &lt;summary&gt;</tspan>
+</text><text x="60.00px" y="140.80px" xml:space="preserve"><tspan fill="#928374" font-style="italic">/// FormSkeleton is the master form</tspan>
+</text><text x="60.00px" y="155.20px" xml:space="preserve"><tspan fill="#928374" font-style="italic">/// &lt;/summary&gt;</tspan>
+</text><text x="60.00px" y="169.60px" xml:space="preserve"><tspan fill="#fe8019">public</tspan> <tspan fill="#fe8019">partial</tspan> <tspan fill="#fe8019">class</tspan> FormSkeleton : Form, IFormMaster {
+</text><text x="60.00px" y="184.00px" xml:space="preserve">    <tspan fill="#fe8019">public</tspan> Form CurrentForm =&gt; panelHolder.
+</text><text x="60.00px" y="198.40px" xml:space="preserve">        Controls.
+</text><text x="60.00px" y="212.80px" xml:space="preserve">        OfType&lt;Form&gt;().
+</text><text x="60.00px" y="227.20px" xml:space="preserve">        ToList().
+</text><text x="60.00px" y="241.60px" xml:space="preserve">        FirstOrDefault()!;
+</text><text x="60.00px" y="256.00px" xml:space="preserve">
+</text><text x="60.00px" y="270.40px" xml:space="preserve">    <tspan fill="#fe8019">public</tspan> Form CurrentlyDisplayedForm { <tspan fill="#fe8019">get</tspan> =&gt; CurrentForm; }
+</text><text x="60.00px" y="284.80px" xml:space="preserve">
+</text><text x="60.00px" y="299.20px" xml:space="preserve">    <tspan fill="#fe8019">public</tspan> FormSkeleton() {
+</text><text x="60.00px" y="313.60px" xml:space="preserve">        InitializeComponent();
+</text><text x="60.00px" y="328.00px" xml:space="preserve">        SetStyle(ControlStyles.OptimizedDoubleBuffer, <tspan fill="#fe8019">true</tspan>);
+</text><text x="60.00px" y="342.40px" xml:space="preserve">
+</text><text x="60.00px" y="356.80px" xml:space="preserve">        BackColor = Almond();
+</text><text x="60.00px" y="371.20px" xml:space="preserve">
+</text><text x="60.00px" y="385.60px" xml:space="preserve">        <tspan fill="#928374" font-style="italic">// Initialise Buttons </tspan>
+</text><text x="60.00px" y="400.00px" xml:space="preserve">        btnHome.Click += (s, e) =&gt; ShowForm&lt;FormHome&gt;();
+</text><text x="60.00px" y="414.40px" xml:space="preserve">        btnJobs.Click += (s, e) =&gt; ShowGCF&lt;FormViewModel, Clean&gt;();
+</text><text x="60.00px" y="428.80px" xml:space="preserve">        btnStock.Click += (s, e) =&gt; ShowGCF&lt;FormViewModel, Stock&gt;();
+</text><text x="60.00px" y="443.20px" xml:space="preserve">        btnStaff.Click += (s, e) =&gt; ShowGCF&lt;FormViewModel, Employee&gt;();
+</text><text x="60.00px" y="457.60px" xml:space="preserve">        btnReports.Click += (s, e) =&gt; ShowForm&lt;FormReports&gt;();
+</text><text x="60.00px" y="472.00px" xml:space="preserve">        btnDeliveries.Click += (s, e) =&gt; ShowForm&lt;FormDeliveries&gt;();
+</text><text x="60.00px" y="486.40px" xml:space="preserve">    }
+</text><text x="60.00px" y="500.80px" xml:space="preserve">
+</text><text x="60.00px" y="515.20px" xml:space="preserve">    <tspan fill="#928374" font-style="italic">/// &lt;summary&gt;</tspan>
+</text><text x="60.00px" y="529.60px" xml:space="preserve">    <tspan fill="#928374" font-style="italic">/// Accesses the Panel that holds the form</tspan>
+</text><text x="60.00px" y="544.00px" xml:space="preserve">    <tspan fill="#928374" font-style="italic">/// &lt;/summary&gt;</tspan>
+</text><text x="60.00px" y="558.40px" xml:space="preserve">    <tspan fill="#928374" font-style="italic">/// &lt;returns&gt;&lt;/returns&gt;</tspan>
+</text><text x="60.00px" y="572.80px" xml:space="preserve">    <tspan fill="#fe8019">public</tspan> Panel GetHolder() =&gt; panelHolder;
+</text><text x="60.00px" y="587.20px" xml:space="preserve">
+</text><text x="60.00px" y="601.60px" xml:space="preserve">    <tspan fill="#928374" font-style="italic">/// &lt;summary&gt;</tspan>
+</text><text x="60.00px" y="616.00px" xml:space="preserve">    <tspan fill="#928374" font-style="italic">/// Displays a chosen &lt;c&gt;Form&lt;/c&gt; in &lt;c&gt;panelHolder&lt;/c&gt;</tspan>
+</text><text x="60.00px" y="630.40px" xml:space="preserve">    <tspan fill="#928374" font-style="italic">/// &lt;/summary&gt;</tspan>
+</text><text x="60.00px" y="644.80px" xml:space="preserve">    <tspan fill="#928374" font-style="italic">/// &lt;param name=&quot;form&quot;&gt;The form to display&lt;/param&gt;</tspan>
+</text><text x="60.00px" y="659.20px" xml:space="preserve">    <tspan fill="#fe8019">public</tspan> <tspan fill="#fe8019">void</tspan> LoadForm(Form form) {
+</text><text x="60.00px" y="673.60px" xml:space="preserve">        form.TopLevel = <tspan fill="#fe8019">false</tspan>;
+</text><text x="60.00px" y="688.00px" xml:space="preserve">        form.Dock = DockStyle.Fill;
+</text><text x="60.00px" y="702.40px" xml:space="preserve">        form.FormBorderStyle = FormBorderStyle.None;
+</text><text x="60.00px" y="716.80px" xml:space="preserve">        form.Enabled = <tspan fill="#fe8019">true</tspan>;
+</text><text x="60.00px" y="731.20px" xml:space="preserve">        form.Visible = <tspan fill="#fe8019">true</tspan>;
+</text><text x="60.00px" y="745.60px" xml:space="preserve">
+</text><text x="60.00px" y="760.00px" xml:space="preserve">        panelHolder.Controls.Clear();
+</text><text x="60.00px" y="774.40px" xml:space="preserve">        panelHolder.Controls.Add(form);
+</text><text x="60.00px" y="788.80px" xml:space="preserve">        panelHolder.Show();
+</text><text x="60.00px" y="803.20px" xml:space="preserve">        form.Show();
+</text><text x="60.00px" y="817.60px" xml:space="preserve">
+</text><text x="60.00px" y="832.00px" xml:space="preserve">        Refresh();
+</text><text x="60.00px" y="846.40px" xml:space="preserve">    }
+</text><text x="60.00px" y="860.80px" xml:space="preserve">}
+</text>
+</g>
+</svg>

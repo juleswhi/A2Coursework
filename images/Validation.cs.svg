@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg width="760.00" height="491.43" xmlns="http://www.w3.org/2000/svg">
+<rect width="660.00" height="451.43" fill="#282828" x="40.00px" y="20.00px"/>
+<g font-family="Jetbrains Mono" font-size="12.00px" fill="#ebdbb2" clip-path="url(#terminalMask)">
+<text x="60.00px" y="54.40px" xml:space="preserve">﻿<tspan fill="#fe8019">namespace</tspan> Model;
+</text><text x="60.00px" y="68.80px" xml:space="preserve"><tspan fill="#fe8019">internal</tspan> <tspan fill="#fe8019">static</tspan> <tspan fill="#fe8019">class</tspan> Validation {
+</text><text x="60.00px" y="83.20px" xml:space="preserve">
+</text><text x="60.00px" y="97.60px" xml:space="preserve">    <tspan fill="#fe8019">public</tspan> <tspan fill="#fe8019">enum</tspan> ValidationType {
+</text><text x="60.00px" y="112.00px" xml:space="preserve">        NAME,
+</text><text x="60.00px" y="126.40px" xml:space="preserve">        PRICE,
+</text><text x="60.00px" y="140.80px" xml:space="preserve">        OTHER,
+</text><text x="60.00px" y="155.20px" xml:space="preserve">    }
+</text><text x="60.00px" y="169.60px" xml:space="preserve">
+</text><text x="60.00px" y="184.00px" xml:space="preserve">    <tspan fill="#fe8019">public</tspan> <tspan fill="#fe8019">static</tspan> <tspan fill="#fabd2f">bool</tspan> Validate(<tspan fill="#fe8019">this</tspan> <tspan fill="#fabd2f">string</tspan> str, ValidationType type) {
+</text><text x="60.00px" y="198.40px" xml:space="preserve">        <tspan fill="#fe8019">return</tspan> type <tspan fill="#fe8019">switch</tspan> {
+</text><text x="60.00px" y="212.80px" xml:space="preserve">            <tspan fill="#928374" font-style="italic">// May only have ascii letters and digits</tspan>
+</text><text x="60.00px" y="227.20px" xml:space="preserve">            <tspan fill="#928374" font-style="italic">// And not longer than 20 digits</tspan>
+</text><text x="60.00px" y="241.60px" xml:space="preserve">            NAME =&gt; str.Any(x =&gt; !<tspan fill="#fabd2f">char</tspan>.IsAsciiLetterOrDigit(x)) &amp;&amp; str.Length &lt; <tspan fill="#d3869b">20</tspan>,
+</text><text x="60.00px" y="256.00px" xml:space="preserve">            _ =&gt; <tspan fill="#fe8019">true</tspan>
+</text><text x="60.00px" y="270.40px" xml:space="preserve">        };
+</text><text x="60.00px" y="284.80px" xml:space="preserve">    }
+</text><text x="60.00px" y="299.20px" xml:space="preserve">
+</text><text x="60.00px" y="313.60px" xml:space="preserve">    <tspan fill="#fe8019">public</tspan> <tspan fill="#fe8019">static</tspan> <tspan fill="#fabd2f">bool</tspan> Validate(<tspan fill="#fe8019">this</tspan> <tspan fill="#fabd2f">int</tspan> num, ValidationType type) {
+</text><text x="60.00px" y="328.00px" xml:space="preserve">        <tspan fill="#fe8019">return</tspan> type <tspan fill="#fe8019">switch</tspan> {
+</text><text x="60.00px" y="342.40px" xml:space="preserve">            PRICE =&gt; num &lt; <tspan fill="#d3869b">1_000_000</tspan> &amp;&amp; num &gt;= <tspan fill="#d3869b">0</tspan>,
+</text><text x="60.00px" y="356.80px" xml:space="preserve">            _ =&gt; <tspan fill="#fe8019">true</tspan>
+</text><text x="60.00px" y="371.20px" xml:space="preserve">        };
+</text><text x="60.00px" y="385.60px" xml:space="preserve">    }
+</text><text x="60.00px" y="400.00px" xml:space="preserve">
+</text><text x="60.00px" y="414.40px" xml:space="preserve">}
+</text><text x="60.00px" y="428.80px" xml:space="preserve">
+</text>
+</g>
+</svg>

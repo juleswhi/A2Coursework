@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg width="931.43" height="1542.29" xmlns="http://www.w3.org/2000/svg">
+<rect width="831.43" height="1502.29" fill="#282828" x="40.00px" y="20.00px"/>
+<g font-family="Jetbrains Mono" font-size="12.00px" fill="#ebdbb2" clip-path="url(#terminalMask)">
+<text x="60.00px" y="54.40px" xml:space="preserve">﻿<tspan fill="#fe8019">using</tspan> System.Reflection;
+</text><text x="60.00px" y="68.80px" xml:space="preserve">
+</text><text x="60.00px" y="83.20px" xml:space="preserve"><tspan fill="#fe8019">namespace</tspan> movers_lib.writeup_tools;
+</text><text x="60.00px" y="97.60px" xml:space="preserve">
+</text><text x="60.00px" y="112.00px" xml:space="preserve"><tspan fill="#fe8019">public</tspan> <tspan fill="#fe8019">static</tspan> <tspan fill="#fe8019">class</tspan> StoryboardConverter {
+</text><text x="60.00px" y="126.40px" xml:space="preserve">    <tspan fill="#fe8019">public</tspan> <tspan fill="#fe8019">static</tspan> <tspan fill="#fe8019">void</tspan> Convert() {
+</text><text x="60.00px" y="140.80px" xml:space="preserve">        <tspan fill="#fabd2f">var</tspan> assembly = Assembly.GetCallingAssembly();
+</text><text x="60.00px" y="155.20px" xml:space="preserve">
+</text><text x="60.00px" y="169.60px" xml:space="preserve">        <tspan fill="#fabd2f">var</tspan> types = assembly.GetTypes();
+</text><text x="60.00px" y="184.00px" xml:space="preserve">
+</text><text x="60.00px" y="198.40px" xml:space="preserve">        Type form = <tspan fill="#fe8019">typeof</tspan>(Form);
+</text><text x="60.00px" y="212.80px" xml:space="preserve">
+</text><text x="60.00px" y="227.20px" xml:space="preserve">        <tspan fill="#fabd2f">var</tspan> forms = types.Where(x =&gt; x.IsSubclassOf(form) || x == form);
+</text><text x="60.00px" y="241.60px" xml:space="preserve">
+</text><text x="60.00px" y="256.00px" xml:space="preserve">        <tspan fill="#fe8019">using</tspan> var sw = <tspan fill="#fe8019">new</tspan> StreamWriter(<tspan fill="#b8bb26">@&quot;examplepath.txt&quot;</tspan>, <tspan fill="#fe8019">true</tspan>);
+</text><text x="60.00px" y="270.40px" xml:space="preserve">
+</text><text x="60.00px" y="284.80px" xml:space="preserve">        <tspan fill="#fe8019">foreach</tspan> (Type type <tspan fill="#fe8019">in</tspan> forms) {
+</text><text x="60.00px" y="299.20px" xml:space="preserve">            <tspan fill="#928374" font-style="italic">// Create the instance of the form</tspan>
+</text><text x="60.00px" y="313.60px" xml:space="preserve">            <tspan fill="#fabd2f">var</tspan> instance = Activator.CreateInstance(type);
+</text><text x="60.00px" y="328.00px" xml:space="preserve">
+</text><text x="60.00px" y="342.40px" xml:space="preserve">            PrintContainer(instance, sw);
+</text><text x="60.00px" y="356.80px" xml:space="preserve">        }
+</text><text x="60.00px" y="371.20px" xml:space="preserve">
+</text><text x="60.00px" y="385.60px" xml:space="preserve">        LOG(<tspan fill="#b8bb26">$&quot;DONE&quot;</tspan>);
+</text><text x="60.00px" y="400.00px" xml:space="preserve">
+</text><text x="60.00px" y="414.40px" xml:space="preserve">        <tspan fill="#928374" font-style="italic">// Collect all that garbage from potentially large amount of objects created</tspan>
+</text><text x="60.00px" y="428.80px" xml:space="preserve">        GC.Collect();
+</text><text x="60.00px" y="443.20px" xml:space="preserve">
+</text><text x="60.00px" y="457.60px" xml:space="preserve">    }
+</text><text x="60.00px" y="472.00px" xml:space="preserve">
+</text><text x="60.00px" y="486.40px" xml:space="preserve">    <tspan fill="#fe8019">private</tspan> <tspan fill="#fe8019">static</tspan> <tspan fill="#fe8019">void</tspan> PrintContainer&lt;T&gt;(T obj, StreamWriter sw) {
+</text><text x="60.00px" y="500.80px" xml:space="preserve">        <tspan fill="#fabd2f">var</tspan> controls = GetControls(obj);
+</text><text x="60.00px" y="515.20px" xml:space="preserve">
+</text><text x="60.00px" y="529.60px" xml:space="preserve">        <tspan fill="#fe8019">if</tspan> (controls <tspan fill="#fe8019">is</tspan> <tspan fill="#fe8019">null</tspan>) {
+</text><text x="60.00px" y="544.00px" xml:space="preserve">            <tspan fill="#fe8019">return</tspan>;
+</text><text x="60.00px" y="558.40px" xml:space="preserve">        }
+</text><text x="60.00px" y="572.80px" xml:space="preserve">
+</text><text x="60.00px" y="587.20px" xml:space="preserve">        <tspan fill="#fe8019">foreach</tspan> (Control control <tspan fill="#fe8019">in</tspan> controls) {
+</text><text x="60.00px" y="601.60px" xml:space="preserve">            <tspan fill="#fe8019">if</tspan> (control <tspan fill="#fe8019">is</tspan> Panel || control.GetType().IsSubclassOf(<tspan fill="#fe8019">typeof</tspan>(Panel))) {
+</text><text x="60.00px" y="616.00px" xml:space="preserve">                <tspan fill="#928374" font-style="italic">// Get controls of panel</tspan>
+</text><text x="60.00px" y="630.40px" xml:space="preserve">                PrintContainer(control, sw);
+</text><text x="60.00px" y="644.80px" xml:space="preserve">            }
+</text><text x="60.00px" y="659.20px" xml:space="preserve">
+</text><text x="60.00px" y="673.60px" xml:space="preserve">            <tspan fill="#fe8019">foreach</tspan> (<tspan fill="#fabd2f">var</tspan> str <tspan fill="#fe8019">in</tspan> GetInformation(control)) {
+</text><text x="60.00px" y="688.00px" xml:space="preserve">                sw.WriteLine(str);
+</text><text x="60.00px" y="702.40px" xml:space="preserve">            }
+</text><text x="60.00px" y="716.80px" xml:space="preserve">        }
+</text><text x="60.00px" y="731.20px" xml:space="preserve">    }
+</text><text x="60.00px" y="745.60px" xml:space="preserve">
+</text><text x="60.00px" y="760.00px" xml:space="preserve">    <tspan fill="#fe8019">private</tspan> <tspan fill="#fe8019">static</tspan> Control.ControlCollection? GetControls&lt;T&gt;(T obj) {
+</text><text x="60.00px" y="774.40px" xml:space="preserve">        <tspan fill="#fabd2f">var</tspan> type = <tspan fill="#fe8019">typeof</tspan>(T);
+</text><text x="60.00px" y="788.80px" xml:space="preserve">        <tspan fill="#fabd2f">var</tspan> controlProp = type.GetProperty(<tspan fill="#b8bb26">&quot;Controls&quot;</tspan>);
+</text><text x="60.00px" y="803.20px" xml:space="preserve">
+</text><text x="60.00px" y="817.60px" xml:space="preserve">        <tspan fill="#fe8019">if</tspan> (controlProp <tspan fill="#fe8019">is</tspan> <tspan fill="#fe8019">null</tspan>) {
+</text><text x="60.00px" y="832.00px" xml:space="preserve">            <tspan fill="#fe8019">return</tspan> <tspan fill="#fe8019">null</tspan>;
+</text><text x="60.00px" y="846.40px" xml:space="preserve">        }
+</text><text x="60.00px" y="860.80px" xml:space="preserve">
+</text><text x="60.00px" y="875.20px" xml:space="preserve">        Control.ControlCollection? controls = controlProp.GetValue(obj) <tspan fill="#fe8019">as</tspan> Control.ControlCollection;
+</text><text x="60.00px" y="889.60px" xml:space="preserve">
+</text><text x="60.00px" y="904.00px" xml:space="preserve">        <tspan fill="#fe8019">if</tspan> (controls <tspan fill="#fe8019">is</tspan> <tspan fill="#fe8019">null</tspan>) {
+</text><text x="60.00px" y="918.40px" xml:space="preserve">            <tspan fill="#fe8019">return</tspan> <tspan fill="#fe8019">null</tspan>;
+</text><text x="60.00px" y="932.80px" xml:space="preserve">        }
+</text><text x="60.00px" y="947.20px" xml:space="preserve">
+</text><text x="60.00px" y="961.60px" xml:space="preserve">        <tspan fill="#fe8019">return</tspan> controls;
+</text><text x="60.00px" y="976.00px" xml:space="preserve">    }
+</text><text x="60.00px" y="990.40px" xml:space="preserve">
+</text><text x="60.00px" y="1004.80px" xml:space="preserve">    <tspan fill="#fe8019">private</tspan> <tspan fill="#fe8019">static</tspan> IEnumerable&lt;<tspan fill="#fabd2f">string</tspan>&gt; GetInformation&lt;T&gt;(T control) <tspan fill="#fe8019">where</tspan> T : Control {
+</text><text x="60.00px" y="1019.20px" xml:space="preserve">        <tspan fill="#fabd2f">var</tspan> props = control.GetType().GetProperties();
+</text><text x="60.00px" y="1033.60px" xml:space="preserve">
+</text><text x="60.00px" y="1048.00px" xml:space="preserve">        <tspan fill="#fe8019">foreach</tspan> (<tspan fill="#fabd2f">var</tspan> prop <tspan fill="#fe8019">in</tspan> props) {
+</text><text x="60.00px" y="1062.40px" xml:space="preserve">            <tspan fill="#fabd2f">string</tspan> str;
+</text><text x="60.00px" y="1076.80px" xml:space="preserve">            <tspan fill="#fe8019">try</tspan> {
+</text><text x="60.00px" y="1091.20px" xml:space="preserve">                <tspan fill="#928374" font-style="italic">// Grab the value of the property</tspan>
+</text><text x="60.00px" y="1105.60px" xml:space="preserve">                str = <tspan fill="#b8bb26">$&quot;\t\t{prop.Name}: {PrettyPrint(prop.GetMethod?.Invoke(control, new object[] { }))}&quot;</tspan>;
+</text><text x="60.00px" y="1120.00px" xml:space="preserve">            } <tspan fill="#fe8019">catch</tspan> (Exception) {
+</text><text x="60.00px" y="1134.40px" xml:space="preserve">                <tspan fill="#928374" font-style="italic">// Some weird property values may encounter this exception</tspan>
+</text><text x="60.00px" y="1148.80px" xml:space="preserve">                <tspan fill="#928374" font-style="italic">// In that case, just ignore it</tspan>
+</text><text x="60.00px" y="1163.20px" xml:space="preserve">                <tspan fill="#fe8019">continue</tspan>;
+</text><text x="60.00px" y="1177.60px" xml:space="preserve">            }
+</text><text x="60.00px" y="1192.00px" xml:space="preserve">
+</text><text x="60.00px" y="1206.40px" xml:space="preserve">            <tspan fill="#fe8019">yield</tspan> <tspan fill="#fe8019">return</tspan> str;
+</text><text x="60.00px" y="1220.80px" xml:space="preserve">        }
+</text><text x="60.00px" y="1235.20px" xml:space="preserve">    }
+</text><text x="60.00px" y="1249.60px" xml:space="preserve">
+</text><text x="60.00px" y="1264.00px" xml:space="preserve">    <tspan fill="#fe8019">private</tspan> <tspan fill="#fe8019">static</tspan> <tspan fill="#fabd2f">string?</tspan> PrettyPrint(<tspan fill="#fabd2f">object?</tspan> obj) {
+</text><text x="60.00px" y="1278.40px" xml:space="preserve">        <tspan fill="#fe8019">if</tspan> (obj <tspan fill="#fe8019">is</tspan> Font font) {
+</text><text x="60.00px" y="1292.80px" xml:space="preserve">            <tspan fill="#fe8019">return</tspan> <tspan fill="#b8bb26">$&quot;{font.Name} - {font.Size}px&quot;</tspan>;
+</text><text x="60.00px" y="1307.20px" xml:space="preserve">        }
+</text><text x="60.00px" y="1321.60px" xml:space="preserve">
+</text><text x="60.00px" y="1336.00px" xml:space="preserve">        <tspan fill="#fe8019">if</tspan> (obj <tspan fill="#fe8019">is</tspan> Point point) {
+</text><text x="60.00px" y="1350.40px" xml:space="preserve">            <tspan fill="#fe8019">return</tspan> <tspan fill="#b8bb26">$&quot;[{point.X}, {point.Y}]&quot;</tspan>;
+</text><text x="60.00px" y="1364.80px" xml:space="preserve">        }
+</text><text x="60.00px" y="1379.20px" xml:space="preserve">
+</text><text x="60.00px" y="1393.60px" xml:space="preserve">        <tspan fill="#fe8019">if</tspan> (obj <tspan fill="#fe8019">is</tspan> Size size) {
+</text><text x="60.00px" y="1408.00px" xml:space="preserve">            <tspan fill="#fe8019">return</tspan> <tspan fill="#b8bb26">$&quot;[{size.Width}, {size.Height}]&quot;</tspan>;
+</text><text x="60.00px" y="1422.40px" xml:space="preserve">        }
+</text><text x="60.00px" y="1436.80px" xml:space="preserve">
+</text><text x="60.00px" y="1451.20px" xml:space="preserve">        <tspan fill="#fe8019">return</tspan> (<tspan fill="#fabd2f">string?</tspan>)obj;
+</text><text x="60.00px" y="1465.60px" xml:space="preserve">    }
+</text><text x="60.00px" y="1480.00px" xml:space="preserve">}
+</text>
+</g>
+</svg>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg width="967.14" height="1254.29" xmlns="http://www.w3.org/2000/svg">
+<rect width="867.14" height="1214.29" fill="#282828" x="40.00px" y="20.00px"/>
+<g font-family="Jetbrains Mono" font-size="12.00px" fill="#ebdbb2" clip-path="url(#terminalMask)">
+<text x="60.00px" y="54.40px" xml:space="preserve">﻿<tspan fill="#fe8019">using</tspan> View;
+</text><text x="60.00px" y="68.80px" xml:space="preserve"><tspan fill="#fe8019">namespace</tspan> Model;
+</text><text x="60.00px" y="83.20px" xml:space="preserve">
+</text><text x="60.00px" y="97.60px" xml:space="preserve"><tspan fill="#fe8019">public</tspan> <tspan fill="#fe8019">record</tspan> Employee : IDatabaseModel {
+</text><text x="60.00px" y="112.00px" xml:space="preserve"><tspan fill="#b8bb26" font-weight="bold">    [PrimaryKey]</tspan>
+</text><text x="60.00px" y="126.40px" xml:space="preserve">    <tspan fill="#fe8019">public</tspan> <tspan fill="#fabd2f">int</tspan> Id { <tspan fill="#fe8019">get</tspan>; <tspan fill="#fe8019">set</tspan>; }
+</text><text x="60.00px" y="140.80px" xml:space="preserve">    <tspan fill="#fe8019">public</tspan> <tspan fill="#fabd2f">string</tspan> Forename { <tspan fill="#fe8019">get</tspan>; <tspan fill="#fe8019">set</tspan>; } = String.Empty;
+</text><text x="60.00px" y="155.20px" xml:space="preserve">    <tspan fill="#fe8019">public</tspan> <tspan fill="#fabd2f">string</tspan> Surname { <tspan fill="#fe8019">get</tspan>; <tspan fill="#fe8019">set</tspan>; } = String.Empty;
+</text><text x="60.00px" y="169.60px" xml:space="preserve">    <tspan fill="#fe8019">public</tspan> <tspan fill="#fe8019">static</tspan> Employee GenerateFakeData()
+</text><text x="60.00px" y="184.00px" xml:space="preserve">        =&gt; <tspan fill="#fe8019">new</tspan> Faker&lt;Employee&gt;()
+</text><text x="60.00px" y="198.40px" xml:space="preserve">            .RuleFor(o =&gt; o.Id, f =&gt; DAL.Query&lt;Employee&gt;().Select(x =&gt; x.Id).Max() + <tspan fill="#d3869b">1</tspan>)
+</text><text x="60.00px" y="212.80px" xml:space="preserve">            .RuleFor(o =&gt; o.Forename, f =&gt; f.Name.FirstName())
+</text><text x="60.00px" y="227.20px" xml:space="preserve">            .RuleFor(o =&gt; o.Surname, f =&gt; f.Name.LastName())
+</text><text x="60.00px" y="241.60px" xml:space="preserve">            .Generate();
+</text><text x="60.00px" y="256.00px" xml:space="preserve">    <tspan fill="#fe8019">public</tspan> Dictionary&lt;<tspan fill="#fabd2f">string</tspan>, (Action&lt;IDatabaseModel?&gt;, <tspan fill="#fabd2f">bool</tspan>)&gt; ViewButtons() {
+</text><text x="60.00px" y="270.40px" xml:space="preserve">        <tspan fill="#fe8019">return</tspan> <tspan fill="#fe8019">new</tspan>() {
+</text><text x="60.00px" y="284.80px" xml:space="preserve">            { <tspan fill="#b8bb26">&quot;Create&quot;</tspan>, (<tspan fill="#fe8019">new</tspan> Action&lt;IDatabaseModel?&gt;(list =&gt; {
+</text><text x="60.00px" y="299.20px" xml:space="preserve">                    <tspan fill="#928374" font-style="italic">//ShowGCFR(typeof(FormCreate), typeof(Clean));</tspan>
+</text><text x="60.00px" y="313.60px" xml:space="preserve">                    ShowGCF&lt;FormCreate, Employee&gt;();
+</text><text x="60.00px" y="328.00px" xml:space="preserve">                    <tspan fill="#fabd2f">var</tspan> form = Master!.CurrentlyDisplayedForm <tspan fill="#fe8019">as</tspan> FormCreate;
+</text><text x="60.00px" y="342.40px" xml:space="preserve">                    <tspan fill="#928374" font-style="italic">//var form_meth = form!.GetType().</tspan>
+</text><text x="60.00px" y="356.80px" xml:space="preserve">                    <tspan fill="#928374" font-style="italic">//    GetMethod(nameof(form.Populate))!.</tspan>
+</text><text x="60.00px" y="371.20px" xml:space="preserve">                    <tspan fill="#928374" font-style="italic">//    MakeGenericMethod(typeof(Clean)!);</tspan>
+</text><text x="60.00px" y="385.60px" xml:space="preserve">            }), <tspan fill="#fe8019">false</tspan>) },
+</text><text x="60.00px" y="400.00px" xml:space="preserve">            { <tspan fill="#b8bb26">&quot;Edit&quot;</tspan>, (m =&gt; {
+</text><text x="60.00px" y="414.40px" xml:space="preserve">                    <tspan fill="#928374" font-style="italic">//ShowGCFR(typeof(FormCreate), typeof(Clean));</tspan>
+</text><text x="60.00px" y="428.80px" xml:space="preserve">                <tspan fill="#928374" font-style="italic">//    var form = Master!.CurrentlyDisplayedForm as FormCreate;</tspan>
+</text><text x="60.00px" y="443.20px" xml:space="preserve">                <tspan fill="#928374" font-style="italic">//    var form_meth = form!.GetType().</tspan>
+</text><text x="60.00px" y="457.60px" xml:space="preserve">                <tspan fill="#928374" font-style="italic">//    GetMethod(nameof(form.Populate))!.</tspan>
+</text><text x="60.00px" y="472.00px" xml:space="preserve">                <tspan fill="#928374" font-style="italic">//    MakeGenericMethod(typeof(Clean)!);</tspan>
+</text><text x="60.00px" y="486.40px" xml:space="preserve">                <tspan fill="#928374" font-style="italic">//form_meth.Invoke(form, [m]);</tspan>
+</text><text x="60.00px" y="500.80px" xml:space="preserve">            }, <tspan fill="#fe8019">true</tspan>) },
+</text><text x="60.00px" y="515.20px" xml:space="preserve">            { <tspan fill="#b8bb26">&quot;Assign To Job&quot;</tspan>, (m =&gt; {
+</text><text x="60.00px" y="529.60px" xml:space="preserve">                ShowGCF&lt;FormSelectViewModel, Employee&gt;();
+</text><text x="60.00px" y="544.00px" xml:space="preserve">                <tspan fill="#928374" font-style="italic">//ShowGCF&lt;FormViewModel, Clean&gt;();</tspan>
+</text><text x="60.00px" y="558.40px" xml:space="preserve">            }, <tspan fill="#fe8019">true</tspan>) },
+</text><text x="60.00px" y="572.80px" xml:space="preserve">            { <tspan fill="#b8bb26">&quot;Delete&quot;</tspan>, (m =&gt; {
+</text><text x="60.00px" y="587.20px" xml:space="preserve">                    DAL.Delete((Clean)m!);
+</text><text x="60.00px" y="601.60px" xml:space="preserve">                <tspan fill="#928374" font-style="italic">//ShowGCF&lt;FormViewModel, Clean&gt;();</tspan>
+</text><text x="60.00px" y="616.00px" xml:space="preserve">            }, <tspan fill="#fe8019">true</tspan>) }
+</text><text x="60.00px" y="630.40px" xml:space="preserve">        };
+</text><text x="60.00px" y="644.80px" xml:space="preserve">    }
+</text><text x="60.00px" y="659.20px" xml:space="preserve">    <tspan fill="#fe8019">public</tspan> Dictionary&lt;<tspan fill="#fabd2f">string</tspan>, (Action&lt;(List&lt;(<tspan fill="#fabd2f">string</tspan>, Func&lt;<tspan fill="#fabd2f">string</tspan>&gt;)&gt;, IDatabaseModel?)&gt;, <tspan fill="#fabd2f">bool</tspan>)&gt; CreateButtons() {
+</text><text x="60.00px" y="673.60px" xml:space="preserve">        <tspan fill="#fe8019">return</tspan> <tspan fill="#fe8019">new</tspan>() {
+</text><text x="60.00px" y="688.00px" xml:space="preserve">            { <tspan fill="#b8bb26">&quot;Create&quot;</tspan>, (list =&gt; {
+</text><text x="60.00px" y="702.40px" xml:space="preserve">                     <tspan fill="#928374" font-style="italic">//ShowGCFR(typeof(FormCreate), typeof(Employee));</tspan>
+</text><text x="60.00px" y="716.80px" xml:space="preserve">                    <tspan fill="#fabd2f">var</tspan> employee = <tspan fill="#fe8019">new</tspan> Employee();
+</text><text x="60.00px" y="731.20px" xml:space="preserve">                    <tspan fill="#fabd2f">var</tspan> employees = DAL.Query&lt;Employee&gt;();
+</text><text x="60.00px" y="745.60px" xml:space="preserve">
+</text><text x="60.00px" y="760.00px" xml:space="preserve">                    <tspan fill="#fe8019">if</tspan>(!employees.Any()) {
+</text><text x="60.00px" y="774.40px" xml:space="preserve">                        employee.Id = <tspan fill="#d3869b">0</tspan>;
+</text><text x="60.00px" y="788.80px" xml:space="preserve">                    }
+</text><text x="60.00px" y="803.20px" xml:space="preserve">
+</text><text x="60.00px" y="817.60px" xml:space="preserve">                    <tspan fill="#fe8019">else</tspan> employee.Id = employees.Select(x =&gt; x.Id).Max() + <tspan fill="#d3869b">1</tspan>;
+</text><text x="60.00px" y="832.00px" xml:space="preserve">
+</text><text x="60.00px" y="846.40px" xml:space="preserve">                    <tspan fill="#fe8019">foreach</tspan>(<tspan fill="#fabd2f">var</tspan> (prop_name, prop_val) <tspan fill="#fe8019">in</tspan> list.Item1) {
+</text><text x="60.00px" y="860.80px" xml:space="preserve">                        <tspan fill="#fabd2f">var</tspan> prop = <tspan fill="#fe8019">typeof</tspan>(Employee).GetProperty(prop_name);
+</text><text x="60.00px" y="875.20px" xml:space="preserve">                        <tspan fill="#fe8019">if</tspan>(prop <tspan fill="#fe8019">is</tspan> <tspan fill="#fe8019">null</tspan>) <tspan fill="#fe8019">continue</tspan>;
+</text><text x="60.00px" y="889.60px" xml:space="preserve">
+</text><text x="60.00px" y="904.00px" xml:space="preserve">                        <tspan fill="#fe8019">if</tspan>(prop.PropertyType == <tspan fill="#fe8019">typeof</tspan>(<tspan fill="#fabd2f">string</tspan>))
+</text><text x="60.00px" y="918.40px" xml:space="preserve">                            prop.SetValue(employee, prop_val(), []);
+</text><text x="60.00px" y="932.80px" xml:space="preserve">                        <tspan fill="#fe8019">else</tspan> <tspan fill="#fe8019">if</tspan>(prop.PropertyType == <tspan fill="#fe8019">typeof</tspan>(<tspan fill="#fabd2f">bool</tspan>))
+</text><text x="60.00px" y="947.20px" xml:space="preserve">                            prop.SetValue(employee, Convert.ToBoolean(prop_val()),[]);
+</text><text x="60.00px" y="961.60px" xml:space="preserve">                        <tspan fill="#fe8019">else</tspan> <tspan fill="#fe8019">if</tspan>(prop.PropertyType == <tspan fill="#fe8019">typeof</tspan>(<tspan fill="#fabd2f">int</tspan>))
+</text><text x="60.00px" y="976.00px" xml:space="preserve">                            prop.SetValue(employee, Convert.ToInt32(prop_val()),[]);
+</text><text x="60.00px" y="990.40px" xml:space="preserve">                        <tspan fill="#fe8019">else</tspan> <tspan fill="#fe8019">if</tspan>(prop.PropertyType == <tspan fill="#fe8019">typeof</tspan>(<tspan fill="#fabd2f">double</tspan>))
+</text><text x="60.00px" y="1004.80px" xml:space="preserve">                            prop.SetValue(employee, Convert.ToDouble(prop_val()),[]);
+</text><text x="60.00px" y="1019.20px" xml:space="preserve">                    }
+</text><text x="60.00px" y="1033.60px" xml:space="preserve">
+</text><text x="60.00px" y="1048.00px" xml:space="preserve">                    employee.Create();
+</text><text x="60.00px" y="1062.40px" xml:space="preserve">
+</text><text x="60.00px" y="1076.80px" xml:space="preserve">                    <tspan fill="#928374" font-style="italic">//ShowGCFR(typeof(FormViewModel), typeof(Employee));</tspan>
+</text><text x="60.00px" y="1091.20px" xml:space="preserve">            }, <tspan fill="#fe8019">true</tspan>) },
+</text><text x="60.00px" y="1105.60px" xml:space="preserve">        };
+</text><text x="60.00px" y="1120.00px" xml:space="preserve">    }
+</text><text x="60.00px" y="1134.40px" xml:space="preserve">
+</text><text x="60.00px" y="1148.80px" xml:space="preserve">    <tspan fill="#fe8019">public</tspan> IDatabaseModel? CreateFromList(List&lt;(<tspan fill="#fabd2f">string</tspan>, Func&lt;<tspan fill="#fabd2f">string</tspan>&gt;)&gt; list, IDatabaseModel? model) {
+</text><text x="60.00px" y="1163.20px" xml:space="preserve">        <tspan fill="#fe8019">return</tspan> <tspan fill="#fe8019">default</tspan>;
+</text><text x="60.00px" y="1177.60px" xml:space="preserve">    }
+</text><text x="60.00px" y="1192.00px" xml:space="preserve">}
+</text>
+</g>
+</svg>

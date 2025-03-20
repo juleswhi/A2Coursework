@@ -1,6 +1,7 @@
 namespace movers_admin;
 
 using MaterialSkin;
+using System.Diagnostics;
 using View;
 using static Forms.FormManager;
 
@@ -13,11 +14,11 @@ internal static class Program {
         // Set colourscheme
         MaterialSkinManager.Instance.ColorScheme = new ColorScheme(Primary.Brown400, Primary.Brown200, Primary.Brown700, Accent.Teal400, TextShade.BLACK);
 
-        for (int i = 0; i < 50; i++) {
-            // Employee.GenerateFakeData().Create();
-        }
-
         // Start form using my own Form Management System rather than the default way
         Start<FormHome>();
     }
+}
+
+public class Example {
+    public int Id { get; set; }
 }
