@@ -25,16 +25,12 @@ public class Customer : IDatabaseModel {
     public Dictionary<string, (Action<(List<(string, Func<string>)>, IDatabaseModel?)>, bool)> CreateButtons() {
         return new() {
             { "Create", (new Action<(List<(string, Func<string>)>, IDatabaseModel?)>(list => {
-                    //ShowGCFR(typeof(FormCreate), typeof(Clean));
+                    var customer = (Customer)CreateFromList(list.Item1, list.Item2)!;
 
-                    var customer = (Customer)CreateFromList(list.Item1, list.Item2);
+                    customer.Delete();
+                    customer.Create();
 
-                    customer?.Delete();
-                    customer?.Create();
-
-                    // TODO: Maybe go to deliveries page?
                     ShowGCFR(typeof(FormViewModel), typeof(Customer));
-
             }), true) },
         };
     }
