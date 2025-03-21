@@ -1,6 +1,6 @@
-﻿using static Model.Helpers.PdfTools;
+﻿using Reports;
 using View;
-using Model.Helpers;
+using static Reports.PdfTools;
 
 namespace Forms;
 
@@ -13,7 +13,7 @@ public static class FormHelper {
         control.Location = new Point(control.Location.X, (int)((control.Parent!.Height / 2) - 0.5 * control.Height) - y);
     }
 
-    public static void PassPdfToViewer(ReportModel model) {
+    public static void PassPdfToViewer(IReportModel model) {
         ((Master as FormSkeleton)!.CurrentForm as FormReportViewer)?.PassPdf(LoadGeneratePdf(model));
     }
 

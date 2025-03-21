@@ -1,4 +1,5 @@
-﻿using static Forms.FormHelper;
+﻿using Reports;
+
 namespace View;
 
 public partial class FormReports : Form {
@@ -8,9 +9,7 @@ public partial class FormReports : Form {
 
         btnReportOne.Click += (s, e) => {
             ShowForm<FormReportViewer>();
-            PassPdfToViewer(new() {
-                 Data = $"Hello"
-            });
+            PassPdfToViewer(new ReportJobsModel());
         };
     }
 }
