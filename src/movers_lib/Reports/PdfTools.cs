@@ -6,8 +6,8 @@ public static class PdfTools {
     public static MemoryStream LoadPdf(byte[] pdf) =>
         new MemoryStream(pdf);
 
-    public static byte[] GeneratePdf(IReportModel model)
-        => new ReportDocument(model).GeneratePdf();
+    public static byte[] GeneratePdf(QuestPDF.Infrastructure.IDocument model)
+        => model.GeneratePdf();
 
-    public static MemoryStream LoadGeneratePdf(IReportModel model) => LoadPdf(GeneratePdf(model));
+    public static MemoryStream LoadGeneratePdf(QuestPDF.Infrastructure.IDocument model) => LoadPdf(GeneratePdf(model));
 }

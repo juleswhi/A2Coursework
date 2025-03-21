@@ -13,7 +13,7 @@ public static class FormHelper {
         control.Location = new Point(control.Location.X, (int)((control.Parent!.Height / 2) - 0.5 * control.Height) - y);
     }
 
-    public static void PassPdfToViewer(IReportModel model) {
+    public static void PassPdfToViewer(QuestPDF.Infrastructure.IDocument model) {
         ((Master as FormSkeleton)!.CurrentForm as FormReportViewer)?.PassPdf(LoadGeneratePdf(model));
     }
 

@@ -34,6 +34,7 @@ partial class FormReports
         labelReportOneTitle = new MaterialSkin.Controls.MaterialLabel();
         labelReportOneDescription = new MaterialSkin.Controls.MaterialLabel();
         btnReportOne = new MaterialSkin.Controls.MaterialFloatingActionButton();
+        imageList1 = new ImageList(components);
         btnReportTwo = new MaterialSkin.Controls.MaterialFloatingActionButton();
         materialCard2 = new MaterialSkin.Controls.MaterialCard();
         materialProgressBar1 = new MaterialSkin.Controls.MaterialProgressBar();
@@ -59,7 +60,6 @@ partial class FormReports
         materialProgressBar5 = new MaterialSkin.Controls.MaterialProgressBar();
         labelReportFiveTitle = new MaterialSkin.Controls.MaterialLabel();
         labelReportFiveDescription = new MaterialSkin.Controls.MaterialLabel();
-        imageList1 = new ImageList(components);
         materialCard1.SuspendLayout();
         materialCard2.SuspendLayout();
         materialCard3.SuspendLayout();
@@ -102,9 +102,9 @@ partial class FormReports
         labelReportOneTitle.Location = new Point(17, 14);
         labelReportOneTitle.MouseState = MaterialSkin.MouseState.HOVER;
         labelReportOneTitle.Name = "labelReportOneTitle";
-        labelReportOneTitle.Size = new Size(87, 41);
+        labelReportOneTitle.Size = new Size(76, 41);
         labelReportOneTitle.TabIndex = 1;
-        labelReportOneTitle.Text = "TITLE";
+        labelReportOneTitle.Text = "Jobs";
         // 
         // labelReportOneDescription
         // 
@@ -114,9 +114,9 @@ partial class FormReports
         labelReportOneDescription.Location = new Point(17, 61);
         labelReportOneDescription.MouseState = MaterialSkin.MouseState.HOVER;
         labelReportOneDescription.Name = "labelReportOneDescription";
-        labelReportOneDescription.Size = new Size(81, 19);
+        labelReportOneDescription.Size = new Size(111, 19);
         labelReportOneDescription.TabIndex = 0;
-        labelReportOneDescription.Text = "Description";
+        labelReportOneDescription.Text = "Currently Active";
         // 
         // btnReportOne
         // 
@@ -131,6 +131,13 @@ partial class FormReports
         btnReportOne.TabIndex = 13;
         btnReportOne.Text = "materialFloatingActionButton1";
         btnReportOne.UseVisualStyleBackColor = false;
+        // 
+        // imageList1
+        // 
+        imageList1.ColorDepth = ColorDepth.Depth32Bit;
+        imageList1.ImageStream = (ImageListStreamer)resources.GetObject("imageList1.ImageStream");
+        imageList1.TransparentColor = Color.Transparent;
+        imageList1.Images.SetKeyName(0, "eye.png");
         // 
         // btnReportTwo
         // 
@@ -179,9 +186,9 @@ partial class FormReports
         labelReportTwoTitle.Location = new Point(17, 14);
         labelReportTwoTitle.MouseState = MaterialSkin.MouseState.HOVER;
         labelReportTwoTitle.Name = "labelReportTwoTitle";
-        labelReportTwoTitle.Size = new Size(87, 41);
+        labelReportTwoTitle.Size = new Size(147, 41);
         labelReportTwoTitle.TabIndex = 1;
-        labelReportTwoTitle.Text = "TITLE";
+        labelReportTwoTitle.Text = "Deliveries";
         // 
         // labelReportTwoDescription
         // 
@@ -191,9 +198,9 @@ partial class FormReports
         labelReportTwoDescription.Location = new Point(17, 61);
         labelReportTwoDescription.MouseState = MaterialSkin.MouseState.HOVER;
         labelReportTwoDescription.Name = "labelReportTwoDescription";
-        labelReportTwoDescription.Size = new Size(81, 19);
+        labelReportTwoDescription.Size = new Size(68, 19);
         labelReportTwoDescription.TabIndex = 0;
-        labelReportTwoDescription.Text = "Description";
+        labelReportTwoDescription.Text = "In Transit";
         // 
         // btnReportFour
         // 
@@ -242,9 +249,9 @@ partial class FormReports
         labelReportFourTitle.Location = new Point(17, 14);
         labelReportFourTitle.MouseState = MaterialSkin.MouseState.HOVER;
         labelReportFourTitle.Name = "labelReportFourTitle";
-        labelReportFourTitle.Size = new Size(87, 41);
+        labelReportFourTitle.Size = new Size(86, 41);
         labelReportFourTitle.TabIndex = 1;
-        labelReportFourTitle.Text = "TITLE";
+        labelReportFourTitle.Text = "Stock";
         // 
         // labelReportFourDescription
         // 
@@ -254,9 +261,9 @@ partial class FormReports
         labelReportFourDescription.Location = new Point(17, 61);
         labelReportFourDescription.MouseState = MaterialSkin.MouseState.HOVER;
         labelReportFourDescription.Name = "labelReportFourDescription";
-        labelReportFourDescription.Size = new Size(81, 19);
+        labelReportFourDescription.Size = new Size(133, 19);
         labelReportFourDescription.TabIndex = 0;
-        labelReportFourDescription.Text = "Description";
+        labelReportFourDescription.Text = "Currently Available";
         // 
         // btnReportThree
         // 
@@ -305,9 +312,9 @@ partial class FormReports
         labelReportThreeTitle.Location = new Point(19, 14);
         labelReportThreeTitle.MouseState = MaterialSkin.MouseState.HOVER;
         labelReportThreeTitle.Name = "labelReportThreeTitle";
-        labelReportThreeTitle.Size = new Size(87, 41);
+        labelReportThreeTitle.Size = new Size(76, 41);
         labelReportThreeTitle.TabIndex = 1;
-        labelReportThreeTitle.Text = "TITLE";
+        labelReportThreeTitle.Text = "Jobs";
         // 
         // labelReportThreeDescription
         // 
@@ -317,9 +324,9 @@ partial class FormReports
         labelReportThreeDescription.Location = new Point(17, 62);
         labelReportThreeDescription.MouseState = MaterialSkin.MouseState.HOVER;
         labelReportThreeDescription.Name = "labelReportThreeDescription";
-        labelReportThreeDescription.Size = new Size(81, 19);
+        labelReportThreeDescription.Size = new Size(117, 19);
         labelReportThreeDescription.TabIndex = 0;
-        labelReportThreeDescription.Text = "Description";
+        labelReportThreeDescription.Text = "Ordered By Price";
         // 
         // btnReportSix
         // 
@@ -368,9 +375,9 @@ partial class FormReports
         labelReportSixTitle.Location = new Point(13, 14);
         labelReportSixTitle.MouseState = MaterialSkin.MouseState.HOVER;
         labelReportSixTitle.Name = "labelReportSixTitle";
-        labelReportSixTitle.Size = new Size(87, 41);
+        labelReportSixTitle.Size = new Size(76, 41);
         labelReportSixTitle.TabIndex = 1;
-        labelReportSixTitle.Text = "TITLE";
+        labelReportSixTitle.Text = "Jobs";
         // 
         // labelReportSixDescription
         // 
@@ -380,9 +387,9 @@ partial class FormReports
         labelReportSixDescription.Location = new Point(17, 61);
         labelReportSixDescription.MouseState = MaterialSkin.MouseState.HOVER;
         labelReportSixDescription.Name = "labelReportSixDescription";
-        labelReportSixDescription.Size = new Size(81, 19);
+        labelReportSixDescription.Size = new Size(77, 19);
         labelReportSixDescription.TabIndex = 0;
-        labelReportSixDescription.Text = "Description";
+        labelReportSixDescription.Text = "Full Report";
         // 
         // btnReportFive
         // 
@@ -431,9 +438,9 @@ partial class FormReports
         labelReportFiveTitle.Location = new Point(17, 14);
         labelReportFiveTitle.MouseState = MaterialSkin.MouseState.HOVER;
         labelReportFiveTitle.Name = "labelReportFiveTitle";
-        labelReportFiveTitle.Size = new Size(87, 41);
+        labelReportFiveTitle.Size = new Size(86, 41);
         labelReportFiveTitle.TabIndex = 1;
-        labelReportFiveTitle.Text = "TITLE";
+        labelReportFiveTitle.Text = "Stock";
         // 
         // labelReportFiveDescription
         // 
@@ -443,16 +450,9 @@ partial class FormReports
         labelReportFiveDescription.Location = new Point(17, 61);
         labelReportFiveDescription.MouseState = MaterialSkin.MouseState.HOVER;
         labelReportFiveDescription.Name = "labelReportFiveDescription";
-        labelReportFiveDescription.Size = new Size(81, 19);
+        labelReportFiveDescription.Size = new Size(142, 19);
         labelReportFiveDescription.TabIndex = 0;
-        labelReportFiveDescription.Text = "Description";
-        // 
-        // imageList1
-        // 
-        imageList1.ColorDepth = ColorDepth.Depth32Bit;
-        imageList1.ImageStream = (ImageListStreamer)resources.GetObject("imageList1.ImageStream");
-        imageList1.TransparentColor = Color.Transparent;
-        imageList1.Images.SetKeyName(0, "eye.png");
+        labelReportFiveDescription.Text = "Ordered By Quantity";
         // 
         // FormReports
         // 

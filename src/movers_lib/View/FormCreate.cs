@@ -263,7 +263,14 @@ public partial class FormCreate : Form, GenericCreateableForm {
             var matching_property_value = PropertyValues.FirstOrDefault(property_value => property_value.Name == obj_prop.Name);
             if (matching_property_value is null) continue;
 
+            if(Attribute.GetCustomAttributes(obj_prop).Count() != 0)
+                LOG($"{Attribute.GetCustomAttributes(obj_prop).Select(x => x.ToString()).Aggregate((x,y) => $"{x}, {y}")} ->> {obj.ToString()}, {obj_prop.ToString()}, {obj_prop.Name}");
+
+
             if (Attribute.GetCustomAttribute(obj_prop, typeof(DateAttribute)) != null) {
+                if((obj_prop.GetValue(obj, null) as string) == "") {
+                    continue;
+                }
                 (matching_property_value.Control as DateTimePicker)!.Value = Convert.ToDateTime(obj_prop.GetValue(obj, null));
             } else if (Attribute.GetCustomAttribute(obj_prop, typeof(ToggleAttribute)) != null) {
                 (matching_property_value.Control as MaterialCheckbox)!.Checked = Convert.ToBoolean(obj_prop.GetValue(obj, null));

@@ -6,6 +6,11 @@ global using static Forms.FormHelper;
 global using static Forms.FormManager;
 global using static Logging.Logger;
 global using static Model.Validation.ValidationType;
+global using static A;
+
+public enum A {
+    @var
+}
 
 // Todo:
 // Validation

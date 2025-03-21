@@ -5,25 +5,53 @@ using QuestPDF.Infrastructure;
 
 namespace Reports;
 
-public class ReportJobsModel : IReportModel {
-    public List<Clean> Cleans { get; set; } = DAL.Query<Clean>();
+public class ReportJobsModel : QuestPDF.Infrastructure.IDocument {
+    public List<Clean> Cleans { get; set; } = DAL.Query<Clean>().Where(x => Convert.ToDateTime(x.StartDate) < DateTime.Now && Convert.ToDateTime(x.EndDate) > DateTime.Now).ToList();
 
     public string Title() => "Cleaning Jobs";
 
+    private void ComposeDescription(IContainer container) {
+       container.Background(Colors.Grey.Lighten3).Padding(10).Column(column =>
+        {
+            column.Spacing(5);
+            column.Item().Text("Description").FontSize(14);
+            column.Item().Text("All current cleaning jobs");
+        }); 
+    }
+
+    public void Compose(IDocumentContainer container) {
+        container.
+            Page(page => {
+                page.Margin(50);
+
+                page.Header().Element(ComposeHeader);
+
+                page.Content().Column(c => {
+                    c.Item().Padding(10).Element(ComposeDescription);
+                    c.Item().Element(ComposeBody);
+                });
+
+                page.Footer().AlignCenter().Text(x => {
+                    x.CurrentPageNumber();
+                    x.Span(" / ");
+                    x.TotalPages();
+                });
+            });
+    }
+
+    private void ComposeHeader(IContainer container) {
+        container.Row(row => {
+            row.RelativeItem().Column(column => {
+                column.Item()
+                    .Text(Title()).FontSize(20).SemiBold().FontColor(Colors.Blue.Medium);
+            });
+
+            row.ConstantItem(100).Height(50).Placeholder();
+        });
+    }
     public void ComposeBody(IContainer container) {
-        container
-           .PaddingVertical(40)
-           .Height(250)
-           .Background(Colors.Grey.Lighten3)
-           .AlignCenter()
-           .AlignMiddle()
-           .Text("Content").FontSize(16);
-
-
         container.Table(table => {
             table.ColumnsDefinition(columns => {
-                columns.ConstantColumn(25);
-                columns.RelativeColumn(3);
                 columns.RelativeColumn();
                 columns.RelativeColumn();
                 columns.RelativeColumn();
@@ -31,7 +59,6 @@ public class ReportJobsModel : IReportModel {
             });
 
             table.Header(header => {
-                header.Cell().Element(CellStyle).Text("Id");
                 header.Cell().Element(CellStyle).Text("Customer Name");
                 header.Cell().Element(CellStyle).AlignRight().Text("StartDate");
                 header.Cell().Element(CellStyle).AlignRight().Text("EndDate");
@@ -43,8 +70,9 @@ public class ReportJobsModel : IReportModel {
             });
 
             foreach (var item in Cleans) {
-                table.Cell().Element(CellStyle).Text(item.Id.ToString());
-                table.Cell().Element(CellStyle).Text(DAL.Query<Customer>().First(x => x.Id == item.CustomerId).Surname);
+                var cust = DAL.Query<Customer>().First(x => x.Id == item.CustomerId);
+                //table.Cell().Element(CellStyle).Text(item.Id.ToString());
+                table.Cell().Element(CellStyle).Text($"{cust.Forename[0]}. {cust.Surname}");
                 table.Cell().Element(CellStyle).AlignRight().Text(item.StartDate.ToString());
                 table.Cell().Element(CellStyle).AlignRight().Text(item.EndDate.ToString());
                 table.Cell().Element(CellStyle).AlignRight().Text(item.Price.ToString());

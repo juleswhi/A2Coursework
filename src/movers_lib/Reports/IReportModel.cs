@@ -2,7 +2,7 @@
 
 namespace Reports;
 
-public interface IReportModel {
+public interface IDocument {
     public string Title();
     public void ComposeBody(IContainer container);
 }
