@@ -202,7 +202,6 @@ partial class FormSkeleton
         btnStaff.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Text;
         btnStaff.UseAccentColor = false;
         btnStaff.UseVisualStyleBackColor = true;
-        btnStaff.Click += btnStaff_Click;
         // 
         // btnDeliveries
         // 

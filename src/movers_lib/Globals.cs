@@ -5,8 +5,8 @@ global using static Database.DAL;
 global using static Forms.FormHelper;
 global using static Forms.FormManager;
 global using static Logging.Logger;
-global using static Model.Validation.ValidationType;
-global using static A;
+global using static Model.Validation.IntValidationType;
+global using static Model.Validation.StringValidationType;
 
 public enum A {
     @var

@@ -1,4 +1,5 @@
 ﻿namespace Model;
+
 public static class ModelHelper {
     public static readonly Type[] ModelTypes = [
         typeof(Clean), typeof(CleaningEquipment), typeof(CleanJob),

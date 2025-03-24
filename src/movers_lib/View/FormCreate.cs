@@ -14,6 +14,10 @@ public partial class FormCreate : Form, GenericCreateableForm {
     private List<MaterialTextBox> _textBoxes => panel1.Controls.OfType<MaterialTextBox>().ToList();
     private IDatabaseModel? _edited_object;
 
+    private List<bool> Validations = [];
+    private int ValidationsCount = 0;
+    private Action OnValidationChange = () => { };
+
     private static Dictionary<Type, PropertyInfo[]> _propCache = new();
 
     public FormCreate() {
@@ -23,17 +27,21 @@ public partial class FormCreate : Form, GenericCreateableForm {
     private List<Type> _skips = [typeof(PrimaryKey), typeof(InitialValueInt), typeof(InitialValueString), typeof(InitialValueDate)];
 
     public class PropValue {
-        public PropValue(string name, Func<string> value, Control control, Type? type, Action<int>? AssignForeignKey) {
+        public PropValue(string name, Func<string> value, Control control, Type? type, Action<int>? AssignForeignKey, bool validated, Action onchange) {
             Name = name;
             Value = value;
             Control = control;
             Type = type;
+            Validated = validated;
+            OnChange = onchange;
         }
 
         public string Name { get; set; }
         public Func<string> Value { get; set; }
         public Control Control { get; set; }
         public Type? Type { get; set; }
+        public bool Validated { get; set; }
+        public Action OnChange { get; set; }
         Action<int>? AssignForeignKey { get; set; }
     }
 
@@ -51,8 +59,6 @@ public partial class FormCreate : Form, GenericCreateableForm {
         }
 
         var valid_props = props.Where(x => !x.CustomAttributes.Any(x => _skips.Contains(x.AttributeType))).Select(x => (x, false)).ToList();
-
-
 
         foreach (var prop in valid_props) {
             var label = new MaterialLabel() { Text = prop.Item1.Name };
@@ -80,7 +86,7 @@ public partial class FormCreate : Form, GenericCreateableForm {
             }
 
             panel1.Controls.Add(txtBox);
-            PropertyValues.Add(new(label.Text, () => txtBox.Text, txtBox, t, null));
+            PropertyValues.Add(new(label.Text, () => txtBox.Text, txtBox, t, null, false, () => { }));
         }
 
         var textBoxes = panel1.Controls.OfType<MaterialTextBox>().ToList();
@@ -146,6 +152,10 @@ public partial class FormCreate : Form, GenericCreateableForm {
             var b = new MaterialButton() { Text = btn.Key, UseAccentColor = true };
 
             b.Click += (s, e) => btn.Value.Item1.Invoke((PropertyValues.Select(x => (x.Name, x.Value)).ToList(), _edited_object));
+
+            OnValidationChange += () => {
+                b.Enabled = Validations.All(x => x);
+            };
 
             Controls.Add(b);
         }
@@ -253,6 +263,40 @@ public partial class FormCreate : Form, GenericCreateableForm {
             textbox_property_kvp.Control = checkbox;
             PropertyValues[PropertyValues.IndexOf(PropertyValues.First(x => x.Name == textbox_property_kvp.Name))] = textbox_property_kvp;
         }
+
+        Validations = Enumerable.Range(0, PropertyValues.Count).Select(x => false).ToList();
+
+        LOG($"Validations count: {Validations.Count}, PropertyValues.Count: {PropertyValues.Count}");
+
+        for (int i = 0; i < PropertyValues.Count; i++) {
+            var propval = PropertyValues[i];
+            Control control = propval.Control;
+            if (control is MaterialTextBox textBox) {
+                textBox.TextChanged += (s, e) => {
+                    propval.Validated = propval.Name switch {
+                        "Forename" => (propval.Control as TextBox)!.Text.Validate(NAME),
+                        _ => false,
+                    };
+                    if (propval.Validated)
+                        textBox.UseAccent = true;
+                    else
+                        textBox.UseAccent = false;
+
+                    LOG($"{textBox.Name} Validated: {propval.Validated}");
+
+                    OnValidationChange.Invoke();
+                };
+            }
+        }
+    }
+
+    private bool ValidateTextBox(int index) {
+        var propval = PropertyValues[index];
+
+        return propval.Name switch {
+            "Forename" => (propval.Control as TextBox)!.Text.Validate(NAME),
+            _ => false,
+        };
     }
 
     // TODO: Deleting doesnt work right
@@ -263,12 +307,12 @@ public partial class FormCreate : Form, GenericCreateableForm {
             var matching_property_value = PropertyValues.FirstOrDefault(property_value => property_value.Name == obj_prop.Name);
             if (matching_property_value is null) continue;
 
-            if(Attribute.GetCustomAttributes(obj_prop).Count() != 0)
-                LOG($"{Attribute.GetCustomAttributes(obj_prop).Select(x => x.ToString()).Aggregate((x,y) => $"{x}, {y}")} ->> {obj.ToString()}, {obj_prop.ToString()}, {obj_prop.Name}");
+            if (Attribute.GetCustomAttributes(obj_prop).Count() != 0)
+                LOG($"{Attribute.GetCustomAttributes(obj_prop).Select(x => x.ToString()).Aggregate((x, y) => $"{x}, {y}")} ->> {obj.ToString()}, {obj_prop.ToString()}, {obj_prop.Name}");
 
 
             if (Attribute.GetCustomAttribute(obj_prop, typeof(DateAttribute)) != null) {
-                if((obj_prop.GetValue(obj, null) as string) == "") {
+                if ((obj_prop.GetValue(obj, null) as string) == "") {
                     continue;
                 }
                 (matching_property_value.Control as DateTimePicker)!.Value = Convert.ToDateTime(obj_prop.GetValue(obj, null));

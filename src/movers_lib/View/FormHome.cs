@@ -30,5 +30,7 @@ public partial class FormHome : Form {
             Where(x => x.Status != "Delivered" || x.Status != "Lost").
             Count().
             ToString();
+
+        labelWorkingEmployees.Text = DAL.Query<Employee>().Count().ToString();
     }
 }

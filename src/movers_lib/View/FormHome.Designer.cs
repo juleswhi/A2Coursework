@@ -39,7 +39,7 @@ partial class FormHome
         btnWorkingEmployees = new MaterialSkin.Controls.MaterialFloatingActionButton();
         materialCard2 = new MaterialSkin.Controls.MaterialCard();
         materialProgressBar2 = new MaterialSkin.Controls.MaterialProgressBar();
-        materialLabel1 = new MaterialSkin.Controls.MaterialLabel();
+        labelWorkingEmployees = new MaterialSkin.Controls.MaterialLabel();
         labelEmployees = new MaterialSkin.Controls.MaterialLabel();
         cartesianChart1 = new LiveCharts.WinForms.CartesianChart();
         materialCard3 = new MaterialSkin.Controls.MaterialCard();
@@ -165,7 +165,7 @@ partial class FormHome
         // 
         materialCard2.BackColor = Color.FromArgb(255, 255, 255);
         materialCard2.Controls.Add(materialProgressBar2);
-        materialCard2.Controls.Add(materialLabel1);
+        materialCard2.Controls.Add(labelWorkingEmployees);
         materialCard2.Controls.Add(labelEmployees);
         materialCard2.Depth = 0;
         materialCard2.ForeColor = Color.FromArgb(222, 0, 0, 0);
@@ -186,18 +186,18 @@ partial class FormHome
         materialProgressBar2.Size = new Size(190, 5);
         materialProgressBar2.TabIndex = 3;
         // 
-        // materialLabel1
+        // labelWorkingEmployees
         // 
-        materialLabel1.AutoSize = true;
-        materialLabel1.Depth = 0;
-        materialLabel1.Font = new Font("Roboto", 34F, FontStyle.Bold, GraphicsUnit.Pixel);
-        materialLabel1.FontType = MaterialSkin.MaterialSkinManager.fontType.H4;
-        materialLabel1.Location = new Point(17, 42);
-        materialLabel1.MouseState = MaterialSkin.MouseState.HOVER;
-        materialLabel1.Name = "materialLabel1";
-        materialLabel1.Size = new Size(85, 41);
-        materialLabel1.TabIndex = 3;
-        materialLabel1.Text = "XXXX";
+        labelWorkingEmployees.AutoSize = true;
+        labelWorkingEmployees.Depth = 0;
+        labelWorkingEmployees.Font = new Font("Roboto", 34F, FontStyle.Bold, GraphicsUnit.Pixel);
+        labelWorkingEmployees.FontType = MaterialSkin.MaterialSkinManager.fontType.H4;
+        labelWorkingEmployees.Location = new Point(17, 42);
+        labelWorkingEmployees.MouseState = MaterialSkin.MouseState.HOVER;
+        labelWorkingEmployees.Name = "labelWorkingEmployees";
+        labelWorkingEmployees.Size = new Size(85, 41);
+        labelWorkingEmployees.TabIndex = 3;
+        labelWorkingEmployees.Text = "XXXX";
         // 
         // labelEmployees
         // 
@@ -318,7 +318,7 @@ partial class FormHome
     private MaterialSkin.Controls.MaterialLabel labelJobsCount;
     private MaterialSkin.Controls.MaterialLabel labelJobs;
     private MaterialSkin.Controls.MaterialProgressBar materialProgressBar2;
-    private MaterialSkin.Controls.MaterialLabel materialLabel1;
+    private MaterialSkin.Controls.MaterialLabel labelWorkingEmployees;
     private MaterialSkin.Controls.MaterialLabel labelEmployees;
     private LiveCharts.WinForms.CartesianChart cartesianChart1;
     private MaterialSkin.Controls.MaterialCard materialCard3;

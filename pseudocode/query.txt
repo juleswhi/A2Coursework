@@ -1,23 +1,18 @@
-function query 
-parameter T 
+Populate()  {
+	
+	object_props <- type of object
 
-	fields -> get all properties from names
-
-	connect to database
-
-	get propertynames fields from database
-
-	list -> new list
-
-	loop results
+	foreach object_prop in object_props
 		
-		assign results to new object of type T
+		matching_value = First PropertyValues Where Name = object_prop Name
 
-	end loop
+		if object_prop has Date Property
+			matching_value <- object_prop As DateTime
 
-	return list of objects
+		if object_prop has Toggle Property
+			matching_value <- object_prop As Boolean
 
-end function
+		if object_prop has ForeignKey Property
+			matching_value <- object_prop As String
 
-
-
+}
