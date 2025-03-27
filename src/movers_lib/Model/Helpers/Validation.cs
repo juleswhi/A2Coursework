@@ -1,6 +1,5 @@
 ﻿namespace Model;
 
-
 internal static class Validation {
 
     public enum StringValidationType {

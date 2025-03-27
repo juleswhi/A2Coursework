@@ -71,7 +71,6 @@ public class ReportJobsFullModel : QuestPDF.Infrastructure.IDocument {
                 header.Cell().Element(CellStyle).AlignRight().Text("Book Date");
                 header.Cell().Element(CellStyle).AlignRight().Text("Start Date");
                 header.Cell().Element(CellStyle).AlignRight().Text("End Date");
-                header.Cell().Element(CellStyle).AlignRight().Text("Hours Worked");
                 header.Cell().Element(CellStyle).AlignRight().Text("Price");
                 header.Cell().Element(CellStyle).AlignRight().Text("Paid");
 
@@ -87,7 +86,6 @@ public class ReportJobsFullModel : QuestPDF.Infrastructure.IDocument {
                 table.Cell().Element(CellStyle).AlignRight().Text(item.BookDate.ToString());
                 table.Cell().Element(CellStyle).AlignRight().Text(item.StartDate.ToString());
                 table.Cell().Element(CellStyle).AlignRight().Text(item.EndDate.ToString());
-                table.Cell().Element(CellStyle).AlignRight().Text(item.HoursWorked.ToString());
                 table.Cell().Element(CellStyle).AlignRight().Text(item.Price.ToString());
                 table.Cell().Element(CellStyle).AlignRight().Text(item.Paid ? "Y" : "N");
 

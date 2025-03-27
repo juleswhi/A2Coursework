@@ -47,7 +47,7 @@ public partial class FormViewModel : Form, GenericCreateableForm {
     }
 
     public void Create<T>() where T : IDatabaseModel {
-        var values = DAL.Query<T>([]);
+        var values = DAL.Query<T>();
         dataGridView.DataSource = values;
         string name = $"Create {typeof(T).Name}";
         var size = TextRenderer.MeasureText(name, MaterialButton.DefaultFont);

@@ -24,29 +24,23 @@ public static class DAL {
     /// <typeparam name="T"></typeparam>
     /// <param name="names"></param>
     /// <returns></returns>
-    public static List<T> Query<T>(params string[] names) where T : IDatabaseModel {
+    public static List<T> Query<T>() where T : IDatabaseModel {
         var type = typeof(T);
-
-        // If no column names are passed then grab all of them
-        if (names is null || names.Length == 0) {
-            names = type.GetProperties().Select(x => x.Name).ToArray();
-        }
-
-        string name = names.Aggregate((x, y) => $"{x}, {y}");
 
         using var conn = new SqlConnection($"{_connectionString}");
         conn.Open();
-        using var command = new SqlCommand($"select {name} from {type.Name} ;", conn);
+        using var command = new SqlCommand($"select * from {type.Name} ;", conn);
 
         // Grab results from query
         using var reader = command.ExecuteReader();
 
         List<T> results = [];
 
+        // This will loop through all rows in query
         while (reader.Read()) {
             // Create instance of the DatabaseModel
             T obj = Activator.CreateInstance<T>();
-            foreach (var property in type.GetProperties().Where(x => names.Contains(x.Name))) {
+            foreach (var property in type.GetProperties()) {
                 // Grab the column cooresponding to the name
                 var ord = reader.GetOrdinal(property.Name);
 
@@ -94,7 +88,6 @@ public static class DAL {
         return results;
     }
 
-    // public static List<T> Query<T>(Func<T, bool> func, params string[] names) where T : DatabaseModel => Query<T>(names).Where(func).ToList();
 
     /// <summary>
     /// Update SQL statement

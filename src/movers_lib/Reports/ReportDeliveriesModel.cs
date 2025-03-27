@@ -14,7 +14,6 @@ public class ReportDeliveriesModel : QuestPDF.Infrastructure.IDocument {
             Page(page => {
                 page.Margin(50);
 
-
                 page.Header().Element(ComposeHeader);
                 page.Content().Column(c => {
                     c.Item().Element(ComposeDescription);
@@ -44,8 +43,6 @@ public class ReportDeliveriesModel : QuestPDF.Infrastructure.IDocument {
                 column.Item()
                     .Text(Title()).FontSize(20).SemiBold().FontColor(Colors.Blue.Medium);
             });
-
-            row.ConstantItem(100).Height(50).Placeholder();
         });
     }
 

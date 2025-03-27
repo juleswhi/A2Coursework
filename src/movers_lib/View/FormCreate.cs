@@ -299,7 +299,11 @@ public partial class FormCreate : Form, GenericCreateableForm {
         };
     }
 
-    // TODO: Deleting doesnt work right
+    private void panel1_Paint(object sender, PaintEventArgs e) {
+
+    }
+
+    // TODO: remove plceholders image from stuff
     public void Populate<T>(T obj) where T : IDatabaseModel {
         var obj_props = obj!.GetType().GetProperties();
 

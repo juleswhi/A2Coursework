@@ -68,7 +68,6 @@ public static class FormManager {
             GetMethod(nameof(ShowGCF))!.
             MakeGenericMethod(T, V).
             Invoke(null, null);
-
     }
 
     /// <summary>

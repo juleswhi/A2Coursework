@@ -22,9 +22,6 @@ public class Clean : IDatabaseModel {
     [DateAttribute]
     public string EndDate { get; set; } = String.Empty;
 
-    [InitialValueInt(0)]
-    public int HoursWorked { get; set; }
-
     public double Price { get; set; }
 
     [ToggleAttribute]
@@ -37,7 +34,6 @@ public class Clean : IDatabaseModel {
             .RuleFor(o => o.BookDate, f => f.Date.Past().ToString())
             .RuleFor(o => o.StartDate, f => f.Date.Past().ToString())
             .RuleFor(o => o.EndDate, f => f.Date.Future().ToString())
-            .RuleFor(o => o.HoursWorked, f => f.Random.Number(0, 50))
             .RuleFor(o => o.Price, f => f.Random.Number(0, 10_000))
             .RuleFor(o => o.Paid, f => f.Random.Bool())
             .Generate();
@@ -47,9 +43,6 @@ public class Clean : IDatabaseModel {
             { "Create", (_ => {
                     ShowGCFR(typeof(FormCreate), typeof(Clean));
                     var form = Master!.CurrentlyDisplayedForm as FormCreate;
-                    //var form_meth = form!.GetType().
-                    //    GetMethod(nameof(form.Populate))!.
-                    //    MakeGenericMethod(typeof(Clean)!);
             }, false) },
             { "Edit", (m => {
                     ShowGCFR(typeof(FormCreate), typeof(Clean));
@@ -61,7 +54,7 @@ public class Clean : IDatabaseModel {
             }, true) },
             { "Delete", (m => {
                     DAL.Delete((Clean)m!);
-                ShowGCF<FormViewModel, Clean>();
+                    ShowGCF<FormViewModel, Clean>();
             }, true) }
         };
     }
@@ -69,13 +62,12 @@ public class Clean : IDatabaseModel {
     public Dictionary<string, (Action<(List<(string, Func<string>)>, IDatabaseModel?)>, bool)> CreateButtons() {
         return new() {
             { "Create", (new Action<(List<(string, Func<string>)>, IDatabaseModel?)>(list => {
-                    //ShowGCFR(typeof(FormCreate), typeof(Clean));
+                    var clean = (Clean)CreateFromList(list.Item1, list.Item2)!;
 
-                    var clean = (Clean)CreateFromList(list.Item1, list.Item2);
+                    clean?.Delete();
 
-                    clean.Delete();
+                    clean?.Create();
 
-                    clean.Create();
                     ShowGCFR(typeof(FormViewModel), typeof(Clean));
 
             }), true) },
@@ -107,18 +99,7 @@ public class Clean : IDatabaseModel {
         }
 
         clean.BookDate = DateTime.Now.ToString();
-        clean.HoursWorked = 0;
         
-        //clean.OrderDate = DateTime.Now.ToString();
-        //clean.ExpectedDate = DateTime.Now.AddDays(new Random().Next(6, 8)).ToString();
-
-        list.ForEach(x => LOG($"{x.Item1}, {x.Item2()}"));
-        LOG($"{model}, MODEL");
-        LOG($"{clean}, CLEAN");
-
-        LOG($"Model: {model}");
-        LOG($"Clean: {clean}");
-
         return clean;
     }
 }

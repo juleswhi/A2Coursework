@@ -101,18 +101,13 @@ public partial class FormSelectViewModel : Form, GenericCreateableForm {
                     var prop_val = ((Master as FormSkeleton)!.CurrentForm as FormCreate)!.PropertyValues.First(x => x.Type == _currentType);
                     (prop_val.Control as MaterialButton)!.Text = primary_key.ToString();
                 }
-            }
-            ,
+            },
             _ => (s, e) => { }
         };
     }
 
-    private void Select_btn_Click(object? sender, EventArgs e) {
-        throw new NotImplementedException();
-    }
-
     public void Create<T>() where T : IDatabaseModel {
-        var values = DAL.Query<T>([]);
+        var values = DAL.Query<T>();
         dataGridView.DataSource = values;
         string name = $"Create {typeof(T).Name}";
         var size = TextRenderer.MeasureText(name, MaterialButton.DefaultFont);
