@@ -15,66 +15,87 @@ public record Employee : IDatabaseModel {
     public Dictionary<string, (Action<IDatabaseModel?>, bool)> ViewButtons() {
         return new() {
             { "Create", (new Action<IDatabaseModel?>(list => {
-                    //ShowGCFR(typeof(FormCreate), typeof(Clean));
-                    ShowGCF<FormCreate, Employee>();
-                    var form = Master!.CurrentlyDisplayedForm as FormCreate;
-                    //var form_meth = form!.GetType().
-                    //    GetMethod(nameof(form.Populate))!.
-                    //    MakeGenericMethod(typeof(Clean)!);
+                    ShowGCFR(typeof(FormCreate), typeof(Employee));
             }), false) },
             { "Edit", (m => {
-                    //ShowGCFR(typeof(FormCreate), typeof(Clean));
-                //    var form = Master!.CurrentlyDisplayedForm as FormCreate;
-                //    var form_meth = form!.GetType().
-                //    GetMethod(nameof(form.Populate))!.
-                //    MakeGenericMethod(typeof(Clean)!);
-                //form_meth.Invoke(form, [m]);
+                    ShowGCFR(typeof(FormCreate), typeof(Employee));
+                    var form = Master!.CurrentlyDisplayedForm as FormCreate;
+                    var form_meth = form!.GetType().
+                    GetMethod(nameof(form.Populate))!.
+                    MakeGenericMethod(typeof(Employee)!);
+                    form_meth.Invoke(form, [m]);
             }, true) },
-            { "Assign To Job", (m => {
-                ShowGCF<FormSelectViewModel, Employee>();
-                //ShowGCF<FormViewModel, Clean>();
-            }, true) },
+            { "Assign To Job", (new Action<IDatabaseModel?>(m => {
+                ShowGCF<FormSelectViewModel, Clean>();
+                var cleanJob = new CleanJob();
+
+                var formSelectViewModel = ((Master as FormSkeleton)!.CurrentForm as FormSelectViewModel)!;
+
+                var action = (int clean_id) => {
+                    cleanJob.CleanId = clean_id;
+                    cleanJob.EmployeeId = (m as Employee)!.Id;
+
+                    if(DAL.Query<CleanJob>().Any(x => x.CleanId == clean_id && x.EmployeeId == cleanJob.EmployeeId)) {
+                        ShowGCF<FormViewModel, Employee>();
+                        return;
+                    }
+
+                    DAL.Create(cleanJob);
+                    ShowGCF<FormViewModel, Employee>();
+                };
+
+                typeof(FormSelectViewModel).
+                    GetMethod(nameof(FormSelectViewModel.SetCallbackReturnKey))!.
+                    Invoke(formSelectViewModel, [action]);
+
+            }), true) },
             { "Delete", (m => {
-                    DAL.Delete((Clean)m!);
-                //ShowGCF<FormViewModel, Clean>();
+                DAL.Delete((Clean)m!);
+                ShowGCF<FormViewModel, Clean>();
             }, true) }
         };
     }
     public Dictionary<string, (Action<(List<(string, Func<string>)>, IDatabaseModel?)>, bool)> CreateButtons() {
         return new() {
             { "Create", (list => {
-                     //ShowGCFR(typeof(FormCreate), typeof(Employee));
-                    var employee = new Employee();
-                    var employees = DAL.Query<Employee>();
+                    var employee = (Employee)CreateFromList(list.Item1, list.Item2)!;
 
-                    if(!employees.Any()) {
-                        employee.Id = 0;
-                    }
-
-                    else employee.Id = employees.Select(x => x.Id).Max() + 1;
-
-                    foreach(var (prop_name, prop_val) in list.Item1) {
-                        var prop = typeof(Employee).GetProperty(prop_name);
-                        if(prop is null) continue;
-
-                        if(prop.PropertyType == typeof(string))
-                            prop.SetValue(employee, prop_val(), []);
-                        else if(prop.PropertyType == typeof(bool))
-                            prop.SetValue(employee, Convert.ToBoolean(prop_val()),[]);
-                        else if(prop.PropertyType == typeof(int))
-                            prop.SetValue(employee, Convert.ToInt32(prop_val()),[]);
-                        else if(prop.PropertyType == typeof(double))
-                            prop.SetValue(employee, Convert.ToDouble(prop_val()),[]);
-                    }
-
+                    employee.Delete();
                     employee.Create();
 
-                    //ShowGCFR(typeof(FormViewModel), typeof(Employee));
+                    ShowGCFR(typeof(FormViewModel), typeof(Employee));
             }, true) },
         };
     }
 
     public IDatabaseModel? CreateFromList(List<(string, Func<string>)> list, IDatabaseModel? model) {
-        return default;
+        var employee = new Employee();
+        var employees = DAL.Query<Employee>();
+
+        if (!employees.Any())
+            employee.Id = 0;
+        else employee.Id = employees.Select(x => x.Id).Max() + 1;
+
+        foreach (var (prop_name, prop_val) in list) {
+            var prop = typeof(Employee).GetProperty(prop_name);
+            if (prop is null || prop_val() == "") continue;
+
+            if (prop.PropertyType == typeof(string))
+                prop.SetValue(employee, prop_val(), []);
+            else if (prop.PropertyType == typeof(bool))
+                prop.SetValue(employee, Convert.ToBoolean(prop_val()), []);
+            else if (prop.PropertyType == typeof(int)) {
+                if (prop_val() == "Choose") {
+                    prop.SetValue(employee, 0, []);
+                    continue;
+                }
+                prop.SetValue(employee, Convert.ToInt32(prop_val()), []);
+            } else if (prop.PropertyType == typeof(double))
+                prop.SetValue(employee, Convert.ToDouble(prop_val()), []);
+            else if (prop.PropertyType == typeof(DateTime))
+                prop.SetValue(employee, Convert.ToDateTime(prop_val()), []);
+        }
+
+        return employee;
     }
 }

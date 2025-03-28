@@ -15,8 +15,7 @@ public partial class FormCreate : Form, GenericCreateableForm {
     private IDatabaseModel? _edited_object;
 
     private List<bool> Validations = [];
-    private int ValidationsCount = 0;
-    private Action OnValidationChange = () => { };
+    public Action OnValidationChange = () => { };
 
     private static Dictionary<Type, PropertyInfo[]> _propCache = new();
 
@@ -42,6 +41,7 @@ public partial class FormCreate : Form, GenericCreateableForm {
         public Type? Type { get; set; }
         public bool Validated { get; set; }
         public Action OnChange { get; set; }
+        public MaterialDivider? ValidationPanel { get; set; }
         Action<int>? AssignForeignKey { get; set; }
     }
 
@@ -154,11 +154,15 @@ public partial class FormCreate : Form, GenericCreateableForm {
             b.Click += (s, e) => btn.Value.Item1.Invoke((PropertyValues.Select(x => (x.Name, x.Value)).ToList(), _edited_object));
 
             OnValidationChange += () => {
-                b.Enabled = Validations.All(x => x);
+                b.Enabled = PropertyValues.Count(x => x.Validated) == PropertyValues.Count;
             };
+
+            b.Enabled = false;
 
             Controls.Add(b);
         }
+
+        // TODO: Fix button spacing in create form
 
         var buttons = Controls.OfType<MaterialButton>().ToList();
 
@@ -180,6 +184,7 @@ public partial class FormCreate : Form, GenericCreateableForm {
 
         #endregion
 
+        #region Replace Textbox with DateTimePicker, Toggle, and ForeignKey
         foreach (var foreignkey in textBoxes.Where(x => (string)x.Tag! == "foreign")) {
             var idx = panel1.Controls.IndexOf(foreignkey);
             if (idx == -1) continue;
@@ -206,8 +211,12 @@ public partial class FormCreate : Form, GenericCreateableForm {
                 // Create model and pass through
 
                 var needed_prop_vals = PropertyValues.Select(x => (x.Name, x.Value)).ToList();
+                LOG($"NEEDED PROP VALS LIST: {needed_prop_vals.Count}, {needed_prop_vals.Select(x => (x.Name, x.Value())).Select(x => $"{x.Name}: {x.Item2}").Aggregate((x, y) => $"{x}, {y}")}");
 
                 var temp_created_obj = typeof(T).GetMethod("CreateFromList")!.Invoke(Activator.CreateInstance<T>(), [needed_prop_vals, null]);
+                if (temp_created_obj is Clean clean) {
+                    LOG($"TEMP CRETED OBJNECT: Clean: {clean}, Clean.CustomerId: {clean.CustomerId}, Clean.BookDate: {clean.BookDate}, Clean.StartDate: {clean.StartDate}, Clean.EndDate: {clean.EndDate}, Clean.Price: {clean.Price}");
+                }
 
                 typeof(FormSelectViewModel).
                     GetMethod(nameof(FormSelectViewModel.SetCallbackFromSelectType))!.
@@ -229,8 +238,23 @@ public partial class FormCreate : Form, GenericCreateableForm {
 
             var datetime_property_kvp = PropertyValues.First(x => x.Control == textbox_datetime);
 
+
             var textbox_size = panel1.Controls[textbox_datetime_idx].Size;
             var textbox_location = panel1.Controls[textbox_datetime_idx].Location;
+
+            var textbox_datetime_validation_panel = new MaterialDivider();
+            var under = new MaterialCard();
+
+            textbox_datetime_validation_panel.Height = textbox_size.Height - 38;
+            textbox_datetime_validation_panel.Width = textbox_size.Width - 14;
+            textbox_datetime_validation_panel.Location = textbox_location;
+            textbox_datetime_validation_panel.Location = new(textbox_datetime_validation_panel.Location.X + 7, textbox_datetime_validation_panel.Location.Y + 20);
+            textbox_datetime_validation_panel.BackColor = MaterialSkin.MaterialSkinManager.Instance.ColorScheme.PrimaryColor;
+
+            under.Height = textbox_size.Height - 35;
+            under.Width = textbox_size.Width - 10;
+            under.Location = textbox_location;
+            under.Location = new(under.Location.X + 5, under.Location.Y + 20);
 
             var datetime_picker = new DateTimePicker {
                 AutoSize = false,
@@ -240,9 +264,13 @@ public partial class FormCreate : Form, GenericCreateableForm {
 
             panel1.Controls.RemoveAt(textbox_datetime_idx);
             panel1.Controls.Add(datetime_picker);
+            panel1.Controls.Add(textbox_datetime_validation_panel);
+            panel1.Controls.Add(under);
 
             datetime_property_kvp.Value = () => datetime_picker.Value.ToString();
             datetime_property_kvp.Control = datetime_picker;
+            datetime_property_kvp.ValidationPanel = textbox_datetime_validation_panel;
+            datetime_property_kvp.Validated = true;
             PropertyValues[PropertyValues.IndexOf(PropertyValues.First(x => x.Name == datetime_property_kvp.Name))] = datetime_property_kvp;
         }
 
@@ -261,8 +289,11 @@ public partial class FormCreate : Form, GenericCreateableForm {
 
             textbox_property_kvp.Value = () => checkbox.Checked.ToString();
             textbox_property_kvp.Control = checkbox;
+            textbox_property_kvp.Validated = true;
             PropertyValues[PropertyValues.IndexOf(PropertyValues.First(x => x.Name == textbox_property_kvp.Name))] = textbox_property_kvp;
         }
+
+        #endregion
 
         Validations = Enumerable.Range(0, PropertyValues.Count).Select(x => false).ToList();
 
@@ -272,9 +303,19 @@ public partial class FormCreate : Form, GenericCreateableForm {
             var propval = PropertyValues[i];
             Control control = propval.Control;
             if (control is MaterialTextBox textBox) {
+                LOG($"Adding event for Textbox: {propval.Name}");
                 textBox.TextChanged += (s, e) => {
                     propval.Validated = propval.Name switch {
-                        "Forename" => (propval.Control as TextBox)!.Text.Validate(NAME),
+                        "Forename" => (propval.Control as MaterialTextBox)!.Text.Validate(NAME),
+                        "Surname" => (propval.Control as MaterialTextBox)!.Text.Validate(NAME),
+                        "Name" => (propval.Control as MaterialTextBox)!.Text.Validate(NAME),
+                        "Description" => (propval.Control as MaterialTextBox)!.Text.Validate(DESCRIPTION),
+                        "ContactNumber" => (propval.Control as MaterialTextBox)!.Text.Validate(PHONE),
+                        "BillingAddress" => (propval.Control as MaterialTextBox)!.Text.Validate(ADDRESS),
+                        "Address" => (propval.Control as MaterialTextBox)!.Text.Validate(ADDRESS),
+                        "Price" => (propval.Control as MaterialTextBox)!.Text.Validate(PRICE),
+                        "Amount" => (propval.Control as MaterialTextBox)!.Text.Validate(QUANTITY),
+                        "Quantity" => (propval.Control as MaterialTextBox)!.Text.Validate(QUANTITY),
                         _ => false,
                     };
                     if (propval.Validated)
@@ -287,17 +328,39 @@ public partial class FormCreate : Form, GenericCreateableForm {
                     OnValidationChange.Invoke();
                 };
             }
+            if (control is DateTimePicker dateTimePicker) {
+                LOG($"Adding event for DateTimePicker: {propval.Name}");
+                dateTimePicker.ValueChanged += (s, e) => {
+                    propval.Validated = propval.Name switch {
+                        "Date" => (propval.Control as DateTimePicker)!.Value.ToString().Validate(DATE),
+                        "StartDate" => (propval.Control as DateTimePicker)!.Value.ToString().Validate(DATE_PAST),
+                        "EndDate" => (propval.Control as DateTimePicker)!.Value.ToString().Validate(DATE_PAST),
+                        _ => false,
+                    };
+                    LOG($"{dateTimePicker.Name} Validated: {propval.Validated}");
+                    propval.ValidationPanel!.BackColor = propval.Validated ? MaterialSkin.MaterialSkinManager.Instance.ColorScheme.AccentColor : MaterialSkin.MaterialSkinManager.Instance.ColorScheme.PrimaryColor;
+                    OnValidationChange.Invoke();
+                };
+            }
+            if (control is MaterialCheckbox checkbox) {
+                LOG($"Adding event for checkbox: {propval.Name}");
+                checkbox.CheckedChanged += (s, e) => {
+                    propval.Validated = true;
+                    OnValidationChange.Invoke();
+                };
+            }
+            if (control is MaterialButton button) {
+                LOG($"Adding event for button: {propval.Name}");
+                button.Click += (s, e) => {
+                    propval.Validated = int.TryParse(propval.Value(), out _);
+                    OnValidationChange.Invoke();
+                };
+            }
         }
     }
 
-    private bool ValidateTextBox(int index) {
-        var propval = PropertyValues[index];
-
-        return propval.Name switch {
-            "Forename" => (propval.Control as TextBox)!.Text.Validate(NAME),
-            _ => false,
-        };
-    }
+    // TODO: add validaiton bar under date and other things
+    // TOOD: Remove processing thing from orders and make it auto generaeted
 
     private void panel1_Paint(object sender, PaintEventArgs e) {
 

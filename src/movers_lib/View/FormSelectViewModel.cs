@@ -44,7 +44,6 @@ public partial class FormSelectViewModel : Form, GenericCreateableForm {
         dataGridView.DefaultCellStyle.SelectionForeColor = Earth();
 
         // TODO: Fix state keeping after selecting foreign key.
-        // TODO: Remove / Make better weird team table that seeminly has no use
 
         dataGridView.BackgroundColor = back;
         dataGridView.ForeColor = fore;
@@ -64,6 +63,23 @@ public partial class FormSelectViewModel : Form, GenericCreateableForm {
         };
     }
 
+    public void SetCallbackReturnKey(Action<int> callback) {
+        var select_btn = Controls.OfType<MaterialButton>().FirstOrDefault();
+        if (select_btn is null) return;
+
+        select_btn.Click += (s, e) => {
+            if (dataGridView.SelectedRows.Count != 1) return;
+
+            dynamic db_query_result = (typeof(DAL).
+                GetMethod(nameof(DAL.Query))!.
+                MakeGenericMethod(_currentType!).
+                Invoke(null, [])!);
+
+            IDatabaseModel typed_model_idx = db_query_result[dataGridView.SelectedRows[0].Index];
+            callback(db_query_result[dataGridView.SelectedRows[0].Index].Id);
+        };
+    }
+
     public void SetCallbackFromSelectType<T>(SelectType select_type, T database_model) where T : IDatabaseModel {
         var select_btn = Controls.OfType<MaterialButton>().FirstOrDefault();
         if (select_btn is null) return;
@@ -71,11 +87,10 @@ public partial class FormSelectViewModel : Form, GenericCreateableForm {
         select_btn.Click += select_type switch {
             GetKey => (s, e) => {
                 if (dataGridView.SelectedRows.Count == 1) {
-                    // LOG($"Type in method: {typeof(T).Name}, _currentType: {_currentType}");
                     dynamic db_query_result = (typeof(DAL).
                         GetMethod(nameof(DAL.Query))!.
                         MakeGenericMethod(_currentType!).
-                        Invoke(null, [new string[] { }])!);
+                        Invoke(null, [])!);
 
                     IDatabaseModel typed_model_idx = db_query_result[dataGridView.SelectedRows[0].Index];
 
@@ -90,7 +105,12 @@ public partial class FormSelectViewModel : Form, GenericCreateableForm {
                         ShowGCFR(typeof(FormCreate), FormCreate.PreviousFormType);
                     } else ShowGCF<FormCreate, T>();
 
-                    // ((Master as FormSkeleton)!.CurrentForm as FormCreate)!.AssignForeignKey!.Invoke(primary);
+                    if (database_model is Clean clean) {
+                        // Log data about clean
+                        LOG($"Clean: {clean}, Clean.CustomerId: {clean.CustomerId}, Clean.BookDate: {clean.BookDate}, Clean.StartDate: {clean.StartDate}, Clean.EndDate: {clean.EndDate}, Clean.Price: {clean.Price}");
+                    }
+
+                    // ((Master as FormSkeleton)!.CurrentForm as FormCreate)!.AssignForeignKey!.Invoke(primary_key);
 
                     var form = Master!.CurrentlyDisplayedForm as FormCreate;
                     var form_meth = form!.GetType().
@@ -100,8 +120,11 @@ public partial class FormSelectViewModel : Form, GenericCreateableForm {
 
                     var prop_val = ((Master as FormSkeleton)!.CurrentForm as FormCreate)!.PropertyValues.First(x => x.Type == _currentType);
                     (prop_val.Control as MaterialButton)!.Text = primary_key.ToString();
+                    prop_val.Validated = true;
+                    ((Master as FormSkeleton)!.CurrentForm as FormCreate)!.OnValidationChange.Invoke();
                 }
-            },
+            }
+            ,
             _ => (s, e) => { }
         };
     }

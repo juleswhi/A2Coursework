@@ -74,7 +74,11 @@ public class Clean : IDatabaseModel {
         };
     }
 
+    // REFACTOR THIS TO REMOVE USELESS IDATABSE MODEL
     public IDatabaseModel? CreateFromList(List<(string, Func<string>)> list, IDatabaseModel? model) {
+
+        LOG($"\n\nCREATING FROM LIST");
+
         var clean = new Clean();
         var cleans = DAL.Query<Clean>();
 
@@ -84,22 +88,25 @@ public class Clean : IDatabaseModel {
 
         foreach (var (prop_name, prop_val) in list) {
             var prop = typeof(Clean).GetProperty(prop_name);
-            if (prop is null) continue;
-            if (model is null) continue;
+            if (prop is null || prop_val() == "") continue;
 
             LOG($"Property: {prop.Name} Property Type: {prop.PropertyType} Settings to: {prop_val()}");
             if (prop.PropertyType == typeof(string))
                 prop.SetValue(clean, prop_val(), []);
             else if (prop.PropertyType == typeof(bool))
                 prop.SetValue(clean, Convert.ToBoolean(prop_val()), []);
-            else if (prop.PropertyType == typeof(int))
+            else if (prop.PropertyType == typeof(int)) {
+                if (prop_val() == "Choose") {
+                    prop.SetValue(clean, 0, []);
+                    continue;
+                }
                 prop.SetValue(clean, Convert.ToInt32(prop_val()), []);
-            else if (prop.PropertyType == typeof(double))
+            } else if (prop.PropertyType == typeof(double))
                 prop.SetValue(clean, Convert.ToDouble(prop_val()), []);
         }
 
         clean.BookDate = DateTime.Now.ToString();
-        
+
         return clean;
     }
 }

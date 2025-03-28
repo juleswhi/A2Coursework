@@ -65,8 +65,7 @@ public class Customer : IDatabaseModel {
 
         foreach (var (prop_name, prop_val) in list) {
             var prop = typeof(Customer).GetProperty(prop_name);
-            if (prop is null) continue;
-            // if (model is null) continue;
+            if (prop is null || prop_val() == "") continue;
 
             LOG($"Property: {prop.Name} Property Type: {prop.PropertyType} Settings to: {prop_val()}");
 
@@ -74,24 +73,20 @@ public class Customer : IDatabaseModel {
                 prop.SetValue(customer, prop_val(), []);
             else if (prop.PropertyType == typeof(bool))
                 prop.SetValue(customer, Convert.ToBoolean(prop_val()), []);
-            else if (prop.PropertyType == typeof(int))
+            else if (prop.PropertyType == typeof(int)) {
+                if (prop_val() == "Choose") {
+                    prop.SetValue(customer, 0, []);
+                    continue;
+                }
                 prop.SetValue(customer, Convert.ToInt32(prop_val()), []);
-            else if (prop.PropertyType == typeof(double))
+            } else if (prop.PropertyType == typeof(double))
                 prop.SetValue(customer, Convert.ToDouble(prop_val()), []);
             else if (prop.PropertyType == typeof(DateTime))
                 prop.SetValue(customer, Convert.ToDateTime(prop_val()), []);
         }
-        
+
         // customer.OrderDate = DateTime.Now.ToString();
         //customer.ExpectedDate = DateTime.Now.AddDays(new Random().Next(6, 8)).ToString();
-
-        list.ForEach(x => LOG($"{x.Item1}, {x.Item2()}"));
-        LOG($"{(model as Customer)?.Id}, MODEL ID");
-        LOG($"{customer.Id}, customer ID");
-
-        if(model is not null) {
-            customer.Id = (model as Customer)!.Id;
-        }
 
         return customer;
     }

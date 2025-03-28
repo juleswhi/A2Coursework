@@ -15,6 +15,7 @@ public record StockReorder : IDatabaseModel {
     [DateAttribute]
     [InitialValueDate]
     public string ExpectedDate { get; set; } = String.Empty;
+    [InitialValueString("Processing")]
     public string Status { get; set; } = String.Empty;
 
     /// <summary>
@@ -35,7 +36,7 @@ public record StockReorder : IDatabaseModel {
             { "Create", (new Action<(List<(string, Func<string>)>, IDatabaseModel?)>(list => {
                     //ShowGCFR(typeof(FormCreate), typeof(Clean));
 
-                    var clean = (StockReorder)CreateFromList(list.Item1, list.Item2);
+                    var clean = (StockReorder)CreateFromList(list.Item1, list.Item2)!;
 
                     clean?.Delete();
                     clean?.Create();
@@ -52,39 +53,37 @@ public record StockReorder : IDatabaseModel {
     }
 
     public IDatabaseModel? CreateFromList(List<(string, Func<string>)> list, IDatabaseModel? model) {
-        var clean = new StockReorder();
-        var cleans = DAL.Query<StockReorder>();
+        var stock_reorder = new StockReorder();
+        var reorders = DAL.Query<StockReorder>();
 
-        if (!cleans.Any())
-            clean.Id = 0;
-        else clean.Id = cleans.Select(x => x.Id).Max() + 1;
+        if (!reorders.Any())
+            stock_reorder.Id = 0;
+        else stock_reorder.Id = reorders.Select(x => x.Id).Max() + 1;
 
         foreach (var (prop_name, prop_val) in list) {
             var prop = typeof(StockReorder).GetProperty(prop_name);
-            if (prop is null) continue;
-            if (model is null) continue;
+            if (prop is null || prop_val() == "") continue;
 
             LOG($"Property: {prop.Name} Property Type: {prop.PropertyType} Settings to: {prop_val()}");
 
             if (prop.PropertyType == typeof(string))
-                prop.SetValue(clean, prop_val(), []);
+                prop.SetValue(stock_reorder, prop_val(), []);
             else if (prop.PropertyType == typeof(bool))
-                prop.SetValue(clean, Convert.ToBoolean(prop_val()), []);
-            else if (prop.PropertyType == typeof(int))
-                prop.SetValue(clean, Convert.ToInt32(prop_val()), []);
-            else if (prop.PropertyType == typeof(double))
-                prop.SetValue(clean, Convert.ToDouble(prop_val()), []);
-            else if (prop.PropertyType == typeof(DateTime))
-                prop.SetValue(clean, Convert.ToDateTime(prop_val()), []);
+                prop.SetValue(stock_reorder, Convert.ToBoolean(prop_val()), []);
+            else if (prop.PropertyType == typeof(int)) {
+                if (prop_val() == "Choose") {
+                    prop.SetValue(stock_reorder, 0, []);
+                    continue;
+                }
+                prop.SetValue(stock_reorder, Convert.ToInt32(prop_val()), []);
+            } else if (prop.PropertyType == typeof(double))
+                prop.SetValue(stock_reorder, Convert.ToDouble(prop_val()), []);
         }
-        
-        clean.OrderDate = DateTime.Now.ToString();
-        clean.ExpectedDate = DateTime.Now.AddDays(new Random().Next(6, 8)).ToString();
 
-        list.ForEach(x => LOG($"{x.Item1}, {x.Item2()}"));
-        LOG($"{model}, MODEL");
-        LOG($"{clean}, CLEAN");
+        stock_reorder.OrderDate = DateTime.Now.ToString();
+        stock_reorder.ExpectedDate = DateTime.Now.AddDays(new Random().Next(6, 8)).ToString();
+        stock_reorder.Status = "Processing";
 
-        return clean;
+        return stock_reorder;
     }
 }
