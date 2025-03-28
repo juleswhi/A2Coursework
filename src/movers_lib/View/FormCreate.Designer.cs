@@ -27,7 +27,10 @@ partial class FormCreate
     /// the contents of this method with the code editor.
     /// </summary>
     private void InitializeComponent() {
+        components = new System.ComponentModel.Container();
+        System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormCreate));
         panel1 = new Panel();
+        imageList1 = new ImageList(components);
         SuspendLayout();
         // 
         // panel1
@@ -39,7 +42,13 @@ partial class FormCreate
         panel1.Name = "panel1";
         panel1.Size = new Size(800, 365);
         panel1.TabIndex = 0;
-        panel1.Paint += panel1_Paint;
+        // 
+        // imageList1
+        // 
+        imageList1.ColorDepth = ColorDepth.Depth32Bit;
+        imageList1.ImageStream = (ImageListStreamer)resources.GetObject("imageList1.ImageStream");
+        imageList1.TransparentColor = Color.Transparent;
+        imageList1.Images.SetKeyName(0, "info.png");
         // 
         // FormCreate
         // 
@@ -56,4 +65,5 @@ partial class FormCreate
     #endregion
 
     private Panel panel1;
+    private ImageList imageList1;
 }

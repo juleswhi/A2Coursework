@@ -15,7 +15,6 @@ public class Clean : IDatabaseModel {
     [InitialValueDate]
     public string BookDate { get; set; } = String.Empty;
 
-    // TODO: Fix date not working properly in FormCreate
     [DateAttribute]
     public string StartDate { get; set; } = String.Empty;
 
@@ -76,9 +75,6 @@ public class Clean : IDatabaseModel {
 
     // REFACTOR THIS TO REMOVE USELESS IDATABSE MODEL
     public IDatabaseModel? CreateFromList(List<(string, Func<string>)> list, IDatabaseModel? model) {
-
-        LOG($"\n\nCREATING FROM LIST");
-
         var clean = new Clean();
         var cleans = DAL.Query<Clean>();
 

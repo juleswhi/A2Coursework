@@ -3,4 +3,3 @@ using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 
 namespace Reports;
-

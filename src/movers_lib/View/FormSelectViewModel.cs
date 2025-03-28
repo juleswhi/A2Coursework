@@ -43,8 +43,6 @@ public partial class FormSelectViewModel : Form, GenericCreateableForm {
         dataGridView.DefaultCellStyle.SelectionBackColor = Sand();
         dataGridView.DefaultCellStyle.SelectionForeColor = Earth();
 
-        // TODO: Fix state keeping after selecting foreign key.
-
         dataGridView.BackgroundColor = back;
         dataGridView.ForeColor = fore;
     }

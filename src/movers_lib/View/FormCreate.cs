@@ -60,8 +60,24 @@ public partial class FormCreate : Form, GenericCreateableForm {
 
         var valid_props = props.Where(x => !x.CustomAttributes.Any(x => _skips.Contains(x.AttributeType))).Select(x => (x, false)).ToList();
 
+        ToolTip tt = new ToolTip();
+
         foreach (var prop in valid_props) {
             var label = new MaterialLabel() { Text = prop.Item1.Name };
+
+            tt.ToolTipIcon = ToolTipIcon.Info;
+            tt.IsBalloon = false;
+            tt.ShowAlways = true;
+
+            if(Validation.HasValidationMessage(label.Text)) 
+                tt.SetToolTip(label, Validation.ValidationMessage(label.Text));
+
+            var size = TextRenderer.MeasureText(label.Text, MaterialLabel.DefaultFont);
+            label.Size = size;
+            label.Width += 200;
+            LOG($"{prop.Item1.Name} width: {size.Width}");
+            LOG($"{prop.Item1.Name} actual width: {label.Size.Width}");
+
             panel1.Controls.Add(label);
             var txtBox = new MaterialTextBox();
 
@@ -115,7 +131,7 @@ public partial class FormCreate : Form, GenericCreateableForm {
 
         int textBoxWidth = Math.Min(maxTextBoxSize.Width, availableWidthPerColumn);
         int textBoxHeight = Math.Min(maxTextBoxSize.Height, availableHeightPerRow - maxLabelSize.Height - 10); // Account for label height and spacing
-        int labelWidth = Math.Min(maxLabelSize.Width, availableWidthPerColumn);
+        int labelWidth = Math.Min(maxLabelSize.Width, availableWidthPerColumn) + 30;
         int labelHeight = maxLabelSize.Height;
 
         int horizontalSpacing = (horizontalSpace - (textBoxWidth * columns)) / (columns + 1);
@@ -125,6 +141,12 @@ public partial class FormCreate : Form, GenericCreateableForm {
         int startY = 10;
 
         for (int i = 0; i < textBoxCount; i++) {
+            var pb = new PictureBox();
+            pb.Image = imageList1.Images[0];
+            panel1.Controls.Add(pb);
+
+            tt.SetToolTip(pb, Validation.ValidationMessage(labels[i].Text));
+
             int row = i / columns;
             int col = i % columns;
 
@@ -136,6 +158,10 @@ public partial class FormCreate : Form, GenericCreateableForm {
 
             labels[i].Location = new Point(labelX, labelY);
             labels[i].Size = new Size(labelWidth, labelHeight);
+
+            pb.Location = new Point(labelX + TextRenderer.MeasureText(labels[i].Text, MaterialLabel.DefaultFont).Width + 20, labelY);
+            pb.Size = new Size(labelHeight, labelHeight);
+            pb.BringToFront();
 
             textBoxes[i].Location = new Point(textBoxX, textBoxY);
             textBoxes[i].Size = new Size(textBoxWidth, textBoxHeight);
@@ -202,21 +228,12 @@ public partial class FormCreate : Form, GenericCreateableForm {
                 Location = textbox_location
             };
 
-            // TODO: Fix the passthrough here
-            // Maybe modify signature of callback function to accomodate data?
             foreignkey_select_button.Click += (s, e) => {
                 ShowGCFR(typeof(FormSelectViewModel), foreignkey_property_kvp.Type!);
                 var formSelectViewModel = ((Master as FormSkeleton)!.CurrentForm as FormSelectViewModel)!;
-                // TODO: Fix form passing through data for edit
-                // Create model and pass through
 
                 var needed_prop_vals = PropertyValues.Select(x => (x.Name, x.Value)).ToList();
-                LOG($"NEEDED PROP VALS LIST: {needed_prop_vals.Count}, {needed_prop_vals.Select(x => (x.Name, x.Value())).Select(x => $"{x.Name}: {x.Item2}").Aggregate((x, y) => $"{x}, {y}")}");
-
                 var temp_created_obj = typeof(T).GetMethod("CreateFromList")!.Invoke(Activator.CreateInstance<T>(), [needed_prop_vals, null]);
-                if (temp_created_obj is Clean clean) {
-                    LOG($"TEMP CRETED OBJNECT: Clean: {clean}, Clean.CustomerId: {clean.CustomerId}, Clean.BookDate: {clean.BookDate}, Clean.StartDate: {clean.StartDate}, Clean.EndDate: {clean.EndDate}, Clean.Price: {clean.Price}");
-                }
 
                 typeof(FormSelectViewModel).
                     GetMethod(nameof(FormSelectViewModel.SetCallbackFromSelectType))!.
@@ -261,6 +278,9 @@ public partial class FormCreate : Form, GenericCreateableForm {
                 Size = textbox_size,
                 Location = textbox_location
             };
+
+            datetime_picker.MaxDate = DateTime.Now.AddYears(1);
+            datetime_picker.MinDate = DateTime.Now;
 
             panel1.Controls.RemoveAt(textbox_datetime_idx);
             panel1.Controls.Add(datetime_picker);
@@ -323,34 +343,28 @@ public partial class FormCreate : Form, GenericCreateableForm {
                     else
                         textBox.UseAccent = false;
 
-                    LOG($"{textBox.Name} Validated: {propval.Validated}");
-
                     OnValidationChange.Invoke();
                 };
             }
             if (control is DateTimePicker dateTimePicker) {
-                LOG($"Adding event for DateTimePicker: {propval.Name}");
                 dateTimePicker.ValueChanged += (s, e) => {
                     propval.Validated = propval.Name switch {
                         "Date" => (propval.Control as DateTimePicker)!.Value.ToString().Validate(DATE),
                         "StartDate" => (propval.Control as DateTimePicker)!.Value.ToString().Validate(DATE_PAST),
-                        "EndDate" => (propval.Control as DateTimePicker)!.Value.ToString().Validate(DATE_PAST),
+                        "EndDate" => (propval.Control as DateTimePicker)!.Value.ToString().ValidateDateFuture((PropertyValues.First(x => x.Name == "StartDate").Control as DateTimePicker)!.Value.ToString()),
                         _ => false,
                     };
-                    LOG($"{dateTimePicker.Name} Validated: {propval.Validated}");
                     propval.ValidationPanel!.BackColor = propval.Validated ? MaterialSkin.MaterialSkinManager.Instance.ColorScheme.AccentColor : MaterialSkin.MaterialSkinManager.Instance.ColorScheme.PrimaryColor;
                     OnValidationChange.Invoke();
                 };
             }
             if (control is MaterialCheckbox checkbox) {
-                LOG($"Adding event for checkbox: {propval.Name}");
                 checkbox.CheckedChanged += (s, e) => {
                     propval.Validated = true;
                     OnValidationChange.Invoke();
                 };
             }
             if (control is MaterialButton button) {
-                LOG($"Adding event for button: {propval.Name}");
                 button.Click += (s, e) => {
                     propval.Validated = int.TryParse(propval.Value(), out _);
                     OnValidationChange.Invoke();
@@ -359,23 +373,12 @@ public partial class FormCreate : Form, GenericCreateableForm {
         }
     }
 
-    // TODO: add validaiton bar under date and other things
-    // TOOD: Remove processing thing from orders and make it auto generaeted
-
-    private void panel1_Paint(object sender, PaintEventArgs e) {
-
-    }
-
-    // TODO: remove plceholders image from stuff
     public void Populate<T>(T obj) where T : IDatabaseModel {
         var obj_props = obj!.GetType().GetProperties();
 
         foreach (var obj_prop in obj_props) {
             var matching_property_value = PropertyValues.FirstOrDefault(property_value => property_value.Name == obj_prop.Name);
             if (matching_property_value is null) continue;
-
-            if (Attribute.GetCustomAttributes(obj_prop).Count() != 0)
-                LOG($"{Attribute.GetCustomAttributes(obj_prop).Select(x => x.ToString()).Aggregate((x, y) => $"{x}, {y}")} ->> {obj.ToString()}, {obj_prop.ToString()}, {obj_prop.Name}");
 
 
             if (Attribute.GetCustomAttribute(obj_prop, typeof(DateAttribute)) != null) {

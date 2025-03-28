@@ -49,8 +49,6 @@ public class ReportJobsCostModel : QuestPDF.Infrastructure.IDocument {
                 column.Item()
                     .Text(Title()).FontSize(20).SemiBold().FontColor(Colors.Blue.Medium);
             });
-
-            row.ConstantItem(100).Height(50).Placeholder();
         });
     }
 

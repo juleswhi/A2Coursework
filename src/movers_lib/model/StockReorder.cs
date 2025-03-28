@@ -18,10 +18,6 @@ public record StockReorder : IDatabaseModel {
     [InitialValueString("Processing")]
     public string Status { get; set; } = String.Empty;
 
-    /// <summary>
-    /// TODO: UPDATE STOCK TO USE STOCK
-    /// </summary>
-    /// <returns></returns>
     public static StockReorder GenerateFakeData()
         => new Faker<StockReorder>()
             .RuleFor(o => o.Id, f => DAL.Query<StockReorder>().Select(x => x.Id).Max() + 1)
@@ -34,14 +30,11 @@ public record StockReorder : IDatabaseModel {
     public Dictionary<string, (Action<(List<(string, Func<string>)>, IDatabaseModel?)>, bool)> CreateButtons() {
         return new() {
             { "Create", (new Action<(List<(string, Func<string>)>, IDatabaseModel?)>(list => {
-                    //ShowGCFR(typeof(FormCreate), typeof(Clean));
-
                     var clean = (StockReorder)CreateFromList(list.Item1, list.Item2)!;
 
                     clean?.Delete();
                     clean?.Create();
 
-                    // TODO: Maybe go to deliveries page?
                     ShowGCFR(typeof(FormViewModel), typeof(StockReorder));
 
             }), true) },

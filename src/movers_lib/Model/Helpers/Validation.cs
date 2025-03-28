@@ -19,16 +19,29 @@ internal static class Validation {
         FALSE,
     }
 
+    public static bool ValidateDateFuture(this string str, string str1) {
+        if(!ValidateDate(str) || !ValidateDate(str1)) {
+            return false;
+        }
+
+        var dt_future = Convert.ToDateTime(str);
+        var dt_past = Convert.ToDateTime(str1);
+
+        LOG($"{dt_past.ToString()}, {dt_future.ToString()}: {dt_future > dt_past}");
+
+        return dt_future > dt_past;
+    }
+
     public static bool Validate(this string str, StringValidationType type) {
         return type switch {
-            NAME => str.All(x => char.IsAsciiLetterOrDigit(x) || char.IsWhiteSpace(x) || x == '-') && str.Length < 20,
-            FORENAME => str.All(x => char.IsAsciiLetterOrDigit(x) || char.IsWhiteSpace(x)) && str.Length < 20,
-            SURNAME => str.All(x => char.IsAsciiLetterOrDigit(x) || char.IsWhiteSpace(x)) && str.Length < 20,
-            ADDRESS => str.All(x => char.IsAsciiLetterOrDigit(x) || char.IsWhiteSpace(x)) && str.Length < 50,
+            NAME => str.All(x => char.IsAsciiLetter(x) || char.IsWhiteSpace(x) || x == '-') && str.Length < 20 && !str.All(x => char.IsWhiteSpace(x)) && !char.IsWhiteSpace(str[0]),
+            FORENAME => str.All(x => char.IsAsciiLetterOrDigit(x) || char.IsWhiteSpace(x)) && str.Length < 20 && !str.All(x => char.IsWhiteSpace(x)) && !char.IsWhiteSpace(str[0]),
+            SURNAME => str.All(x => char.IsAsciiLetterOrDigit(x) || char.IsWhiteSpace(x)) && str.Length < 20 && !str.All(x => char.IsWhiteSpace(x)) && !char.IsWhiteSpace(str[0]),
+            ADDRESS => str.All(x => char.IsAsciiLetterOrDigit(x) || char.IsWhiteSpace(x)) && str.Length < 50 && !str.All(x => char.IsWhiteSpace(x)) && !char.IsWhiteSpace(str[0]),
             DATE => ValidateDate(str),
             PHONE => ValidatePhone(str),
             PRICE => ValidatePrice(str),
-            DESCRIPTION => str.Length < 100 && str.All(x => char.IsAsciiLetterOrDigit(x) || char.IsWhiteSpace(x)),
+            DESCRIPTION => str.Length < 100 && str.All(x => char.IsAsciiLetterOrDigit(x) || char.IsWhiteSpace(x)) && !str.All(x => char.IsWhiteSpace(x)) && !char.IsWhiteSpace(str[0]),
             QUANTITY => ValidateQuantity(str),
             DATE_FUTURE => ValidateDateFuture(str),
             DATE_PAST => ValidateDatePast(str),
@@ -57,7 +70,7 @@ internal static class Validation {
             str = str.Substring(1);
         }
 
-        if (!decimal.TryParse(str, out decimal d) && d > 0 && d * 100 == Math.Floor(d * 100)) {
+        if (!decimal.TryParse(str, out decimal d) || d < 0 || d > 500_000) {
             return false;
         }
 
@@ -73,9 +86,10 @@ internal static class Validation {
             str = str.Substring(1);
         }
 
-        if (!int.TryParse(str, out int d) && d >= 0 && d <= 500) {
+        if (!int.TryParse(str, out int d) || d <= 0 || d >= 500) {
             return false;
         }
+
         return Regex.IsMatch(str, @"^-?(\d+|\d{1,3}(?:\,\d{3})+)?(\.\d+)?$");
     }
 
@@ -104,11 +118,35 @@ internal static class Validation {
 
         var dt = Convert.ToDateTime(str);
 
-        if (DateTime.Now >= dt) {
+        if (DateTime.Now >= dt)
             return false;
-        }
 
         return true;
     }
+
+    public static string ValidationMessage(string name) =>
+        name switch {
+            "Forename" => "Must be less than 20 characters",
+            "Surname" => "Must be less than 20 characters",
+            "Name" => "Must be less than 20 characters",
+            "Description" => "Must be less than 50 characters",
+            "ContactNumber" => "Must be a valid Phone Number",
+            "Billing Address" => "Must be a valid address",
+            "Address" => "Must be a valid address",
+            "Price" => "Must be a valid number below £500_000, ($) and (£) are allowed",
+            "Amount" => "Must be a valid number below 500",
+            "Quantity" => "Must be a valid number below 500",
+            "Date" => "Must be a valid date",
+            "StartDate" => "Must be a date in the future",
+            "EndDate" => "Must be a date the in the future, and after the StartDate",
+            _ => "No validation message"
+        };
+
+    public static bool HasValidationMessage(string str) =>
+        str switch {
+            "Paid" => false,
+            var a when a.Contains("Id") => false,
+            _ => true,
+        };
 }
 
