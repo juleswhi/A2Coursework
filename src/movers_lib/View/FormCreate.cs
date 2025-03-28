@@ -280,12 +280,18 @@ public partial class FormCreate : Form, GenericCreateableForm {
             };
 
             datetime_picker.MaxDate = DateTime.Now.AddYears(1);
-            datetime_picker.MinDate = DateTime.Now;
+            if(datetime_picker.Value < DateTime.Now) {
+                datetime_picker.MinDate = datetime_picker.Value.AddDays(-1);
+            } else {
+                datetime_picker.MinDate = DateTime.Now.AddHours(-1);
+            }
 
             panel1.Controls.RemoveAt(textbox_datetime_idx);
             panel1.Controls.Add(datetime_picker);
             panel1.Controls.Add(textbox_datetime_validation_panel);
             panel1.Controls.Add(under);
+
+            // TODO editing doesnt work becaues foreign is auto invalided
 
             datetime_property_kvp.Value = () => datetime_picker.Value.ToString();
             datetime_property_kvp.Control = datetime_picker;
@@ -373,6 +379,8 @@ public partial class FormCreate : Form, GenericCreateableForm {
         }
     }
 
+    // TODO: Clicking create in editing just createa  new one
+
     public void Populate<T>(T obj) where T : IDatabaseModel {
         var obj_props = obj!.GetType().GetProperties();
 
@@ -390,6 +398,7 @@ public partial class FormCreate : Form, GenericCreateableForm {
                 (matching_property_value.Control as MaterialCheckbox)!.Checked = Convert.ToBoolean(obj_prop.GetValue(obj, null));
             } else if (Attribute.GetCustomAttribute(obj_prop, typeof(ForeignKeyAttribute)) != null) {
                 (matching_property_value.Control as MaterialButton)!.Text = Convert.ToString(obj_prop.GetValue(obj, null));
+                matching_property_value.Validated = true;
             } else {
                 (matching_property_value.Control as MaterialTextBox)!.Text = Convert.ToString(obj_prop.GetValue(obj, null));
             }
