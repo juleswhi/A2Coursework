@@ -1,7 +1,6 @@
 namespace movers_admin;
 
 using MaterialSkin;
-using System.Diagnostics;
 using View;
 using static Forms.FormManager;
 
@@ -17,8 +16,4 @@ internal static class Program {
         // Start form using my own Form Management System rather than the default way
         Start<FormHome>();
     }
-}
-
-public class Example {
-    public int Id { get; set; }
 }

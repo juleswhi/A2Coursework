@@ -86,7 +86,6 @@ public class Clean : IDatabaseModel {
             var prop = typeof(Clean).GetProperty(prop_name);
             if (prop is null || prop_val() == "") continue;
 
-            LOG($"Property: {prop.Name} Property Type: {prop.PropertyType} Settings to: {prop_val()}");
             if (prop.PropertyType == typeof(string))
                 prop.SetValue(clean, prop_val(), []);
             else if (prop.PropertyType == typeof(bool))
@@ -98,10 +97,18 @@ public class Clean : IDatabaseModel {
                 }
                 prop.SetValue(clean, Convert.ToInt32(prop_val()), []);
             } else if (prop.PropertyType == typeof(double))
-                prop.SetValue(clean, Convert.ToDouble(prop_val()), []);
+                if (prop_name == "Price") {
+                    prop.SetValue(clean, Convert.ToDouble(prop_val()[1..]), []);
+                } else {
+                    prop.SetValue(clean, Convert.ToDouble(prop_val()), []);
+                }
         }
 
         clean.BookDate = DateTime.Now.ToString();
+
+        if (model is Clean c) {
+            clean.Id = c.Id;
+        }
 
         return clean;
     }

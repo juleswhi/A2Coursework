@@ -69,14 +69,12 @@ public partial class FormCreate : Form, GenericCreateableForm {
             tt.IsBalloon = false;
             tt.ShowAlways = true;
 
-            if(Validation.HasValidationMessage(label.Text)) 
-                tt.SetToolTip(label, Validation.ValidationMessage(label.Text));
+            if (Validation.HasValidationMessage(label.Text))
+                tt.SetToolTip(label, Validation.ValidationMessage(label.Text, typeof(T).Name));
 
             var size = TextRenderer.MeasureText(label.Text, MaterialLabel.DefaultFont);
             label.Size = size;
             label.Width += 200;
-            LOG($"{prop.Item1.Name} width: {size.Width}");
-            LOG($"{prop.Item1.Name} actual width: {label.Size.Width}");
 
             panel1.Controls.Add(label);
             var txtBox = new MaterialTextBox();
@@ -145,7 +143,7 @@ public partial class FormCreate : Form, GenericCreateableForm {
             pb.Image = imageList1.Images[0];
             panel1.Controls.Add(pb);
 
-            tt.SetToolTip(pb, Validation.ValidationMessage(labels[i].Text));
+            tt.SetToolTip(pb, Validation.ValidationMessage(labels[i].Text, typeof(T).Name));
 
             int row = i / columns;
             int col = i % columns;
@@ -280,7 +278,7 @@ public partial class FormCreate : Form, GenericCreateableForm {
             };
 
             datetime_picker.MaxDate = DateTime.Now.AddYears(1);
-            if(datetime_picker.Value < DateTime.Now) {
+            if (datetime_picker.Value < DateTime.Now) {
                 datetime_picker.MinDate = datetime_picker.Value.AddDays(-1);
             } else {
                 datetime_picker.MinDate = DateTime.Now.AddHours(-1);
@@ -340,7 +338,7 @@ public partial class FormCreate : Form, GenericCreateableForm {
                         "BillingAddress" => (propval.Control as MaterialTextBox)!.Text.Validate(ADDRESS),
                         "Address" => (propval.Control as MaterialTextBox)!.Text.Validate(ADDRESS),
                         "Price" => (propval.Control as MaterialTextBox)!.Text.Validate(PRICE),
-                        "Amount" => (propval.Control as MaterialTextBox)!.Text.Validate(QUANTITY),
+                        "Amount" => (propval.Control as MaterialTextBox)!.Text.Validate(typeof(T).Name == "TakeStock" ? STOCK_AMOUNT : QUANTITY),
                         "Quantity" => (propval.Control as MaterialTextBox)!.Text.Validate(QUANTITY),
                         _ => false,
                     };

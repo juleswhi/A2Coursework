@@ -90,10 +90,10 @@ partial class FormHome
         // progressJobs
         // 
         progressJobs.Depth = 0;
-        progressJobs.Location = new Point(17, 91);
+        progressJobs.Location = new Point(17, 86);
         progressJobs.MouseState = MaterialSkin.MouseState.HOVER;
         progressJobs.Name = "progressJobs";
-        progressJobs.Size = new Size(190, 5);
+        progressJobs.Size = new Size(192, 5);
         progressJobs.TabIndex = 2;
         // 
         // labelJobsCount
@@ -127,7 +127,7 @@ partial class FormHome
         btnActiveJobs.Icon = (Image)resources.GetObject("btnActiveJobs.Icon");
         btnActiveJobs.ImageKey = "calender.png";
         btnActiveJobs.ImageList = imageList1;
-        btnActiveJobs.Location = new Point(208, 50);
+        btnActiveJobs.Location = new Point(211, 50);
         btnActiveJobs.MouseState = MaterialSkin.MouseState.HOVER;
         btnActiveJobs.Name = "btnActiveJobs";
         btnActiveJobs.Size = new Size(56, 56);
@@ -146,6 +146,7 @@ partial class FormHome
         imageList1.Images.SetKeyName(3, "star.png");
         imageList1.Images.SetKeyName(4, "burger.png");
         imageList1.Images.SetKeyName(5, "calender.png");
+        imageList1.Images.SetKeyName(6, "package.png");
         // 
         // btnWorkingEmployees
         // 
@@ -153,7 +154,7 @@ partial class FormHome
         btnWorkingEmployees.Icon = movers_lib.Properties.Resources.users;
         btnWorkingEmployees.ImageKey = "users.png";
         btnWorkingEmployees.ImageList = imageList1;
-        btnWorkingEmployees.Location = new Point(468, 52);
+        btnWorkingEmployees.Location = new Point(211, 196);
         btnWorkingEmployees.MouseState = MaterialSkin.MouseState.HOVER;
         btnWorkingEmployees.Name = "btnWorkingEmployees";
         btnWorkingEmployees.Size = new Size(56, 56);
@@ -169,12 +170,12 @@ partial class FormHome
         materialCard2.Controls.Add(labelEmployees);
         materialCard2.Depth = 0;
         materialCard2.ForeColor = Color.FromArgb(222, 0, 0, 0);
-        materialCard2.Location = new Point(274, 24);
+        materialCard2.Location = new Point(16, 169);
         materialCard2.Margin = new Padding(14);
         materialCard2.MouseState = MaterialSkin.MouseState.HOVER;
         materialCard2.Name = "materialCard2";
         materialCard2.Padding = new Padding(14);
-        materialCard2.Size = new Size(224, 113);
+        materialCard2.Size = new Size(222, 113);
         materialCard2.TabIndex = 13;
         // 
         // materialProgressBar2
@@ -213,9 +214,9 @@ partial class FormHome
         // 
         // cartesianChart1
         // 
-        cartesianChart1.Location = new Point(14, 153);
+        cartesianChart1.Location = new Point(283, 23);
         cartesianChart1.Name = "cartesianChart1";
-        cartesianChart1.Size = new Size(242, 142);
+        cartesianChart1.Size = new Size(274, 406);
         cartesianChart1.TabIndex = 15;
         cartesianChart1.Text = "cartesianChart1";
         // 
@@ -227,7 +228,7 @@ partial class FormHome
         materialCard3.Controls.Add(labelPendingDelivieries);
         materialCard3.Depth = 0;
         materialCard3.ForeColor = Color.FromArgb(222, 0, 0, 0);
-        materialCard3.Location = new Point(274, 182);
+        materialCard3.Location = new Point(14, 316);
         materialCard3.Margin = new Padding(14);
         materialCard3.MouseState = MaterialSkin.MouseState.HOVER;
         materialCard3.Name = "materialCard3";
@@ -272,10 +273,10 @@ partial class FormHome
         // btnPendingDeliveries
         // 
         btnPendingDeliveries.Depth = 0;
-        btnPendingDeliveries.Icon = movers_lib.Properties.Resources.users;
+        btnPendingDeliveries.Icon = (Image)resources.GetObject("btnPendingDeliveries.Icon");
         btnPendingDeliveries.ImageKey = "users.png";
         btnPendingDeliveries.ImageList = imageList1;
-        btnPendingDeliveries.Location = new Point(468, 211);
+        btnPendingDeliveries.Location = new Point(211, 345);
         btnPendingDeliveries.MouseState = MaterialSkin.MouseState.HOVER;
         btnPendingDeliveries.Name = "btnPendingDeliveries";
         btnPendingDeliveries.Size = new Size(56, 56);
@@ -287,7 +288,7 @@ partial class FormHome
         // 
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
-        ClientSize = new Size(562, 417);
+        ClientSize = new Size(580, 444);
         Controls.Add(btnPendingDeliveries);
         Controls.Add(materialCard3);
         Controls.Add(cartesianChart1);

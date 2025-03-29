@@ -37,6 +37,8 @@ public partial class FormSelectViewModel : Form, GenericCreateableForm {
         dataGridView.AdvancedRowHeadersBorderStyle.Right = DataGridViewAdvancedCellBorderStyle.None;
         dataGridView.AdvancedRowHeadersBorderStyle.Bottom = DataGridViewAdvancedCellBorderStyle.None;
 
+        dataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+
         dataGridView.GridColor = Color.LightGray;
         dataGridView.DefaultCellStyle.BackColor = back;
         dataGridView.DefaultCellStyle.ForeColor = fore;

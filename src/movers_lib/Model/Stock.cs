@@ -12,21 +12,50 @@ public record Stock : IDatabaseModel {
     public Dictionary<string, (Action<IDatabaseModel?>, bool)> ViewButtons() {
         return new() {
             { "Order Stock", (s => {
-                //if(s is null) return;
-
                 ShowGCFR(typeof(FormCreate), typeof(StockReorder));
                 var form = Master!.CurrentlyDisplayedForm as FormCreate;
+
+                form?.Populate(new StockReorder() {
+                    StockId = (s as Stock)!.Id
+                });
+
             }, false) },
-            { "Return Stock", (s => {
-                if(s is null) return;
-            }, true )},
+
             { "Take Stock", (s => {
                 if(s is null) return;
+
+                ShowGCFR(typeof(FormCreate), typeof(TakeStock));
+                var form  = Master!.CurrentlyDisplayedForm as FormCreate;
+
+                form?.Populate(new TakeStock() {
+                    StockId = (s as Stock)!.Id
+                });
             },true )},
+            { "Return Stock", (new Action<IDatabaseModel?>(s => {
+                if(s is null) return;
+
+                ShowGCF<FormSelectViewModel, TakeStock>();
+
+                var formSelectViewModel = ((Master as FormSkeleton)!.CurrentForm as FormSelectViewModel)!;
+
+                var action = (int takestock_id) => {
+                    var takestock = DAL.Query<TakeStock>().First(x => x.Id == takestock_id);
+
+                    DAL.Delete(takestock);
+                    var stock = DAL.Query<Stock>().First(x => x.Id == takestock.StockId);
+                    stock.Amount += takestock.Amount;
+                    stock.Update();
+
+                    ShowGCF<FormViewModel, Stock>();
+                };
+
+                typeof(FormSelectViewModel).
+                    GetMethod(nameof(FormSelectViewModel.SetCallbackReturnKey))!.
+                    Invoke(formSelectViewModel, [action]);
+
+            }), true )},
             { "New Stock", (_ => {
                     ShowGCFR(typeof(FormCreate), typeof(Stock));
-                    //var form = Master!.CurrentlyDisplayedForm as FormCreate;
-                    //var form_meth = form!.GetType().GetMethod(nameof(form.Populate))!.MakeGenericMethod(typeof(Clean)!);
             }, false )}
         };
     }

@@ -26,6 +26,8 @@ public partial class FormViewModel : Form, GenericCreateableForm {
         dataGridView.RowHeadersDefaultCellStyle.SelectionBackColor = Sand();
         dataGridView.RowHeadersDefaultCellStyle.SelectionForeColor = Earth();
 
+        dataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+
         dataGridView.RowsDefaultCellStyle.BackColor = back;
         dataGridView.RowsDefaultCellStyle.ForeColor = fore;
         dataGridView.RowsDefaultCellStyle.SelectionBackColor = Sand();
@@ -92,6 +94,11 @@ public partial class FormViewModel : Form, GenericCreateableForm {
         }
 
         dataGridView.RowStateChanged += (s, e) => {
+
+            if (dataGridView.SelectedCells.Count == 1) {
+                //dataGridView.select = dataGridView.Rows[dataGridView.SelectedCells[0].RowIndex];
+            }
+
             foreach (var action in buttons.Zip(Controls.OfType<MaterialButton>())) {
                 if (!action.First.Value.Item2) continue;
 

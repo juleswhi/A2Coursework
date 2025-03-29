@@ -48,10 +48,13 @@ public class Customer : IDatabaseModel {
                     MakeGenericMethod(typeof(Customer)!);
                     form_meth.Invoke(form, [m]);
             }, true) },
+
             { "Delete", (m => {
+                    if(m is null) return;
                     DAL.Delete((Customer)m!);
                     ShowGCF<FormViewModel, Customer>();
             }, true) }
+
         };
     }
 
@@ -85,8 +88,9 @@ public class Customer : IDatabaseModel {
                 prop.SetValue(customer, Convert.ToDateTime(prop_val()), []);
         }
 
-        // customer.OrderDate = DateTime.Now.ToString();
-        //customer.ExpectedDate = DateTime.Now.AddDays(new Random().Next(6, 8)).ToString();
+        if (model is Customer c) {
+            customer.Id = c.Id;
+        }
 
         return customer;
     }

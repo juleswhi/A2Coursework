@@ -20,9 +20,10 @@ public partial class FormHome : Form {
         var total_jobs = DAL.Query<Clean>().Count();
 
         labelJobsCount.Text = active_jobs.ToString();
-        progressJobs.Minimum = 0;
-        progressJobs.Maximum = total_jobs;
-        progressJobs.Value = active_jobs;
+
+        //progressJobs.Minimum = 0;
+        //progressJobs.Maximum = total_jobs;
+        //progressJobs.Value = active_jobs;
 
         labelPendingDelivieriesValue.Text = DAL.
             Query<StockReorder>().
@@ -32,5 +33,23 @@ public partial class FormHome : Form {
             ToString();
 
         labelWorkingEmployees.Text = DAL.Query<Employee>().Count().ToString();
+
+        cartesianChart1.AxisX.Add(new LiveCharts.Wpf.Axis {
+            Title = "Months",
+            Labels = new[] { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" }
+        });
+
+        cartesianChart1.AxisY.Add(new LiveCharts.Wpf.Axis {
+            Title = "Revenue",
+            LabelFormatter = value => value.ToString(),
+            Separator = new LiveCharts.Wpf.Separator()
+        });
+
+        var series_x = new LiveCharts.Wpf.LineSeries {
+            Title = "Revenue",
+            Values = new LiveCharts.ChartValues<double> { 30_000, 10_000, 12_300, 7_010, 54_000, 22_050, 65_000, 10_010, 4_430, 10_300, 12_000, 40_320 }
+        };
+
+        cartesianChart1.Series = [series_x];
     }
 }

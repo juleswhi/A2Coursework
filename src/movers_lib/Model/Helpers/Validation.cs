@@ -1,5 +1,6 @@
 ﻿using PhoneNumbers;
 using System.Text.RegularExpressions;
+using View;
 namespace Model;
 
 internal static class Validation {
@@ -16,11 +17,13 @@ internal static class Validation {
         DATE_PAST,
         QUANTITY,
         PRICE,
+        STOCK_AMOUNT,
         FALSE,
+        TRUE,
     }
 
     public static bool ValidateDateFuture(this string str, string str1) {
-        if(!ValidateDate(str) || !ValidateDate(str1)) {
+        if (!ValidateDate(str) || !ValidateDate(str1)) {
             return false;
         }
 
@@ -45,9 +48,30 @@ internal static class Validation {
             QUANTITY => ValidateQuantity(str),
             DATE_FUTURE => ValidateDateFuture(str),
             DATE_PAST => ValidateDatePast(str),
+            STOCK_AMOUNT => ValidateStockAmount(str),
             FALSE => ValidateAlwaysFalse(),
             _ => true
         };
+    }
+
+    private static bool ValidateStockAmount(string str) {
+        var form = (Master!.CurrentlyDisplayedForm as FormCreate);
+
+        var val = form?.PropertyValues.FirstOrDefault(x => x.Name == "StockId");
+
+        if (val is null) return false;
+
+        if (val.Value() == "Choose") {
+            return false;
+        }
+
+        var stock = DAL.Query<Stock>().First(x => x.Id == Convert.ToInt32(val.Value()));
+
+        if (Int32.TryParse(str, out int i) && i <= stock.Amount) {
+            return true;
+        }
+
+        return false;
     }
 
     private static bool ValidatePhone(string str) {
@@ -70,7 +94,7 @@ internal static class Validation {
             str = str.Substring(1);
         }
 
-        if (!decimal.TryParse(str, out decimal d) || d < 0 || d > 500_000) {
+        if (!decimal.TryParse(str, out decimal d) || d <= 0 || d > 500_000) {
             return false;
         }
 
@@ -80,10 +104,6 @@ internal static class Validation {
     private static bool ValidateQuantity(string str) {
         if (str.Length == 0) {
             return false;
-        }
-
-        if (str[0] == '$' || str[0] == '£') {
-            str = str.Substring(1);
         }
 
         if (!int.TryParse(str, out int d) || d <= 0 || d >= 500) {
@@ -124,7 +144,7 @@ internal static class Validation {
         return true;
     }
 
-    public static string ValidationMessage(string name) =>
+    public static string ValidationMessage(string name, string model_name) =>
         name switch {
             "Forename" => "Must be less than 20 characters",
             "Surname" => "Must be less than 20 characters",
@@ -134,7 +154,7 @@ internal static class Validation {
             "Billing Address" => "Must be a valid address",
             "Address" => "Must be a valid address",
             "Price" => "Must be a valid number below £500_000, ($) and (£) are allowed",
-            "Amount" => "Must be a valid number below 500",
+            "Amount" => name == "TakeStock" ? $"Cannot be higher than the amount of stock" : "Must be a valid integer below 500",
             "Quantity" => "Must be a valid number below 500",
             "Date" => "Must be a valid date",
             "StartDate" => "Must be a date in the future",
@@ -145,6 +165,7 @@ internal static class Validation {
     public static bool HasValidationMessage(string str) =>
         str switch {
             "Paid" => false,
+            "StockId" => false,
             var a when a.Contains("Id") => false,
             _ => true,
         };

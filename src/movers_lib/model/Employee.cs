@@ -6,12 +6,14 @@ public record Employee : IDatabaseModel {
     public int Id { get; set; }
     public string Forename { get; set; } = String.Empty;
     public string Surname { get; set; } = String.Empty;
+
     public static Employee GenerateFakeData()
         => new Faker<Employee>()
             .RuleFor(o => o.Id, f => DAL.Query<Employee>().Select(x => x.Id).Max() + 1)
             .RuleFor(o => o.Forename, f => f.Name.FirstName())
             .RuleFor(o => o.Surname, f => f.Name.LastName())
             .Generate();
+
     public Dictionary<string, (Action<IDatabaseModel?>, bool)> ViewButtons() {
         return new() {
             { "Create", (new Action<IDatabaseModel?>(list => {
@@ -26,6 +28,7 @@ public record Employee : IDatabaseModel {
                     form_meth.Invoke(form, [m]);
             }, true) },
             { "Assign To Job", (new Action<IDatabaseModel?>(m => {
+
                 ShowGCF<FormSelectViewModel, Clean>();
                 var cleanJob = new CleanJob();
 
@@ -55,6 +58,7 @@ public record Employee : IDatabaseModel {
             }, true) }
         };
     }
+
     public Dictionary<string, (Action<(List<(string, Func<string>)>, IDatabaseModel?)>, bool)> CreateButtons() {
         return new() {
             { "Create", (list => {
@@ -94,6 +98,10 @@ public record Employee : IDatabaseModel {
                 prop.SetValue(employee, Convert.ToDouble(prop_val()), []);
             else if (prop.PropertyType == typeof(DateTime))
                 prop.SetValue(employee, Convert.ToDateTime(prop_val()), []);
+        }
+
+        if (model is Employee e) {
+            employee.Id = e.Id;
         }
 
         return employee;

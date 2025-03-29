@@ -231,11 +231,13 @@ partial class FormSkeleton
         ClientSize = new Size(804, 461);
         Controls.Add(cardSide);
         Controls.Add(cardView);
+        DoubleBuffered = true;
+        Icon = (Icon)resources.GetObject("$this.Icon");
         MaximumSize = new Size(820, 500);
         MinimumSize = new Size(820, 500);
         Name = "FormSkeleton";
         StartPosition = FormStartPosition.CenterScreen;
-        Text = "FormSkeleton";
+        Text = "Movers Admin ";
         cardView.ResumeLayout(false);
         cardSide.ResumeLayout(false);
         cardSide.PerformLayout();
