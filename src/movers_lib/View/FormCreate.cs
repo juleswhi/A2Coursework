@@ -1,11 +1,13 @@
 ﻿using MaterialSkin.Controls;
 using Model;
 using System.Reflection;
+using System.Text;
 
 namespace View;
 
 public partial class FormCreate : Form, GenericCreateableForm {
     public static Type? PreviousFormType { get; private set; } = null;
+
     public Action<int>? AssignForeignKey;
     public Func<IEnumerable<(string, object)>>? func = null;
     public List<PropValue> PropertyValues = [];
@@ -13,6 +15,8 @@ public partial class FormCreate : Form, GenericCreateableForm {
     private Type? _currentType;
     private List<MaterialTextBox> _textBoxes => panel1.Controls.OfType<MaterialTextBox>().ToList();
     private IDatabaseModel? _edited_object;
+
+    private bool is_populated = false;
 
     private List<bool> Validations = [];
     public Action OnValidationChange = () => { };
@@ -65,6 +69,22 @@ public partial class FormCreate : Form, GenericCreateableForm {
         foreach (var prop in valid_props) {
             var label = new MaterialLabel() { Text = prop.Item1.Name };
 
+            StringBuilder labelCreater = new StringBuilder();
+
+            foreach (var c in label.Text) {
+                if (char.IsUpper(c) && labelCreater.Length > 0) {
+                    labelCreater.Append(" ");
+                }
+                labelCreater.Append(c);
+            }
+
+            string txt = labelCreater.ToString();
+            if (txt[0] == ' ') {
+                txt = txt.Substring(1);
+            }
+
+            label.Text = txt;
+
             tt.ToolTipIcon = ToolTipIcon.Info;
             tt.IsBalloon = false;
             tt.ShowAlways = true;
@@ -100,7 +120,7 @@ public partial class FormCreate : Form, GenericCreateableForm {
             }
 
             panel1.Controls.Add(txtBox);
-            PropertyValues.Add(new(label.Text, () => txtBox.Text, txtBox, t, null, false, () => { }));
+            PropertyValues.Add(new(prop.Item1.Name, () => txtBox.Text, txtBox, t, null, false, () => { }));
         }
 
         var textBoxes = panel1.Controls.OfType<MaterialTextBox>().ToList();
@@ -195,7 +215,7 @@ public partial class FormCreate : Form, GenericCreateableForm {
             totalButtonsWidth += button.Width;
         }
 
-        int availableSpace = horizontalSpace / totalButtonsWidth;
+        int availableSpace = horizontalSpace - totalButtonsWidth;
         int spacing = availableSpace / (btns.Count + 1);
 
         startX = (this.ClientSize.Width - horizontalSpace) / 2;
@@ -354,7 +374,7 @@ public partial class FormCreate : Form, GenericCreateableForm {
                 dateTimePicker.ValueChanged += (s, e) => {
                     propval.Validated = propval.Name switch {
                         "Date" => (propval.Control as DateTimePicker)!.Value.ToString().Validate(DATE),
-                        "StartDate" => (propval.Control as DateTimePicker)!.Value.ToString().Validate(DATE_PAST),
+                        "StartDate" => (propval.Control as DateTimePicker)!.Value.ToString().Validate(is_populated ? DATE : DATE_PAST),
                         "EndDate" => (propval.Control as DateTimePicker)!.Value.ToString().ValidateDateFuture((PropertyValues.First(x => x.Name == "StartDate").Control as DateTimePicker)!.Value.ToString()),
                         _ => false,
                     };
@@ -380,6 +400,7 @@ public partial class FormCreate : Form, GenericCreateableForm {
     // TODO: Clicking create in editing just createa  new one
 
     public void Populate<T>(T obj) where T : IDatabaseModel {
+        is_populated = true;
         var obj_props = obj!.GetType().GetProperties();
 
         foreach (var obj_prop in obj_props) {

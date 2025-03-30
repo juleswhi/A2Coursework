@@ -30,8 +30,6 @@ internal static class Validation {
         var dt_future = Convert.ToDateTime(str);
         var dt_past = Convert.ToDateTime(str1);
 
-        LOG($"{dt_past.ToString()}, {dt_future.ToString()}: {dt_future > dt_past}");
-
         return dt_future > dt_past;
     }
 
@@ -67,7 +65,7 @@ internal static class Validation {
 
         var stock = DAL.Query<Stock>().First(x => x.Id == Convert.ToInt32(val.Value()));
 
-        if (Int32.TryParse(str, out int i) && i <= stock.Amount) {
+        if (Int32.TryParse(str, out int i) && i <= stock.Amount && i > 0) {
             return true;
         }
 

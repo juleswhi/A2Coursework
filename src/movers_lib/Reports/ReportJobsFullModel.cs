@@ -13,12 +13,11 @@ public class ReportJobsFullModel : QuestPDF.Infrastructure.IDocument {
     public string Title() => "Cleaning Jobs";
 
     private void ComposeDescription(IContainer container) {
-       container.Background(Colors.Grey.Lighten3).Padding(10).Column(column =>
-        {
+        container.Background(Colors.Grey.Lighten3).Padding(10).Column(column => {
             column.Spacing(5);
             column.Item().Text("Description").FontSize(14);
             column.Item().Text("All cleaning jobs, with all information included");
-        }); 
+        });
     }
 
     public void Compose(IDocumentContainer container) {
@@ -50,11 +49,12 @@ public class ReportJobsFullModel : QuestPDF.Infrastructure.IDocument {
         });
     }
 
+    // TODO: make it so that startdate can be in the past
+
     public void ComposeBody(IContainer container) {
         container.Table(table => {
             table.ColumnsDefinition(columns => {
                 // columns.ConstantColumn(50);
-                columns.RelativeColumn();
                 columns.RelativeColumn();
                 columns.RelativeColumn();
                 columns.RelativeColumn();
@@ -79,12 +79,11 @@ public class ReportJobsFullModel : QuestPDF.Infrastructure.IDocument {
 
             foreach (var item in Cleans) {
                 var cust = DAL.Query<Customer>().First(x => x.Id == item.CustomerId);
-                // table.Cell().Element(CellStyle).Text(item.Id.ToString());
                 table.Cell().Element(CellStyle).Text($"{cust.Forename[0]}. {cust.Surname}");
                 table.Cell().Element(CellStyle).AlignRight().Text(item.BookDate.ToString());
                 table.Cell().Element(CellStyle).AlignRight().Text(item.StartDate.ToString());
                 table.Cell().Element(CellStyle).AlignRight().Text(item.EndDate.ToString());
-                table.Cell().Element(CellStyle).AlignRight().Text(item.Price.ToString());
+                table.Cell().Element(CellStyle).AlignRight().Text($"£{item.Price.ToString()}");
                 table.Cell().Element(CellStyle).AlignRight().Text(item.Paid ? "Y" : "N");
 
                 static IContainer CellStyle(IContainer container) {

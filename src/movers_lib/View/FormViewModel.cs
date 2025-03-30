@@ -59,7 +59,7 @@ public partial class FormViewModel : Form, GenericCreateableForm {
         var buttons = obj.ViewButtons();
 
         foreach (var btn in buttons) {
-            var b = new MaterialButton() { Text = btn.Key };
+            var b = new MaterialButton() { Text = btn.Key, UseAccentColor = true };
 
             b.Click += (s, e) => {
                 btn.Value.Item1.Invoke(
