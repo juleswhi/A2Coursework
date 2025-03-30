@@ -1,10 +1,10 @@
 namespace Forms;
 
+using Model;
+using QuestPDF.Infrastructure;
+using View;
 using WinFormsScraper;
 using static WinFormsScraper.ScrapeType;
-using Model;
-using View;
-using QuestPDF.Infrastructure;
 
 public static class FormManager {
     ///<summary>
@@ -53,6 +53,16 @@ public static class FormManager {
 
         Master.LoadForm(form);
 
+        form.Create<V>();
+    }
+
+    public static void ShowGCFView<T, V>(List<V> list) where T : Form, GenericCreateableForm, new() where V : IDatabaseModel {
+        if (Master is null) return;
+        T form = CreateForm<T>();
+
+        Master.LoadForm(form);
+
+        (Master.CurrentlyDisplayedForm as FormViewModel)!.RecordsShown = list.Select(x => (IDatabaseModel)x).ToList();
         form.Create<V>();
     }
 

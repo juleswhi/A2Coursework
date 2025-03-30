@@ -56,7 +56,7 @@ partial class FormSkeleton
         cardView.Name = "cardView";
         cardView.Padding = new Padding(14);
         cardView.Size = new Size(582, 450);
-        cardView.TabIndex = 2;
+        cardView.TabIndex = 0;
         // 
         // panelHolder
         // 
@@ -96,7 +96,7 @@ partial class FormSkeleton
         cardSide.Name = "cardSide";
         cardSide.Padding = new Padding(14, 14, 14, 40);
         cardSide.Size = new Size(200, 450);
-        cardSide.TabIndex = 3;
+        cardSide.TabIndex = 0;
         // 
         // btnReports
         // 
@@ -113,7 +113,7 @@ partial class FormSkeleton
         btnReports.Name = "btnReports";
         btnReports.NoAccentTextColor = Color.Empty;
         btnReports.Size = new Size(172, 50);
-        btnReports.TabIndex = 6;
+        btnReports.TabIndex = 5;
         btnReports.Text = "Reports";
         btnReports.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Text;
         btnReports.UseAccentColor = false;
@@ -134,7 +134,7 @@ partial class FormSkeleton
         btnHome.Name = "btnHome";
         btnHome.NoAccentTextColor = Color.Empty;
         btnHome.Size = new Size(172, 50);
-        btnHome.TabIndex = 5;
+        btnHome.TabIndex = 1;
         btnHome.Text = "Home";
         btnHome.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Text;
         btnHome.UseAccentColor = false;
@@ -155,7 +155,7 @@ partial class FormSkeleton
         btnJobs.Name = "btnJobs";
         btnJobs.NoAccentTextColor = Color.Empty;
         btnJobs.Size = new Size(172, 50);
-        btnJobs.TabIndex = 4;
+        btnJobs.TabIndex = 2;
         btnJobs.Text = "Jobs";
         btnJobs.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Text;
         btnJobs.UseAccentColor = false;
@@ -197,7 +197,7 @@ partial class FormSkeleton
         btnStaff.Name = "btnStaff";
         btnStaff.NoAccentTextColor = Color.Empty;
         btnStaff.Size = new Size(172, 50);
-        btnStaff.TabIndex = 2;
+        btnStaff.TabIndex = 4;
         btnStaff.Text = "Customers";
         btnStaff.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Text;
         btnStaff.UseAccentColor = false;
@@ -218,7 +218,7 @@ partial class FormSkeleton
         btnDeliveries.Name = "btnDeliveries";
         btnDeliveries.NoAccentTextColor = Color.Empty;
         btnDeliveries.Size = new Size(172, 50);
-        btnDeliveries.TabIndex = 1;
+        btnDeliveries.TabIndex = 6;
         btnDeliveries.Text = "Deliveries";
         btnDeliveries.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Text;
         btnDeliveries.UseAccentColor = false;

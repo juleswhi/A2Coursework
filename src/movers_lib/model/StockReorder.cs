@@ -35,14 +35,33 @@ public record StockReorder : IDatabaseModel {
                     clean?.Delete();
                     clean?.Create();
 
-                    ShowGCFR(typeof(FormViewModel), typeof(StockReorder));
+                    //ShowGCFR(typeof(FormViewModel), typeof(StockReorder));
+
+                    ShowForm<FormDeliveries>();
 
             }), true) },
         };
     }
 
     public Dictionary<string, (Action<IDatabaseModel?>, bool)> ViewButtons() {
-        return new();
+        return new() {
+            { "Mark As Delivered", (m => {
+                    if(m is StockReorder reorder && reorder.Status != "Delivered") {
+                        reorder.Status = "Delivered";
+                        reorder.Update();
+                        var stock = DAL.Query<Stock>().First(x => x.Id == reorder.StockId);
+                        stock.Amount += reorder.Quantity;
+                        stock.Update();
+                        ShowForm<FormDeliveries>();
+                    }
+            }, true) },
+            { "Mark As Lost", (m => {
+                    if(m is StockReorder reorder && reorder.Status != "Delivered") {
+                        reorder.Status = "Lost";
+                        reorder.Update();
+                    }
+            }, true) }
+        };
     }
 
     public IDatabaseModel? CreateFromList(List<(string, Func<string>)> list, IDatabaseModel? model) {

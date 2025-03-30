@@ -86,6 +86,7 @@ public record Stock : IDatabaseModel {
 
                 stock.Create();
                 ShowGCFR(typeof(FormViewModel), typeof(Stock));
+                //ShowForm<FormDeliveries>();
             }, true) },
         };
     }

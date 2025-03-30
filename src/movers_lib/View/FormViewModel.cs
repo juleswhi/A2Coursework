@@ -48,8 +48,16 @@ public partial class FormViewModel : Form, GenericCreateableForm {
         dataGridView.ForeColor = fore;
     }
 
+    public List<IDatabaseModel>? RecordsShown { get; set; } = null;
+
     public void Create<T>() where T : IDatabaseModel {
-        var values = DAL.Query<T>();
+        List<T> values;
+        if (RecordsShown is List<IDatabaseModel> records) {
+            values = records.Select(x => (T)x).ToList();
+        } else {
+            values = DAL.Query<T>();
+        }
+
         dataGridView.DataSource = values;
         string name = $"Create {typeof(T).Name}";
         var size = TextRenderer.MeasureText(name, MaterialButton.DefaultFont);
@@ -64,7 +72,7 @@ public partial class FormViewModel : Form, GenericCreateableForm {
             b.Click += (s, e) => {
                 btn.Value.Item1.Invoke(
                     dataGridView.SelectedRows.Count == 1 ?
-                        (IDatabaseModel)Query<T>()[dataGridView.SelectedRows[0].Index]
+                        (IDatabaseModel)(RecordsShown == null ? Query<T>().Select(x => (IDatabaseModel)x).ToList() : RecordsShown)[dataGridView.SelectedRows[0].Index]
                         : null
                     );
             };

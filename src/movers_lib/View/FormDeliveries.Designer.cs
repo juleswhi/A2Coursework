@@ -29,14 +29,11 @@ partial class FormDeliveries
     /// the contents of this method with the code editor.
     /// </summary>
     private void InitializeComponent() {
+        System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormDeliveries));
         materialCard3 = new MaterialSkin.Controls.MaterialCard();
         materialProgressBar1 = new MaterialSkin.Controls.MaterialProgressBar();
         labelPendingDelivieriesValue = new MaterialSkin.Controls.MaterialLabel();
         labelPendingDelivieries = new MaterialSkin.Controls.MaterialLabel();
-        materialCard1 = new MaterialSkin.Controls.MaterialCard();
-        materialProgressBar2 = new MaterialSkin.Controls.MaterialProgressBar();
-        labelEnRouteValue = new MaterialSkin.Controls.MaterialLabel();
-        labelEnRoute = new MaterialSkin.Controls.MaterialLabel();
         materialCard2 = new MaterialSkin.Controls.MaterialCard();
         materialProgressBar3 = new MaterialSkin.Controls.MaterialProgressBar();
         labelDeliveredValue = new MaterialSkin.Controls.MaterialLabel();
@@ -45,15 +42,13 @@ partial class FormDeliveries
         materialProgressBar4 = new MaterialSkin.Controls.MaterialProgressBar();
         labelLateValue = new MaterialSkin.Controls.MaterialLabel();
         materialLabel6 = new MaterialSkin.Controls.MaterialLabel();
-        materialCard5 = new MaterialSkin.Controls.MaterialCard();
-        materialProgressBar5 = new MaterialSkin.Controls.MaterialProgressBar();
-        labelLostValue = new MaterialSkin.Controls.MaterialLabel();
-        lostDeliveriesLabel = new MaterialSkin.Controls.MaterialLabel();
+        btnProcessingDeliveries = new MaterialSkin.Controls.MaterialFloatingActionButton();
+        btnDeliveredDeliveries = new MaterialSkin.Controls.MaterialFloatingActionButton();
+        btnLateDeliveries = new MaterialSkin.Controls.MaterialFloatingActionButton();
+        cartesianChart1 = new LiveCharts.WinForms.CartesianChart();
         materialCard3.SuspendLayout();
-        materialCard1.SuspendLayout();
         materialCard2.SuspendLayout();
         materialCard4.SuspendLayout();
-        materialCard5.SuspendLayout();
         SuspendLayout();
         // 
         // materialCard3
@@ -64,7 +59,7 @@ partial class FormDeliveries
         materialCard3.Controls.Add(labelPendingDelivieries);
         materialCard3.Depth = 0;
         materialCard3.ForeColor = Color.FromArgb(222, 0, 0, 0);
-        materialCard3.Location = new Point(27, 17);
+        materialCard3.Location = new Point(314, 23);
         materialCard3.Margin = new Padding(14);
         materialCard3.MouseState = MaterialSkin.MouseState.HOVER;
         materialCard3.Name = "materialCard3";
@@ -106,56 +101,6 @@ partial class FormDeliveries
         labelPendingDelivieries.TabIndex = 3;
         labelPendingDelivieries.Text = "Processing";
         // 
-        // materialCard1
-        // 
-        materialCard1.BackColor = Color.FromArgb(255, 255, 255);
-        materialCard1.Controls.Add(materialProgressBar2);
-        materialCard1.Controls.Add(labelEnRouteValue);
-        materialCard1.Controls.Add(labelEnRoute);
-        materialCard1.Depth = 0;
-        materialCard1.ForeColor = Color.FromArgb(222, 0, 0, 0);
-        materialCard1.Location = new Point(288, 17);
-        materialCard1.Margin = new Padding(14);
-        materialCard1.MouseState = MaterialSkin.MouseState.HOVER;
-        materialCard1.Name = "materialCard1";
-        materialCard1.Padding = new Padding(14);
-        materialCard1.Size = new Size(224, 113);
-        materialCard1.TabIndex = 18;
-        // 
-        // materialProgressBar2
-        // 
-        materialProgressBar2.Depth = 0;
-        materialProgressBar2.Location = new Point(17, 91);
-        materialProgressBar2.MouseState = MaterialSkin.MouseState.HOVER;
-        materialProgressBar2.Name = "materialProgressBar2";
-        materialProgressBar2.Size = new Size(190, 5);
-        materialProgressBar2.TabIndex = 3;
-        // 
-        // labelEnRouteValue
-        // 
-        labelEnRouteValue.AutoSize = true;
-        labelEnRouteValue.Depth = 0;
-        labelEnRouteValue.Font = new Font("Roboto", 34F, FontStyle.Bold, GraphicsUnit.Pixel);
-        labelEnRouteValue.FontType = MaterialSkin.MaterialSkinManager.fontType.H4;
-        labelEnRouteValue.Location = new Point(17, 42);
-        labelEnRouteValue.MouseState = MaterialSkin.MouseState.HOVER;
-        labelEnRouteValue.Name = "labelEnRouteValue";
-        labelEnRouteValue.Size = new Size(85, 41);
-        labelEnRouteValue.TabIndex = 3;
-        labelEnRouteValue.Text = "XXXX";
-        // 
-        // labelEnRoute
-        // 
-        labelEnRoute.AutoSize = true;
-        labelEnRoute.Depth = 0;
-        labelEnRoute.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
-        labelEnRoute.Location = new Point(17, 14);
-        labelEnRoute.MouseState = MaterialSkin.MouseState.HOVER;
-        labelEnRoute.Name = "labelEnRoute";
-        labelEnRoute.Size = new Size(64, 19);
-        labelEnRoute.TabIndex = 3;
-        labelEnRoute.Text = "En Route";
-        // 
         // materialCard2
         // 
         materialCard2.BackColor = Color.FromArgb(255, 255, 255);
@@ -164,7 +109,7 @@ partial class FormDeliveries
         materialCard2.Controls.Add(materialLabel4);
         materialCard2.Depth = 0;
         materialCard2.ForeColor = Color.FromArgb(222, 0, 0, 0);
-        materialCard2.Location = new Point(288, 147);
+        materialCard2.Location = new Point(314, 153);
         materialCard2.Margin = new Padding(14);
         materialCard2.MouseState = MaterialSkin.MouseState.HOVER;
         materialCard2.Name = "materialCard2";
@@ -193,7 +138,6 @@ partial class FormDeliveries
         labelDeliveredValue.Size = new Size(85, 41);
         labelDeliveredValue.TabIndex = 3;
         labelDeliveredValue.Text = "XXXX";
-        labelDeliveredValue.Click += materialLabel3_Click;
         // 
         // materialLabel4
         // 
@@ -215,7 +159,7 @@ partial class FormDeliveries
         materialCard4.Controls.Add(materialLabel6);
         materialCard4.Depth = 0;
         materialCard4.ForeColor = Color.FromArgb(222, 0, 0, 0);
-        materialCard4.Location = new Point(27, 147);
+        materialCard4.Location = new Point(314, 294);
         materialCard4.Margin = new Padding(14);
         materialCard4.MouseState = MaterialSkin.MouseState.HOVER;
         materialCard4.Name = "materialCard4";
@@ -257,78 +201,73 @@ partial class FormDeliveries
         materialLabel6.TabIndex = 3;
         materialLabel6.Text = "Late";
         // 
-        // materialCard5
+        // btnProcessingDeliveries
         // 
-        materialCard5.BackColor = Color.FromArgb(255, 255, 255);
-        materialCard5.Controls.Add(materialProgressBar5);
-        materialCard5.Controls.Add(labelLostValue);
-        materialCard5.Controls.Add(lostDeliveriesLabel);
-        materialCard5.Depth = 0;
-        materialCard5.ForeColor = Color.FromArgb(222, 0, 0, 0);
-        materialCard5.Location = new Point(27, 277);
-        materialCard5.Margin = new Padding(14);
-        materialCard5.MouseState = MaterialSkin.MouseState.HOVER;
-        materialCard5.Name = "materialCard5";
-        materialCard5.Padding = new Padding(14);
-        materialCard5.Size = new Size(224, 113);
-        materialCard5.TabIndex = 19;
+        btnProcessingDeliveries.Depth = 0;
+        btnProcessingDeliveries.Icon = (Image)resources.GetObject("btnProcessingDeliveries.Icon");
+        btnProcessingDeliveries.ImageKey = "calender.png";
+        btnProcessingDeliveries.Location = new Point(506, 50);
+        btnProcessingDeliveries.MouseState = MaterialSkin.MouseState.HOVER;
+        btnProcessingDeliveries.Name = "btnProcessingDeliveries";
+        btnProcessingDeliveries.Size = new Size(56, 56);
+        btnProcessingDeliveries.TabIndex = 20;
+        btnProcessingDeliveries.Text = "btnProcessingDeliveries";
+        btnProcessingDeliveries.UseVisualStyleBackColor = false;
         // 
-        // materialProgressBar5
+        // btnDeliveredDeliveries
         // 
-        materialProgressBar5.Depth = 0;
-        materialProgressBar5.Location = new Point(17, 91);
-        materialProgressBar5.MouseState = MaterialSkin.MouseState.HOVER;
-        materialProgressBar5.Name = "materialProgressBar5";
-        materialProgressBar5.Size = new Size(190, 5);
-        materialProgressBar5.TabIndex = 3;
+        btnDeliveredDeliveries.Depth = 0;
+        btnDeliveredDeliveries.Icon = (Image)resources.GetObject("btnDeliveredDeliveries.Icon");
+        btnDeliveredDeliveries.ImageKey = "calender.png";
+        btnDeliveredDeliveries.Location = new Point(506, 182);
+        btnDeliveredDeliveries.MouseState = MaterialSkin.MouseState.HOVER;
+        btnDeliveredDeliveries.Name = "btnDeliveredDeliveries";
+        btnDeliveredDeliveries.Size = new Size(56, 56);
+        btnDeliveredDeliveries.TabIndex = 21;
+        btnDeliveredDeliveries.Text = "btnDelivered";
+        btnDeliveredDeliveries.UseVisualStyleBackColor = false;
         // 
-        // labelLostValue
+        // btnLateDeliveries
         // 
-        labelLostValue.AutoSize = true;
-        labelLostValue.Depth = 0;
-        labelLostValue.Font = new Font("Roboto", 34F, FontStyle.Bold, GraphicsUnit.Pixel);
-        labelLostValue.FontType = MaterialSkin.MaterialSkinManager.fontType.H4;
-        labelLostValue.Location = new Point(17, 42);
-        labelLostValue.MouseState = MaterialSkin.MouseState.HOVER;
-        labelLostValue.Name = "labelLostValue";
-        labelLostValue.Size = new Size(85, 41);
-        labelLostValue.TabIndex = 3;
-        labelLostValue.Text = "XXXX";
+        btnLateDeliveries.Depth = 0;
+        btnLateDeliveries.Icon = (Image)resources.GetObject("btnLateDeliveries.Icon");
+        btnLateDeliveries.ImageKey = "calender.png";
+        btnLateDeliveries.Location = new Point(506, 321);
+        btnLateDeliveries.MouseState = MaterialSkin.MouseState.HOVER;
+        btnLateDeliveries.Name = "btnLateDeliveries";
+        btnLateDeliveries.Size = new Size(56, 56);
+        btnLateDeliveries.TabIndex = 22;
+        btnLateDeliveries.Text = "btnLateDeliveries";
+        btnLateDeliveries.UseVisualStyleBackColor = false;
         // 
-        // lostDeliveriesLabel
+        // cartesianChart1
         // 
-        lostDeliveriesLabel.AutoSize = true;
-        lostDeliveriesLabel.Depth = 0;
-        lostDeliveriesLabel.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
-        lostDeliveriesLabel.Location = new Point(17, 14);
-        lostDeliveriesLabel.MouseState = MaterialSkin.MouseState.HOVER;
-        lostDeliveriesLabel.Name = "lostDeliveriesLabel";
-        lostDeliveriesLabel.Size = new Size(32, 19);
-        lostDeliveriesLabel.TabIndex = 3;
-        lostDeliveriesLabel.Text = "Lost";
+        cartesianChart1.Location = new Point(29, 23);
+        cartesianChart1.Name = "cartesianChart1";
+        cartesianChart1.Size = new Size(273, 402);
+        cartesianChart1.TabIndex = 23;
+        cartesianChart1.Text = "cartesianChart1";
         // 
         // FormDeliveries
         // 
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
-        ClientSize = new Size(529, 410);
-        Controls.Add(materialCard5);
+        ClientSize = new Size(587, 437);
+        Controls.Add(cartesianChart1);
+        Controls.Add(btnLateDeliveries);
+        Controls.Add(btnDeliveredDeliveries);
+        Controls.Add(btnProcessingDeliveries);
         Controls.Add(materialCard4);
         Controls.Add(materialCard2);
-        Controls.Add(materialCard1);
         Controls.Add(materialCard3);
         Name = "FormDeliveries";
         Text = "formSettings";
         materialCard3.ResumeLayout(false);
         materialCard3.PerformLayout();
-        materialCard1.ResumeLayout(false);
-        materialCard1.PerformLayout();
         materialCard2.ResumeLayout(false);
         materialCard2.PerformLayout();
         materialCard4.ResumeLayout(false);
         materialCard4.PerformLayout();
-        materialCard5.ResumeLayout(false);
-        materialCard5.PerformLayout();
         ResumeLayout(false);
     }
 
@@ -338,10 +277,6 @@ partial class FormDeliveries
     private MaterialSkin.Controls.MaterialProgressBar materialProgressBar1;
     private MaterialSkin.Controls.MaterialLabel labelPendingDelivieriesValue;
     private MaterialSkin.Controls.MaterialLabel labelPendingDelivieries;
-    private MaterialSkin.Controls.MaterialCard materialCard1;
-    private MaterialSkin.Controls.MaterialProgressBar materialProgressBar2;
-    private MaterialSkin.Controls.MaterialLabel labelEnRouteValue;
-    private MaterialSkin.Controls.MaterialLabel labelEnRoute;
     private MaterialSkin.Controls.MaterialCard materialCard2;
     private MaterialSkin.Controls.MaterialProgressBar materialProgressBar3;
     private MaterialSkin.Controls.MaterialLabel labelDeliveredValue;
@@ -350,8 +285,8 @@ partial class FormDeliveries
     private MaterialSkin.Controls.MaterialProgressBar materialProgressBar4;
     private MaterialSkin.Controls.MaterialLabel labelLateValue;
     private MaterialSkin.Controls.MaterialLabel materialLabel6;
-    private MaterialSkin.Controls.MaterialCard materialCard5;
-    private MaterialSkin.Controls.MaterialProgressBar materialProgressBar5;
-    private MaterialSkin.Controls.MaterialLabel labelLostValue;
-    private MaterialSkin.Controls.MaterialLabel lostDeliveriesLabel;
+    private MaterialSkin.Controls.MaterialFloatingActionButton btnProcessingDeliveries;
+    private MaterialSkin.Controls.MaterialFloatingActionButton btnDeliveredDeliveries;
+    private MaterialSkin.Controls.MaterialFloatingActionButton btnLateDeliveries;
+    private LiveCharts.WinForms.CartesianChart cartesianChart1;
 }

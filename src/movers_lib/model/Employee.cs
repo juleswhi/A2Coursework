@@ -53,8 +53,8 @@ public record Employee : IDatabaseModel {
 
             }), true) },
             { "Delete", (m => {
-                DAL.Delete((Clean)m!);
-                ShowGCF<FormViewModel, Clean>();
+                DAL.Delete((Employee)m!);
+                ShowGCF<FormViewModel, Employee>();
             }, true) }
         };
     }

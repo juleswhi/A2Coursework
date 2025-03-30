@@ -73,7 +73,6 @@ public class Clean : IDatabaseModel {
         };
     }
 
-    // REFACTOR THIS TO REMOVE USELESS IDATABSE MODEL
     public IDatabaseModel? CreateFromList(List<(string, Func<string>)> list, IDatabaseModel? model) {
         var clean = new Clean();
         var cleans = DAL.Query<Clean>();

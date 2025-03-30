@@ -8,6 +8,7 @@ namespace Reports;
 public class ReportStockAmountModel : QuestPDF.Infrastructure.IDocument {
     public List<Stock> Cleans { get; set; } = DAL.
         Query<Stock>().
+        Where(x => x.Amount > 0).
         OrderBy(x => x.Amount).
         Reverse().
         ToList();
@@ -15,12 +16,11 @@ public class ReportStockAmountModel : QuestPDF.Infrastructure.IDocument {
     public string Title() => "Stock";
 
     private void ComposeDescription(IContainer container) {
-       container.Background(Colors.Grey.Lighten3).Padding(10).Column(column =>
-        {
+        container.Background(Colors.Grey.Lighten3).Padding(10).Column(column => {
             column.Spacing(5);
             column.Item().Text("Description").FontSize(14);
             column.Item().Text("All current stock available, ordered by amount in descending order");
-        }); 
+        });
     }
 
     public void Compose(IDocumentContainer container) {
