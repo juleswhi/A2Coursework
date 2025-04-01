@@ -2,10 +2,10 @@
 namespace Model;
 
 public class CleanJob : IDatabaseModel {
-    [PrimaryKey]
+    [Attributes.PrimaryKey]
     [ForeignKeyAttribute(typeof(Clean))]
     public int CleanId { get; set; }
-    [PrimaryKey]
+    [Attributes.PrimaryKey]
     [ForeignKeyAttribute(typeof(Employee))]
     public int EmployeeId { get; set; }
 

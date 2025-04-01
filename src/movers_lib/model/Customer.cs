@@ -4,7 +4,7 @@ using View;
 namespace Model;
 
 public class Customer : IDatabaseModel {
-    [PrimaryKey]
+    [Attributes.PrimaryKey]
     public int Id { get; set; }
     public string Forename { get; set; } = String.Empty;
     public string Surname { get; set; } = String.Empty;

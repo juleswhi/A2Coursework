@@ -2,14 +2,14 @@
 
 public static class ModelHelper {
     public static readonly Type[] ModelTypes = [
-        typeof(Clean), typeof(CleaningEquipment), typeof(CleanJob),
-        typeof(Customer), typeof(Employee), typeof(Equipment),
+        typeof(Clean), typeof(CleanJob),
+        typeof(Customer), typeof(Employee),
         typeof(Job), typeof(Stock), typeof(StockReorder),
         ];
 
     public static IEnumerable<(string, int)> GetPrimaryKey<T>(this T model) where T : IDatabaseModel {
         foreach (var prop in model.GetType().GetProperties()) {
-            var attr = Attribute.GetCustomAttribute(prop, typeof(PrimaryKey));
+            var attr = Attribute.GetCustomAttribute(prop, typeof(Attributes.PrimaryKey));
             if (attr is null) continue;
             yield return (prop.Name, (int)prop.GetValue(model)!);
         }

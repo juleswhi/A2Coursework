@@ -27,7 +27,7 @@ public partial class FormCreate : Form, GenericCreateableForm {
         InitializeComponent();
     }
 
-    private List<Type> _skips = [typeof(PrimaryKey), typeof(InitialValueInt), typeof(InitialValueString), typeof(InitialValueDate)];
+    private List<Type> _skips = [typeof(Attributes.PrimaryKey), typeof(InitialValueInt), typeof(InitialValueString), typeof(InitialValueDate)];
 
     public class PropValue {
         public PropValue(string name, Func<string> value, Control control, Type? type, Action<int>? AssignForeignKey, bool validated, Action onchange) {
@@ -101,7 +101,7 @@ public partial class FormCreate : Form, GenericCreateableForm {
 
             Type? t = null;
 
-            if (Attribute.GetCustomAttribute(prop.Item1, typeof(PrimaryKey)) != null ||
+            if (Attribute.GetCustomAttribute(prop.Item1, typeof(Attributes.PrimaryKey)) != null ||
                 Attribute.GetCustomAttribute(prop.Item1, typeof(InitialValueInt)) != null ||
                 Attribute.GetCustomAttribute(prop.Item1, typeof(InitialValueString)) != null) {
                 continue;

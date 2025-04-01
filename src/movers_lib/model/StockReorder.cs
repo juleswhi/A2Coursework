@@ -4,7 +4,7 @@ using View;
 namespace Model;
 
 public record StockReorder : IDatabaseModel {
-    [PrimaryKey]
+    [Attributes.PrimaryKey]
     public int Id { get; set; }
     [ForeignKeyAttribute(typeof(Stock))]
     public int StockId { get; set; }

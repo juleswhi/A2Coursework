@@ -1,8 +1,7 @@
-﻿
-namespace Model;
+﻿namespace Model;
 
 public record Job : IDatabaseModel {
-    [PrimaryKey]
+    [Attributes.PrimaryKey]
     public int Id { get; set; }
 
     public static Job GenerateFakeData()

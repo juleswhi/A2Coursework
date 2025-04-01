@@ -3,7 +3,7 @@
 namespace Model;
 public class TakeStock : IDatabaseModel {
 
-    [PrimaryKey]
+    [Attributes.PrimaryKey]
     public int Id { get; set; }
 
     [ForeignKeyAttribute(typeof(Stock))]

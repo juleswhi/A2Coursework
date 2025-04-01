@@ -4,7 +4,7 @@ namespace Model;
 
 public class Clean : IDatabaseModel {
 
-    [PrimaryKey]
+    [Attributes.PrimaryKey]
     public int Id { get; set; }
 
 
