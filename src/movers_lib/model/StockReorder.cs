@@ -35,8 +35,6 @@ public record StockReorder : IDatabaseModel {
                     clean?.Delete();
                     clean?.Create();
 
-                    //ShowGCFR(typeof(FormViewModel), typeof(StockReorder));
-
                     ShowForm<FormDeliveries>();
 
             }), true) },
@@ -59,6 +57,7 @@ public record StockReorder : IDatabaseModel {
                     if(m is StockReorder reorder && reorder.Status != "Delivered") {
                         reorder.Status = "Lost";
                         reorder.Update();
+                        ShowForm<FormDeliveries>();
                     }
             }, true) }
         };

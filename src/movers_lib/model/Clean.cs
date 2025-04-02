@@ -96,7 +96,7 @@ public class Clean : IDatabaseModel {
                 }
                 prop.SetValue(clean, Convert.ToInt32(prop_val()), []);
             } else if (prop.PropertyType == typeof(double))
-                if (prop_name == "Price") {
+                if (prop_val()[0] == '$' && prop_val()[0] == '£') {
                     prop.SetValue(clean, Convert.ToDouble(prop_val()[1..]), []);
                 } else {
                     prop.SetValue(clean, Convert.ToDouble(prop_val()), []);

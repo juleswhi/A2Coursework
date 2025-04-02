@@ -27,8 +27,7 @@ public partial class FormHome : Form {
 
         labelPendingDelivieriesValue.Text = DAL.
             Query<StockReorder>().
-            Where(x => Convert.ToDateTime(x.ExpectedDate) > DateTime.Now).
-            Where(x => x.Status != "Delivered" || x.Status != "Lost").
+            Where(x => x.Status == "Processing").
             Count().
             ToString();
 

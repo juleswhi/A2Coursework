@@ -36,8 +36,8 @@ internal static class Validation {
     public static bool Validate(this string str, StringValidationType type) {
         return type switch {
             NAME => str.All(x => char.IsAsciiLetter(x) || char.IsWhiteSpace(x) || x == '-') && str.Length < 20 && !str.All(x => char.IsWhiteSpace(x)) && !char.IsWhiteSpace(str[0]),
-            FORENAME => str.All(x => char.IsAsciiLetterOrDigit(x) || char.IsWhiteSpace(x)) && str.Length < 20 && !str.All(x => char.IsWhiteSpace(x)) && !char.IsWhiteSpace(str[0]),
-            SURNAME => str.All(x => char.IsAsciiLetterOrDigit(x) || char.IsWhiteSpace(x)) && str.Length < 20 && !str.All(x => char.IsWhiteSpace(x)) && !char.IsWhiteSpace(str[0]),
+            FORENAME => str.All(x => char.IsAsciiLetter(x) || char.IsWhiteSpace(x)) && str.Length < 20 && !str.All(x => char.IsWhiteSpace(x)) && !char.IsWhiteSpace(str[0]),
+            SURNAME => str.All(x => char.IsAsciiLetter(x) || char.IsWhiteSpace(x)) && str.Length < 20 && !str.All(x => char.IsWhiteSpace(x)) && !char.IsWhiteSpace(str[0]),
             ADDRESS => str.All(x => char.IsAsciiLetterOrDigit(x) || char.IsWhiteSpace(x)) && str.Length < 50 && !str.All(x => char.IsWhiteSpace(x)) && !char.IsWhiteSpace(str[0]),
             DATE => ValidateDate(str),
             PHONE => ValidatePhone(str),

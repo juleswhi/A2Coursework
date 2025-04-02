@@ -69,22 +69,6 @@ public partial class FormCreate : Form, GenericCreateableForm {
         foreach (var prop in valid_props) {
             var label = new MaterialLabel() { Text = prop.Item1.Name };
 
-            StringBuilder labelCreater = new StringBuilder();
-
-            foreach (var c in label.Text) {
-                if (char.IsUpper(c) && labelCreater.Length > 0) {
-                    labelCreater.Append(" ");
-                }
-                labelCreater.Append(c);
-            }
-
-            string txt = labelCreater.ToString();
-            if (txt[0] == ' ') {
-                txt = txt.Substring(1);
-            }
-
-            label.Text = txt;
-
             tt.ToolTipIcon = ToolTipIcon.Info;
             tt.IsBalloon = false;
             tt.ShowAlways = true;
