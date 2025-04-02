@@ -30,7 +30,3 @@ If packages need downloaded beforehand, below is a list of all needed packages
 - NevronOpenVision
 - QuestPDF
 - WinFormsScraper
-
-### Configuration
-
-Application settings can be configured from the `config.json` file, or can be controlled from the app.
