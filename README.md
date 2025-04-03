@@ -12,6 +12,8 @@ __Movers Admin__ is a application designed to aid in the cleaning process of a h
 
 __Movers Admin uses .NET 8__
 
+Navigate to the `src/` directory and click on the Visual Studio Solution File
+
 Press `F5` or the `Play` Button in visual studio.
 
 Alternatively, run `dotnet run` from the command line. ( Make sure you are in the source directory )
